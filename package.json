@@ -4,15 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "npm run data:fetch && npm run data:normalize && vite build",
+    "dev": "npm run data:prepare && vite",
+    "build": "npm run data:prepare && vite build",
     "check": "eslint .",
     "preview": "vite preview",
     "data:fetch": "node pd2/scripts/fetch-data.mjs",
     "data:check": "node pd2/scripts/fetch-data.mjs --check",
     "data:normalize": "node pd2/scripts/normalize-poison-strike.mjs",
-    "data:test": "npm run data:fetch && npm run data:normalize && node --test pd2/tests/poison-strike.test.mjs pd2/tests/season-14-overlay.test.mjs",
-    "overlay:test": "npm run data:fetch && npm run data:normalize && node --test pd2/tests/season-14-overlay.test.mjs"
+    "data:test": "npm run data:prepare && node --test pd2/tests/poison-strike.test.mjs pd2/tests/season-14-overlay.test.mjs",
+    "data:prepare": "npm run data:fetch && npm run data:normalize"
   },
   "devDependencies": {
     "@eslint/js": "9.38.0",
