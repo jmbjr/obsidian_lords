@@ -18,4 +18,5 @@ jobs:
           node-version: 22
       - run: npm install
       - run: npm run check
+      - run: npm run data:check
       - run: npm run build
