@@ -85,6 +85,8 @@ function renderSkills() {
   const raw = skill.raw.skill;
   const desc = skill.raw.description;
   const source = skill.source;
+  const overlay = poisonStrikeS14;
+  const delta = overlay.changes[0];
   const commitShort = source.commit.slice(0, 12);
 
   return layout(`
