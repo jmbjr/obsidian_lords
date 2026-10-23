@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "id": "spectral-plate-poison-strike",
+  "season": 14,
+  "title": "Spectral Plate + Poison Strike",
+  "status": "untested",
+  "premise": "Test whether player phasing creates a meaningful positioning advantage for Poison Strike rather than assuming that walking through monster hitboxes improves clear speed.",
+  "knownInputs": [
+    {
+      "fact": "Spectral Plate grants Phasing When Equipped.",
+      "sourceType": "season-14-patch-note",
+      "confidence": "explicit"
+    },
+    {
+      "fact": "Poison Strike has a Season 14 behavioral fix limiting its poison-pierce bonus to the attack animation.",
+      "sourceType": "season-14-overlay",
+      "confidence": "explicit"
+    }
+  ],
+  "questions": [
+    {
+      "id": "overlap-attack",
+      "question": "Can a phased player stop and attack while overlapping monster hitboxes, or only move through them?",
+      "status": "untested"
+    },
+    {
+      "id": "minion-collision",
+      "question": "Does player phasing ignore collision with owned summons or minions?",
+      "status": "untested"
+    },
+    {
+      "id": "central-seed",
+      "question": "Does phasing materially improve the ability to place a Poison Strike attack in the center of a dense pack?",
+      "status": "untested"
+    },
+    {
+      "id": "propagation",
+      "question": "Does central seed placement materially improve poison-cloud propagation or practical clear behavior?",
+      "status": "untested"
+    },
+    {
+      "id": "defensive-cost",
+      "question": "What defensive cost comes from deliberately occupying pack centers?",
+      "status": "untested"
+    }
+  ],
+  "protocol": [
+    "Use the same character, skill setup, weapon, zone, and comparable monster packs for both conditions.",
+    "Run a control condition without Spectral Plate and an experimental condition with Spectral Plate.",
+    "For each condition, attempt edge attacks and deliberate movement into the pack center before attacking.",
+    "Record whether movement through monsters succeeds, whether the character can stop while overlapped, and whether Poison Strike can begin from that position.",
+    "Repeat with owned summons or minions present to test allied collision separately.",
+    "Compare practical poison spread and clear behavior; record observations rather than inferred engine mechanics.",
+    "Record survivability effects separately from clear behavior, including obvious increases in simultaneous incoming attacks."
+  ],
+  "result": null
+}

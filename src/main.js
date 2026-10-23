@@ -1,12 +1,14 @@
 import "./style.css";
 import poisonStrike from "../pd2/generated/poison-strike.json";
 import poisonStrikeS14 from "../pd2/overlays/season-14/poison-strike.json";
+import spectralExperiment from "../pd2/experiments/spectral-plate-poison-strike.json";
 
 const routes = {
   "": renderHome,
   "#/": renderHome,
   "#/pd2": renderPd2,
   "#/pd2/skills": renderSkills,
+  "#/pd2/experiments/spectral-plate-poison-strike": renderSpectralExperiment,
 };
 
 function nav() {
@@ -61,6 +63,12 @@ function renderPd2() {
           <h2>Skill Explorer</h2>
           <p>Inspect source-backed skill mechanics. Poison Strike is the first vertical slice.</p>
           <span class="card-link">Open Skill Explorer →</span>
+        </a>
+        <a class="card" href="#/pd2/experiments/spectral-plate-poison-strike">
+          <span class="card-kicker">Experiment</span>
+          <h2>Spectral Plate + Poison Strike</h2>
+          <p>Run a controlled Season 14 test of whether phasing changes Poison Strike positioning and clear behavior.</p>
+          <span class="card-link">Open experiment →</span>
         </a>
       </div>
     </section>
@@ -169,6 +177,65 @@ function renderSkills() {
         ${field("Schema", `v${skill.schemaVersion}`)}
       </dl>
       <p class="annotation">Generated from <code>${source.files.map((file) => file.name).join("</code> and <code>")}</code>. Regenerating the normalized artifact changes this page without duplicating skill constants in the UI.</p>
+      <a class="text-link" href="#/pd2">← Back to PD2 Tools</a>
+    </section>
+  `);
+}
+
+
+function renderSpectralExperiment() {
+  const experiment = spectralExperiment;
+
+  return layout(`
+    <section class="hero compact">
+      <p class="eyebrow">PD2 Tools · Experiment</p>
+      <h1>${experiment.title}</h1>
+      <p class="lede">${experiment.premise}</p>
+      <div class="source-warning">
+        <strong>Status: ${experiment.status}</strong>
+        <span>Everything below is a test plan, not a claimed game mechanic. Results stay empty until observed in Season ${experiment.season} gameplay.</span>
+      </div>
+    </section>
+
+    <section class="section wide">
+      <p class="eyebrow">Known inputs</p>
+      <h2>What we are starting from</h2>
+      <div class="experiment-list">
+        ${experiment.knownInputs.map((input) => `
+          <article class="experiment-row">
+            <span class="status-chip known">known</span>
+            <div><p>${input.fact}</p><small>${input.sourceType} · confidence: ${input.confidence}</small></div>
+          </article>
+        `).join("")}
+      </div>
+    </section>
+
+    <section class="section wide">
+      <p class="eyebrow">Questions</p>
+      <h2>What we do not know yet</h2>
+      <div class="experiment-list">
+        ${experiment.questions.map((item) => `
+          <article class="experiment-row">
+            <span class="status-chip">${item.status}</span>
+            <p>${item.question}</p>
+          </article>
+        `).join("")}
+      </div>
+    </section>
+
+    <section class="section wide">
+      <p class="eyebrow">Protocol</p>
+      <h2>Controlled in-game test</h2>
+      <ol class="protocol-list">
+        ${experiment.protocol.map((step) => `<li>${step}</li>`).join("")}
+      </ol>
+      <p class="annotation">The important comparison is control versus Spectral Plate while holding the rest of the setup as constant as practical. Observed behavior should be recorded separately from explanations for why the engine behaves that way.</p>
+    </section>
+
+    <section class="section wide provenance">
+      <p class="eyebrow">Results</p>
+      <h2>No result recorded yet</h2>
+      <p class="annotation">This experiment definition intentionally contains <code>result: null</code>. Once tested in-game, observations can be added without rewriting source-backed skill data or patch-note overlays.</p>
       <a class="text-link" href="#/pd2">← Back to PD2 Tools</a>
     </section>
   `);
