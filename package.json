@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run data:fetch && npm run data:normalize && vite build",
     "check": "eslint .",
     "preview": "vite preview",
     "data:fetch": "node pd2/scripts/fetch-data.mjs",
