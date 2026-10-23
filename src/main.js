@@ -1,5 +1,6 @@
 import "./style.css";
-import poisonStrike from "../pd2/generated/poison-strike.json";\nimport poisonStrikeS14 from "../pd2/overlays/season-14/poison-strike.json";
+import poisonStrike from "../pd2/generated/poison-strike.json";
+import poisonStrikeS14 from "../pd2/overlays/season-14/poison-strike.json";
 
 const routes = {
   "": renderHome,
