@@ -1,0 +1,26 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+
+const overlay = JSON.parse(await readFile("pd2/overlays/season-14/poison-strike.json", "utf8"));
+const normalized = JSON.parse(await readFile("pd2/generated/poison-strike.json", "utf8"));
+
+assert.equal(overlay.schemaVersion, 1);
+assert.equal(overlay.targetSeason, 14);
+assert.equal(overlay.target.kind, "skill");
+assert.equal(overlay.target.internalId, normalized.identity.internalId);
+assert.equal(overlay.changes.length, 1);
+
+const change = overlay.changes[0];
+assert.equal(change.changeType, "behavior");
+assert.equal(change.source.type, "patch-note");
+assert.equal(change.source.title, "Season 14 Alliance Patch Notes");
+assert.equal(change.source.section, "Necromancer > Poison Strike");
+assert.equal(change.confidence, "explicit");
+assert.equal(change.numericOverride, null);
+assert.match(change.statement, /only during the Poison Strike attack animation/);
+assert.ok(change.affectedSourceFields.includes("raw.skill.calc1"));
+
+assert.equal(normalized.source.season, 13, "overlay must not relabel the normalized source season");
+assert.equal(normalized.raw.skill.calc1, "\"min(ln12, 50)\"", "overlay must not replace the S13 poison-pierce formula");
+
+console.log("Season 14 Poison Strike overlay fixture passed");
