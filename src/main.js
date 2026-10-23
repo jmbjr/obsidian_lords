@@ -1,5 +1,6 @@
 import "./style.css";
 import poisonStrike from "../pd2/generated/poison-strike.json";
+import poisonStrikeS14 from "../pd2/overlays/season-14/poison-strike.json";
 
 const routes = {
   "": renderHome,
@@ -84,6 +85,8 @@ function renderSkills() {
   const raw = skill.raw.skill;
   const desc = skill.raw.description;
   const source = skill.source;
+  const overlay = poisonStrikeS14;
+  const delta = overlay.changes[0];
   const commitShort = source.commit.slice(0, 12);
 
   return layout(`
@@ -93,7 +96,20 @@ function renderSkills() {
       <p class="lede">A source-backed view of PD2's Necromancer poison melee skill. The pinned game table still identifies it internally as <code>${skill.identity.internalName}</code>.</p>
       <div class="source-warning">
         <strong>Season ${source.season} source data</strong>
-        <span>This is not yet a Season 14 representation. S14 deltas are intentionally deferred to the next roadmap phase.</span>
+        <span>The numeric/formula record below is Season ${source.season} game-table data. A separately sourced Season ${overlay.targetSeason} behavioral delta is shown below; it does not relabel these tables as S14.</span>
+      </div>
+    </section>
+
+    <section class="section wide season-delta">
+      <p class="eyebrow">Season ${overlay.targetSeason} patch-note overlay</p>
+      <h2>Known Season ${overlay.targetSeason} change</h2>
+      <div class="delta-card">
+        <div class="delta-meta">
+          <span>${delta.changeType}</span>
+          <span>confidence: ${delta.confidence}</span>
+        </div>
+        <p>${delta.statement}</p>
+        <p class="annotation">Source: <strong>${delta.source.title}</strong> · ${delta.source.section}. This is a behavioral correction. The patch notes provide no replacement numeric poison-pierce value, so the Season ${source.season} formula below remains unchanged.</p>
       </div>
     </section>
 

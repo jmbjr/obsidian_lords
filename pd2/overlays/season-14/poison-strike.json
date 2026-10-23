@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "targetSeason": 14,
+  "target": {
+    "kind": "skill",
+    "internalId": 73,
+    "displayName": "Poison Strike"
+  },
+  "changes": [
+    {
+      "id": "s14-poison-strike-pierce-duration",
+      "changeType": "behavior",
+      "statement": "Poison pierce bonus applies only during the Poison Strike attack animation.",
+      "source": {
+        "type": "patch-note",
+        "title": "Season 14 Alliance Patch Notes",
+        "section": "Necromancer > Poison Strike",
+        "quotedText": "Fixed the poison pierce bonus applying beyond the duration of the attack animation",
+        "reference": "user-provided Season 14 Alliance Patch Notes"
+      },
+      "confidence": "explicit",
+      "affectedSourceFields": [],
+      "numericOverride": null,
+      "affectedMechanic": "poison pierce bonus duration"
+    }
+  ]
+}
