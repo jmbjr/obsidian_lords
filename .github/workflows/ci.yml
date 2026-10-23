@@ -19,4 +19,5 @@ jobs:
       - run: npm install
       - run: npm run check
       - run: npm run data:check
+      - run: npm run data:test
       - run: npm run build

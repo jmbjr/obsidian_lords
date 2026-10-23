@@ -1,21 +1,25 @@
-# PD2 data ingestion
+# PD2 data pipeline
 
-This directory owns reproducible Project Diablo 2 source-data ingestion. It does **not** interpret skill mechanics yet.
+This directory owns reproducible Project Diablo 2 source-data ingestion and minimal normalization.
 
 ## Upstream
 
 The source is `coleestrin/pd2-tools`, pinned in `source.json` to exact commit `ff6ebbbf5510bd68cdd343b2d460a4bdd91609c4`.
 
-That upstream commit is titled `feat: s14 (#45)` and switches the application default to Season 14. However, the skill tables available at the expected game-data path are still under **Season 13**; no `season-14/Skills.txt` / `SkillDesc.txt` pair was found there during Phase C. We therefore explicitly label these inputs as Season 13 rather than implying they are S14 data.
+That upstream commit is titled `feat: s14 (#45)` and switches the application default to Season 14. However, the skill tables available at the expected game-data path are still under **Season 13**; no `season-14/Skills.txt` / `SkillDesc.txt` pair was found there during Phase C. We explicitly label these inputs as Season 13.
 
-## Fetch
+## Commands
 
-Run `npm run data:fetch` to download only the two tables needed by the upcoming skill vertical slice: `Skills.txt` and `SkillDesc.txt`.
+`npm run data:fetch` downloads the pinned `Skills.txt` and `SkillDesc.txt` inputs into ignored `pd2/raw/` and records provenance.
 
-Downloads go to `pd2/raw/` with a generated `provenance.json`. That directory is derived input and is gitignored.
+`npm run data:check` verifies the pinned files still exist and retain the minimum source schema.
 
-Run `npm run data:check` to verify the pinned files exist and retain the minimum table schema we depend on without writing them. CI runs this check.
+`npm run data:normalize` converts the one Phase D target into `pd2/generated/poison-strike.json`.
 
-## Boundaries
+`npm run data:test` fetches inputs, normalizes Poison Strike, verifies expected source-backed fields, and verifies byte-for-byte deterministic regeneration.
 
-Phase C establishes provenance, retrieval, and minimum source-schema validation only. Parsing, normalization, formula interpretation, and Poison Strike-specific semantics belong to later phases.
+## Current scope
+
+Phase D supports only the Necromancer skill represented internally by the Season 13 tables as `Poison Dagger`, ID 73. The normalized artifact preserves all non-empty source fields and formulas rather than interpreting uncertain Diablo data expressions.
+
+See `docs/skill-schema.md` for the schema and naming boundary.
