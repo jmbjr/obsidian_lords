@@ -20,7 +20,7 @@ Requirements:
 Install and verify:
 
 ```bash
-npm ci
+npm install
 npm run check
 npm run build
 ```
