@@ -1,5 +1,5 @@
 import "./style.css";
-import poisonStrike from "../pd2/generated/poison-strike.json";
+import poisonStrike from "../pd2/generated/poison-strike.json";\nimport poisonStrikeS14 from "../pd2/overlays/season-14/poison-strike.json";
 
 const routes = {
   "": renderHome,
@@ -93,7 +93,7 @@ function renderSkills() {
       <p class="lede">A source-backed view of PD2's Necromancer poison melee skill. The pinned game table still identifies it internally as <code>${skill.identity.internalName}</code>.</p>
       <div class="source-warning">
         <strong>Season ${source.season} source data</strong>
-        <span>This is not yet a Season 14 representation. S14 deltas are intentionally deferred to the next roadmap phase.</span>
+        <span>The numeric/formula record below is Season ${source.season} game-table data. A separately sourced Season ${overlay.targetSeason} behavioral delta is shown below; it does not relabel these tables as S14.</span>
       </div>
     </section>
 
