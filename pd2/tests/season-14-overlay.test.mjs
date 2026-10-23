@@ -18,7 +18,8 @@ assert.equal(change.source.section, "Necromancer > Poison Strike");
 assert.equal(change.confidence, "explicit");
 assert.equal(change.numericOverride, null);
 assert.match(change.statement, /only during the Poison Strike attack animation/);
-assert.ok(change.affectedSourceFields.includes("raw.skill.calc1"));
+assert.deepEqual(change.affectedSourceFields, []);
+assert.equal(change.affectedMechanic, "poison pierce bonus duration");
 
 assert.equal(normalized.source.season, 13, "overlay must not relabel the normalized source season");
 assert.equal(normalized.raw.skill.calc1, "\"min(ln12, 50)\"", "overlay must not replace the S13 poison-pierce formula");
