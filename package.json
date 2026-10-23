@@ -9,7 +9,9 @@
     "check": "eslint .",
     "preview": "vite preview",
     "data:fetch": "node pd2/scripts/fetch-data.mjs",
-    "data:check": "node pd2/scripts/fetch-data.mjs --check"
+    "data:check": "node pd2/scripts/fetch-data.mjs --check",
+    "data:normalize": "node pd2/scripts/normalize-poison-strike.mjs",
+    "data:test": "npm run data:fetch && npm run data:normalize && node --test pd2/tests/poison-strike.test.mjs"
   },
   "devDependencies": {
     "@eslint/js": "9.38.0",
