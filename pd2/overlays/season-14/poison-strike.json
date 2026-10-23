@@ -19,8 +19,9 @@
         "reference": "user-provided Season 14 Alliance Patch Notes"
       },
       "confidence": "explicit",
-      "affectedSourceFields": ["raw.skill.calc1", "raw.skill.*calc1 desc", "raw.description.desccalca4"],
-      "numericOverride": null
+      "affectedSourceFields": [],
+      "numericOverride": null,
+      "affectedMechanic": "poison pierce bonus duration"
     }
   ]
 }
