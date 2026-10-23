@@ -14,4 +14,12 @@ export default [
       globals: globals.browser,
     },
   },
+  {
+    files: ["pd2/**/*.mjs"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: globals.node,
+    },
+  },
 ];
