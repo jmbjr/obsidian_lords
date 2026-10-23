@@ -100,6 +100,19 @@ function renderSkills() {
       </div>
     </section>
 
+    <section class="section wide season-delta">
+      <p class="eyebrow">Season ${overlay.targetSeason} patch-note overlay</p>
+      <h2>Known Season ${overlay.targetSeason} change</h2>
+      <div class="delta-card">
+        <div class="delta-meta">
+          <span>${delta.changeType}</span>
+          <span>confidence: ${delta.confidence}</span>
+        </div>
+        <p>${delta.statement}</p>
+        <p class="annotation">Source: <strong>${delta.source.title}</strong> · ${delta.source.section}. This is a behavioral correction. The patch notes provide no replacement numeric poison-pierce value, so the Season ${source.season} formula below remains unchanged.</p>
+      </div>
+    </section>
+
     <section class="section wide">
       <p class="eyebrow">Normalized facts</p>
       <h2>What the source directly tells us</h2>
