@@ -19,6 +19,15 @@ export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0, build = {
       { label: "Damage modifier % (calc4)", value: linear(row.Param5, row.Param6, level), expression: row.calc4, assumption: "ln56 = Param5 + (level − 1) × Param6; not total damage" },
     ];
   }
+  if (skill.identity.internalId === 26 && row.calc1 === '"min(par3 + lvl - 1, par4)"' && row.calc2 === "ln12 + (skill('Penetrate'.blvl) * par8)") {
+    const penetrate = Number(build[23] || 0);
+    if (Number.isInteger(penetrate) && penetrate >= 0 && penetrate <= 20) {
+      return [
+        { label: "Strafe calc1 capped count", value: Math.min(n(row.Param3) + level - 1, n(row.Param4)), expression: row.calc1, assumption: "Native expression uses effective Strafe level; count interpretation not engine-verified" },
+        { label: "Strafe calc2 modifier (source units)", value: linear(row.Param1, row.Param2, level) + penetrate * n(row.Param8), expression: row.calc2, assumption: "ln12 uses effective Strafe level; Penetrate.blvl uses hard points; source units, not total DPS" },
+      ];
+    }
+  }
   if (skill.identity.internalId === 22 && row.calc1 === "ln34") {
     return [{ label: "Damage modifier % (calc1)", value: linear(row.Param3, row.Param4, level), expression: row.calc1, assumption: "ln34 = Param3 + (level − 1) × Param4; not total damage" }];
   }
