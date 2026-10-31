@@ -16,8 +16,10 @@ function parseTsv(text) {
   const columns = header.split("\t");
   return lines.map((line) => {
     const values = line.split("\t");
-    if (values.length !== columns.length) throw new Error("Malformed TSV row");
-    return Object.fromEntries(columns.map((key, i) => [key, values[i]]));
+    if (values.length > columns.length) throw new Error(`Malformed TSV row: ${values.length} values exceed ${columns.length} columns`);
+    // Upstream SkillDesc.txt contains a final row with omitted trailing empty cells.
+    // Match the existing Poison Strike parser: missing trailing fields are empty.
+    return Object.fromEntries(columns.map((key, i) => [key, values[i] ?? ""]));
   });
 }
 const [skillsText, descriptionsText, provenanceText] = await Promise.all([
