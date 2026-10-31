@@ -7,6 +7,12 @@ export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0, build = {
   if (!skill || hardPoints <= 0) return [];
   const row = skill.raw.skill;
   const level = hardPoints + bonusSkills;
+  if (skill.identity.internalId === 9 && row.passivecalc1 === "dm12" && row.passivestat1 === "passive_critical_strike") {
+    return [{ label: "Critical Strike chance (unresolved)", value: null, expression: row.passivecalc1, assumption: "Native S14 diminishing-return token dm12; Param1=5, Param2=75. Engine semantics not yet verified; no percentage inferred" }];
+  }
+  if (skill.identity.internalId === 33 && row.passivecalc1 === "edmn" && row.passivestat1 === "skill_pierce") {
+    return [{ label: "Pierce chance (unresolved)", value: null, expression: row.passivecalc1, assumption: "Native S14 token edmn; Param1=10, Param2=100. Engine semantics not yet verified; no percentage inferred" }];
+  }
   if (skill.identity.internalId === 6 && row.EDmgSymPerCalc === "(skill('Inner Sight'.blvl)+skill('Slow Movement'.blvl)+skill('Guided Arrow'.blvl))*par8" && Number(row.Param8) === 20) {
     const points = [8,17,22].map(id => Number(build[id] || 0));
     if (points.every(value => Number.isInteger(value) && value >= 0 && value <= 20)) {
