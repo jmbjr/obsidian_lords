@@ -227,3 +227,5 @@ footer {
 @media(max-width:560px){.skill-tree{gap:.25rem;padding:.35rem}.tree-node{padding:.15rem}.tree-skill{font-size:.65rem}.tree-glyph{width:26px;height:26px}.sandbox-inspector{padding:.65rem}}
 
 .sandbox-preview{display:grid;gap:.5rem;margin:1rem 0}.sandbox-preview>div{padding:.75rem;border:1px solid #554a3c;background:#262018;font-family:system-ui,sans-serif}.sandbox-preview small{display:block;margin-top:.3rem;color:#bdb2a4;line-height:1.4}
+
+.sandbox-metrics{max-width:100%;overflow-x:auto}.sandbox-metrics>div{grid-template-columns:minmax(170px,1fr) 65px 65px 75px}.sandbox-metrics small{display:block;color:#aaa0a9;font-size:.7rem;margin-top:.2rem}

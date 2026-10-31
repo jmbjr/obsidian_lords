@@ -1,6 +1,7 @@
 import amazonSkills from "../pd2/generated/amazon-skills.json";
 import { resolveAmazonLayout, validateAmazonLayout } from "./amazon-layout.js";
 import { previewAmazonSkill } from "./amazon-formulas.js";
+import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies } from "./amazon-comparison.js";
 
 const skills = amazonSkills.skills;
 validateAmazonLayout(skills);
@@ -23,6 +24,8 @@ export function renderAmazonSandbox() {
   const cards = skills.filter((skill) => resolveAmazonLayout(skill).page === state.page);
   const unplaced = skills.filter((skill) => resolveAmazonLayout(skill).page === null);
   const preview = previewAmazonSkill(selected, current[state.selected], state.bonus);
+  const comparisons = compareAmazonBuilds(skills, state.builds, state.bonus);
+  const dependencies = findAmazonDependencies(selected, skills);
   const formulas = Object.entries(selected.raw.skill).filter(([key, value]) => value && /calc|sym|param|reqskill|aurastat/i.test(key) && !key.startsWith("*"));
   return `
     <section class="hero compact"><p class="eyebrow">PD2 Tools · Experimental</p><h1>Amazon Skill Sandbox</h1>
@@ -37,7 +40,7 @@ export function renderAmazonSandbox() {
       </div>
       <div class="sandbox-summary">
         <strong>Build ${state.active === 0 ? "A" : "B"} · ${sum(current)} spent / ${state.budget} available · ${pointsLeft()} remaining</strong>
-        <div class="sandbox-actions"><button data-build="0" aria-pressed="${state.active === 0}">Build A</button><button data-build="1" aria-pressed="${state.active === 1}">Build B</button><button data-reset="true">Clear current build</button></div>
+        <div class="sandbox-actions"><button data-copy="true">Copy build JSON</button><button data-import="true">Import build JSON</button><button data-build="0" aria-pressed="${state.active === 0}">Build A</button><button data-build="1" aria-pressed="${state.active === 1}">Build B</button><button data-reset="true">Clear current build</button></div>
       </div>
       <div class="sandbox-actions"><button data-page="1" aria-pressed="${state.page === 1}">Bow & Crossbow</button><button data-page="2" aria-pressed="${state.page === 2}">Passive & Magic</button><button data-page="3" aria-pressed="${state.page === 3}">Javelin & Spear</button></div>
       <div class="skill-tree" aria-label="Amazon skill tree">
@@ -57,9 +60,15 @@ export function renderAmazonSandbox() {
         <h2>${escape(selected.identity.internalName)}</h2>
         <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · effective skill level ${current[state.selected] ? current[state.selected] + state.bonus : 0} (global bonus assumption; hard points remain capped at 20)</p>
         <div class="tree-points"><button data-adjust="${state.selected}" data-delta="-1" ${current[state.selected] === 0 ? "disabled" : ""}>−</button><strong>${current[state.selected]} / ${selected.selected.maxLevel}</strong><button data-adjust="${state.selected}" data-delta="1" ${current[state.selected] >= selected.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button></div>
+        <p class="annotation">Formula references to other skills: ${dependencies.length ? dependencies.map(escape).join(", ") : "none detected"}. References are not automatically evaluated as synergies.</p>
         <p class="annotation">Native S14 fields. The limited numeric previews below use explicit linear-parameter assumptions, not verified engine output or DPS. Other expressions remain uninterpreted.</p>
         ${preview.length ? `<div class="sandbox-preview">${preview.map((item) => `<div><strong>${escape(item.label)}: ${escape(item.value)}</strong><small>${escape(item.expression)} · ${escape(item.assumption)}</small></div>`).join("")}</div>` : `<p class="annotation">No supported numeric preview for this skill yet.</p>`}
         <div class="raw-table">${formulas.map(([key, value]) => `<div class="raw-row"><div><code>${escape(key)}</code></div><code class="raw-value">${escape(value)}</code></div>`).join("")}</div>
+      </section>
+      <section class="sandbox-inspector"><h2>Calculated build comparison</h2>
+        <p class="annotation">B − A shows the change between builds. A dash means that build has no allocated hard points for that skill. Results are limited formula previews, not DPS.</p>
+        <div class="sandbox-compare sandbox-metrics"><div><strong>Skill · metric</strong><strong>A</strong><strong>B</strong><strong>Δ B−A</strong></div>
+        ${comparisons.map(item => `<div><span>${escape(item.skill)} · ${escape(item.label)}<small>${escape(item.assumption)}</small></span><span>${item.a ?? "—"}</span><span>${item.b ?? "—"}</span><span>${item.delta === null ? "—" : item.delta > 0 ? "+" + item.delta : item.delta}</span></div>`).join("") || "<p>Allocate Multiple Shot or Guided Arrow points to see numeric comparisons.</p>"}</div>
       </section>
       <section class="sandbox-inspector"><h2>Compare builds</h2>
         <p class="annotation">Build A: ${sum(state.builds[0])} points · Build B: ${sum(state.builds[1])} points. Both share the same level, budget and +skills settings.</p>
@@ -72,11 +81,26 @@ export function renderAmazonSandbox() {
 
 export function mountAmazonSandbox(container) {
   if (!container) return;
+  try { const saved = normalizeBuildSnapshot(JSON.parse(localStorage.getItem(STORAGE_KEY)), skills); if (saved) Object.assign(state, saved); } catch { /* private browsing or invalid stored data */ }
+  const persist = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify({version:1,level:state.level,budget:state.budget,bonus:state.bonus,builds:state.builds})); } catch { /* storage unavailable */ } };
   const redraw = () => { container.innerHTML = renderAmazonSandbox(); };
   redraw();
   container.addEventListener("click", (event) => {
     const button = event.target.closest("button");
     if (!button || !container.contains(button)) return;
+    if (button.dataset.copy) {
+      const snapshot = JSON.stringify({version:1,level:state.level,budget:state.budget,bonus:state.bonus,builds:state.builds},null,2);
+      if (navigator.clipboard?.writeText) navigator.clipboard.writeText(snapshot).catch(() => window.prompt("Copy build JSON:",snapshot));
+      else window.prompt("Copy build JSON:",snapshot);
+      return;
+    }
+    if (button.dataset.import) {
+      const text = window.prompt("Paste exported build JSON:");
+      if (text === null) return;
+      try { const saved = normalizeBuildSnapshot(JSON.parse(text), skills); if (!saved) throw new Error("Invalid build format"); Object.assign(state,saved); persist(); redraw(); }
+      catch { window.alert("Invalid build JSON. No changes were made."); }
+      return;
+    }
     if (button.dataset.build !== undefined) state.active = Number(button.dataset.build);
     if (button.dataset.page !== undefined) state.page = Number(button.dataset.page);
     if (button.dataset.select !== undefined) state.selected = Number(button.dataset.select);
@@ -88,6 +112,7 @@ export function mountAmazonSandbox(container) {
       const current = activeBuild()[id];
       if (skill && ((delta === 1 && current < skill.selected.maxLevel && pointsLeft() > 0) || (delta === -1 && current > 0))) activeBuild()[id] += delta;
     }
+    persist();
     redraw();
   });
   container.addEventListener("change", (event) => {
