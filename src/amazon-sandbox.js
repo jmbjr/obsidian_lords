@@ -27,13 +27,13 @@ export function renderAmazonSandbox() {
   return `
     <section class="hero compact"><p class="eyebrow">PD2 Tools · Experimental</p><h1>Amazon Skill Sandbox</h1>
       <p class="lede">Plan and compare two skill allocations using native Season 14 skill-tree coordinates. Layout is source-based; icons and artwork are placeholders.</p>
-      <div class="source-warning"><strong>Prototype: allocation first</strong><span>Points are manually budgeted. Level gates and prerequisites are flagged, not enforced. Raw formulas are displayed but not evaluated into damage numbers. No automatic quest-point or respec assumptions.</span></div>
+      <div class="source-warning"><strong>Prototype: allocation first</strong><span>Hard points are manually budgeted (max 20 per skill); bonus skill levels can raise effective levels to 60 and beyond. Level gates and prerequisites are flagged, not enforced. Raw formulas are displayed but not evaluated into damage numbers. No automatic quest-point or respec assumptions.</span></div>
     </section>
     <section class="section wide">
       <div class="sandbox-settings">
         <label>Character level <input data-setting="level" type="number" min="1" max="99" value="${state.level}"></label>
         <label>Points to allocate <input data-setting="budget" type="number" min="0" max="150" value="${state.budget}"></label>
-        <label>+All skills <input data-setting="bonus" type="number" min="0" max="40" value="${state.bonus}"></label>
+        <label>+Skills from gear/effects <input data-setting="bonus" type="number" min="0" max="100" value="${state.bonus}"></label>
       </div>
       <div class="sandbox-summary">
         <strong>Build ${state.active === 0 ? "A" : "B"} · ${sum(current)} spent / ${state.budget} available · ${pointsLeft()} remaining</strong>
@@ -55,7 +55,7 @@ export function renderAmazonSandbox() {
       ${unplaced.length ? `<p class="annotation">Unverified tree position (select to allocate in inspector): ${unplaced.map((s) => escape(s.identity.internalName)).join(", ")}. These skills can still be allocated below.</p><div class="sandbox-actions">${unplaced.map((s) => `<button data-select="${s.identity.internalId}">${escape(s.identity.internalName)}</button>`).join("")}</div>` : ""}
       <section class="sandbox-inspector">
         <h2>${escape(selected.identity.internalName)}</h2>
-        <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · displayed skill level ${current[state.selected] ? current[state.selected] + state.bonus : 0} (simple +skills assumption)</p>
+        <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · effective skill level ${current[state.selected] ? current[state.selected] + state.bonus : 0} (global bonus assumption; hard points remain capped at 20)</p>
         <div class="tree-points"><button data-adjust="${state.selected}" data-delta="-1" ${current[state.selected] === 0 ? "disabled" : ""}>−</button><strong>${current[state.selected]} / ${selected.selected.maxLevel}</strong><button data-adjust="${state.selected}" data-delta="1" ${current[state.selected] >= selected.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button></div>
         <p class="annotation">Native S14 fields. The limited numeric previews below use explicit linear-parameter assumptions, not verified engine output or DPS. Other expressions remain uninterpreted.</p>
         ${preview.length ? `<div class="sandbox-preview">${preview.map((item) => `<div><strong>${escape(item.label)}: ${escape(item.value)}</strong><small>${escape(item.expression)} · ${escape(item.assumption)}</small></div>`).join("")}</div>` : `<p class="annotation">No supported numeric preview for this skill yet.</p>`}
@@ -96,7 +96,7 @@ export function mountAmazonSandbox(container) {
     const key = field.dataset.setting;
     if (key === "level") state.level = inputNumber(field.value, state.level, 1, 99);
     if (key === "budget") state.budget = Math.max(sum(state.builds[0]), sum(state.builds[1]), inputNumber(field.value, state.budget, 0, 150));
-    if (key === "bonus") state.bonus = inputNumber(field.value, state.bonus, 0, 40);
+    if (key === "bonus") state.bonus = inputNumber(field.value, state.bonus, 0, 100);
     redraw();
   });
 }
