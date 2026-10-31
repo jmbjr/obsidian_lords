@@ -142,7 +142,7 @@ function renderSkills() {
       <h2>Interesting formulas and parameters</h2>
       <p class="section-intro">These expressions are displayed exactly as they appear in the pinned game table. Labels beginning with an asterisk are source-column descriptions, not our interpretation.</p>
       <div class="raw-table">
-        ${rawField("aurastat1", raw.aurastat1) }
+        ${rawField("aurastat1", raw.aurastat1)}
         ${rawField("aurastatcalc1", raw.aurastatcalc1)}
         ${rawField("Param1", raw.Param1, raw["*Param1 Description"])}
         ${rawField("Param2", raw.Param2, raw["*Param2 Description"])}
