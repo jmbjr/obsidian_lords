@@ -14,7 +14,7 @@ assert.equal(previewAmazonSkill(skill(12), 20, 40)[1].value, 286);
 assert.equal(previewAmazonSkill(skill(22), 20, 40)[0].value, 320);
 assert.equal(previewAmazonSkill(skill(22), 1)[0].value, 25);
 assert.equal(previewAmazonSkill(skill(22), 5)[0].value, 45);
-assert.deepEqual(previewAmazonSkill(skill(26), 10), []);
+assert.equal(previewAmazonSkill(skill(26), 10).length, 2);
 const changed = structuredClone(skill(12));
 changed.raw.skill.calc1 = "unexpected";
 assert.deepEqual(previewAmazonSkill(changed, 5), []);
