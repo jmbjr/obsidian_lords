@@ -32,4 +32,12 @@ assert.equal(previewAmazonSkill(skill(26), 10, 40, {23:0})[1].value, 80 + 49 * 1
 const alteredStrafe = structuredClone(skill(26));
 alteredStrafe.raw.skill.calc2 = "unknown";
 assert.deepEqual(previewAmazonSkill(alteredStrafe, 10, 0, {23:5}), []);
+for (const [id, token] of [[9,"dm12"],[33,"edmn"]]) {
+  const result = previewAmazonSkill(skill(id),20,40);
+  assert.equal(result[0].value,null);
+  assert.equal(result[0].expression,token);
+  const altered = structuredClone(skill(id));
+  altered.raw.skill.passivecalc1 = "unexpected";
+  assert.deepEqual(previewAmazonSkill(altered,20,40),[]);
+}
 console.log("Source-guarded formula previews passed");
