@@ -203,3 +203,25 @@ footer {
 @media (max-width: 560px) {
   .experiment-row { grid-template-columns: 1fr; gap: .55rem; }
 }
+
+/* Amazon skill allocation prototype */
+.sandbox-settings,.sandbox-summary,.sandbox-actions{display:flex;gap:.7rem;flex-wrap:wrap;align-items:center;margin:1rem 0;font-family:system-ui,sans-serif}
+.sandbox-settings label{display:grid;gap:.35rem;color:#c9c0c9;font-size:.85rem}
+.sandbox-settings input{width:115px;background:#171519;border:1px solid #625867;color:#eee6d8;padding:.6rem}
+.sandbox-summary{justify-content:space-between;border-block:1px solid #3d3941;padding:.65rem 0}
+.sandbox-actions button,.tree-points button{background:#29242b;border:1px solid #655969;color:#eee6d8;padding:.5rem .75rem;cursor:pointer}
+.sandbox-actions button[aria-pressed="true"]{border-color:#d4b883;background:#443a2d}
+.sandbox-actions button:disabled,.tree-points button:disabled{opacity:.3;cursor:not-allowed}
+.skill-tree{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(6,minmax(98px,auto));gap:.6rem;padding:1rem;background:linear-gradient(140deg,#201b23,#121115);border:1px solid #574b5b;max-width:650px}
+.tree-node{min-width:0;padding:.3rem;border:1px solid #55495b;background:#221d26;text-align:center;display:grid;align-content:space-between;gap:.25rem}
+.tree-node.chosen{outline:2px solid #c4a77b}
+.tree-skill{width:100%;display:grid;justify-items:center;gap:.2rem;border:0;background:transparent;color:#f0e7db;cursor:pointer;font-size:.76rem;overflow-wrap:anywhere}
+.tree-glyph{display:grid;place-items:center;width:36px;height:36px;background:#554434;border:1px solid #ab8c5d;font-size:1.4rem}
+.tree-points{display:flex;align-items:center;justify-content:center;gap:.35rem;font-family:system-ui,sans-serif}
+.tree-points button{padding:.15rem .45rem}
+.tree-points small{font-size:.65rem;color:#b3a8b8}
+.tree-warning{color:#e3ad85;font-size:.67rem}
+.sandbox-inspector{margin-top:2rem;padding:1.2rem;background:#19161b;border:1px solid #3d3941}
+.sandbox-compare{max-width:540px;font-family:system-ui,sans-serif}
+.sandbox-compare>div{display:grid;grid-template-columns:1fr 50px 50px;gap:1rem;padding:.5rem;border-bottom:1px solid #3d3941}
+@media(max-width:560px){.skill-tree{gap:.25rem;padding:.35rem}.tree-node{padding:.15rem}.tree-skill{font-size:.65rem}.tree-glyph{width:26px;height:26px}.sandbox-inspector{padding:.65rem}}
