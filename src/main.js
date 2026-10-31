@@ -104,12 +104,12 @@ function renderSkills() {
       <p class="lede">A source-backed view of PD2's Necromancer poison melee skill. The pinned game table still identifies it internally as <code>${skill.identity.internalName}</code>.</p>
       <div class="source-warning">
         <strong>Season ${source.season} source data</strong>
-        <span>The numeric/formula record below is Season ${source.season} game-table data. A separately sourced Season ${overlay.targetSeason} behavioral delta is shown below; it does not relabel these tables as S14.</span>
+        <span>The numeric/formula record below is Season ${source.season} game-table data. The Season ${overlay.targetSeason} patch-note record below is retained as provenance, not as a replacement for these native S14 tables.</span>
       </div>
     </section>
 
     <section class="section wide season-delta">
-      <p class="eyebrow">Season ${overlay.targetSeason} patch-note overlay</p>
+      <p class="eyebrow">Season ${overlay.targetSeason} patch-note provenance</p>
       <h2>Known Season ${overlay.targetSeason} change</h2>
       <div class="delta-card">
         <div class="delta-meta">
@@ -117,7 +117,7 @@ function renderSkills() {
           <span>confidence: ${delta.confidence}</span>
         </div>
         <p>${delta.statement}</p>
-        <p class="annotation">Source: <strong>${delta.source.title}</strong> · ${delta.source.section}. This is a behavioral correction. The patch notes provide no replacement numeric poison-pierce value, so the Season ${source.season} formula below remains unchanged.</p>
+        <p class="annotation">Source: <strong>${delta.source.title}</strong> · ${delta.source.section}. This is a behavioral correction. The patch note describes the behavioral fix; the native Season ${source.season} table now stores the poison-pierce expression under <code>aurastatcalc1</code>.</p>
       </div>
     </section>
 
@@ -142,7 +142,8 @@ function renderSkills() {
       <h2>Interesting formulas and parameters</h2>
       <p class="section-intro">These expressions are displayed exactly as they appear in the pinned game table. Labels beginning with an asterisk are source-column descriptions, not our interpretation.</p>
       <div class="raw-table">
-        ${rawField("calc1", raw.calc1, raw["*calc1 desc"])}
+        ${rawField("aurastat1", raw.aurastat1) }
+        ${rawField("aurastatcalc1", raw.aurastatcalc1)}
         ${rawField("Param1", raw.Param1, raw["*Param1 Description"])}
         ${rawField("Param2", raw.Param2, raw["*Param2 Description"])}
         ${rawField("Param3", raw.Param3, raw["*Param3 Description"])}
