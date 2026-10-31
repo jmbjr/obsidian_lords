@@ -1,5 +1,6 @@
 import "./style.css";
 import poisonStrike from "../pd2/generated/poison-strike.json";
+import amazonSkills from "../pd2/generated/amazon-skills.json";
 import poisonStrikeS14 from "../pd2/overlays/season-14/poison-strike.json";
 import spectralExperiment from "../pd2/experiments/spectral-plate-poison-strike.json";
 
@@ -8,6 +9,7 @@ const routes = {
   "#/": renderHome,
   "#/pd2": renderPd2,
   "#/pd2/skills": renderSkills,
+  "#/pd2/amazon": renderAmazon,
   "#/pd2/experiments/spectral-plate-poison-strike": renderSpectralExperiment,
 };
 
@@ -63,6 +65,12 @@ function renderPd2() {
           <h2>Skill Explorer</h2>
           <p>Inspect source-backed skill mechanics. Poison Strike is the first vertical slice.</p>
           <span class="card-link">Open Skill Explorer →</span>
+        </a>
+        <a class="card" href="#/pd2/amazon">
+          <span class="card-kicker">Season 14</span>
+          <h2>Amazon Skills</h2>
+          <p>Explore native Season 14 Multiple Shot and companion skill formulas.</p>
+          <span class="card-link">Explore Amazon skills →</span>
         </a>
         <a class="card" href="#/pd2/experiments/spectral-plate-poison-strike">
           <span class="card-kicker">Experiment</span>
@@ -183,6 +191,40 @@ function renderSkills() {
   `);
 }
 
+
+
+function escapeHtml(value) {
+  return String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+}
+
+function renderAmazon() {
+  const source = amazonSkills.source;
+  const relevantFields = ["reqlevel", "maxlvl", "reqskill1", "reqskill2", "reqskill3", "EDmgSymPerCalc", "DmgSymPerCalc", "calc1", "calc2", "aurastat1", "aurastatcalc1", "Param1", "Param2", "Param8"];
+  return layout(`
+    <section class="hero compact">
+      <p class="eyebrow">PD2 Tools · Amazon</p>
+      <h1>Season ${source.season} Amazon Skills</h1>
+      <p class="lede">Multiple Shot and selected physical, magic, elemental and utility companions. Raw mechanics, not a damage or point-allocation calculator.</p>
+      <div class="source-warning"><strong>Native Season ${source.season} tables</strong><span>Pinned to ${escapeHtml(source.repository)} @ ${escapeHtml(source.commit.slice(0, 12))}. Game formulas are shown verbatim, not evaluated.</span></div>
+    </section>
+    <section class="section wide">
+      <h2>Skill reference (${amazonSkills.skills.length})</h2>
+      <p class="annotation">This is a curated selection, not a complete tree. Source prerequisites and synergy formulas must be interpreted before using them to validate skill allocations.</p>
+      <div class="experiment-list">
+        ${amazonSkills.skills.map((skill) => `
+          <details class="experiment-row" ${skill.identity.internalId === 12 ? "open" : ""}>
+            <summary><strong>${escapeHtml(skill.identity.internalName)}</strong> · level ${skill.selected.requiredLevel} · ID ${skill.identity.internalId}</summary>
+            <p class="annotation">Display string key: <code>${escapeHtml(skill.identity.displayNameStringKey)}</code></p>
+            <div class="raw-table">
+              ${relevantFields.filter((field) => skill.raw.skill[field] !== undefined).map((field) => rawField(escapeHtml(field), escapeHtml(skill.raw.skill[field]))).join("")}
+            </div>
+          </details>
+        `).join("")}
+      </div>
+      <a class="text-link" href="#/pd2">← Back to PD2 Tools</a>
+    </section>
+  `);
+}
 
 function renderSpectralExperiment() {
   const experiment = spectralExperiment;
