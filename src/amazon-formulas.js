@@ -9,6 +9,14 @@ export const diminishingDm12 = (level, min, max) => {
   const scale = Math.trunc(110 * level / (level + 6));
   return Math.min(max, min + Math.trunc(scale * (max - min) / 100));
 };
+// edmn reads elemental minimum damage; native level bands are 2–8, 9–16,
+// 17–22, 23–28, and 29+. Pierce stores this value in its passive stat.
+export const elementalMinByLevel = (row, level) => {
+  if (!Number.isInteger(level) || level < 1) return null;
+  const increments = [row.EMinLev1,row.EMinLev2,row.EMinLev3,row.EMinLev4,row.EMinLev5].map(n);
+  const counts = [Math.min(Math.max(level-1,0),7),Math.min(Math.max(level-8,0),8),Math.min(Math.max(level-16,0),6),Math.min(Math.max(level-22,0),6),Math.max(level-28,0)];
+  return n(row.EMin) + counts.reduce((sum,count,i)=>sum+count*increments[i],0);
+};
 export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0, build = {}) {
   if (!skill || hardPoints <= 0) return [];
   const row = skill.raw.skill;
@@ -17,7 +25,7 @@ export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0, build = {
     return [{ label: "Critical Strike chance % (dm12 preview)", value: diminishingDm12(level, n(row.Param1), n(row.Param2)), expression: row.passivecalc1, assumption: "D2-family dm12 integer diminishing-return evaluator, capped at Param2; PD2 engine parity not verified" }];
   }
   if (skill.identity.internalId === 33 && row.passivecalc1 === "edmn" && row.passivestat1 === "skill_pierce") {
-    return [{ label: "Pierce chance (unresolved)", value: null, expression: row.passivecalc1, assumption: "Native S14 token edmn is conventionally elemental minimum damage, not a generic chance function; Pierce engine usage unverified" }];
+    return [{ label: "Pierce passive stat (edmn raw preview)", value: elementalMinByLevel(row, level), expression: row.passivecalc1, assumption: "edmn evaluates EMin and EMinLev1–5 by skill-level bands. Native passive stat is skill_pierce, but whether this raw value equals in-game pierce chance % is not engine-verified. Gear pierce not included." }];
   }
   if (skill.identity.internalId === 6 && row.EDmgSymPerCalc === "(skill('Inner Sight'.blvl)+skill('Slow Movement'.blvl)+skill('Guided Arrow'.blvl))*par8" && Number(row.Param8) === 20) {
     const points = [8,17,22].map(id => Number(build[id] || 0));
