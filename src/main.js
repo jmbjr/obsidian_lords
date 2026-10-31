@@ -1,4 +1,5 @@
 import "./style.css";
+import { mountAmazonSandbox } from "./amazon-sandbox.js";
 import poisonStrike from "../pd2/generated/poison-strike.json";
 import amazonSkills from "../pd2/generated/amazon-skills.json";
 import poisonStrikeS14 from "../pd2/overlays/season-14/poison-strike.json";
@@ -10,6 +11,7 @@ const routes = {
   "#/pd2": renderPd2,
   "#/pd2/skills": renderSkills,
   "#/pd2/amazon": renderAmazon,
+  "#/pd2/amazon/sandbox": renderSandbox,
   "#/pd2/experiments/spectral-plate-poison-strike": renderSpectralExperiment,
 };
 
@@ -197,6 +199,10 @@ function escapeHtml(value) {
   return String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 }
 
+function renderSandbox() {
+  return layout(`<div id="amazon-sandbox"></div>`);
+}
+
 function renderAmazon() {
   const source = amazonSkills.source;
   const relevantFields = ["reqlevel", "maxlvl", "reqskill1", "reqskill2", "reqskill3", "EDmgSymPerCalc", "DmgSymPerCalc", "calc1", "calc2", "aurastat1", "aurastatcalc1", "Param1", "Param2", "Param8"];
@@ -209,6 +215,7 @@ function renderAmazon() {
     </section>
     <section class="section wide">
       <h2>Skill reference (${amazonSkills.skills.length})</h2>
+      <p><a class="button" href="#/pd2/amazon/sandbox">Open allocation sandbox →</a></p>
       <p class="annotation">This is a curated selection, not a complete tree. Source prerequisites and synergy formulas must be interpreted before using them to validate skill allocations.</p>
       <div class="experiment-list">
         ${amazonSkills.skills.map((skill) => `
@@ -287,6 +294,7 @@ function renderSpectralExperiment() {
 function render() {
   const renderer = routes[window.location.hash] ?? renderHome;
   document.querySelector("#app").innerHTML = renderer();
+  if (window.location.hash === "#/pd2/amazon/sandbox") mountAmazonSandbox(document.querySelector("#amazon-sandbox"));
 }
 
 window.addEventListener("hashchange", render);
