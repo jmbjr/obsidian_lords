@@ -14,13 +14,13 @@ export function normalizeBuildSnapshot(input, skills) {
   if (builds.some(b => !b)) return null;
   const bounded = (v, lo, hi, fallback) => Number.isInteger(v) && v >= lo && v <= hi ? v : fallback;
   const spent = Math.max(...builds.map(b => Object.values(b).reduce((a,c)=>a+c,0)));
-  return { version: 1, level: bounded(input.level,1,99,55), budget: Math.max(spent,bounded(input.budget,0,150,30)), bonus: bounded(input.bonus,0,100,0), builds };
+  return { version: 1, level: bounded(input.level,1,99,55), budget: Math.max(spent,bounded(input.budget,0,150,30)), bonuses: Array.isArray(input.bonuses) && input.bonuses.length === 2 ? input.bonuses.map(v => bounded(v,0,100,0)) : [bounded(input.bonus,0,100,0), bounded(input.bonus,0,100,0)], builds };
 }
-export function compareAmazonBuilds(skills, builds, bonus) {
+export function compareAmazonBuilds(skills, builds, bonuses) {
   return skills.flatMap(skill => {
     const id = skill.identity.internalId;
-    const a = previewAmazonSkill(skill, builds[0][id] || 0, bonus, builds[0]);
-    const b = previewAmazonSkill(skill, builds[1][id] || 0, bonus, builds[1]);
+    const a = previewAmazonSkill(skill, builds[0][id] || 0, bonuses[0], builds[0]);
+    const b = previewAmazonSkill(skill, builds[1][id] || 0, bonuses[1], builds[1]);
     const labels = [...new Set([...a,...b].map(v=>v.label))];
     return labels.map(label => {
       const av = a.find(v=>v.label===label);
