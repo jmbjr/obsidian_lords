@@ -1,16 +1,18 @@
 import amazonSkills from "../pd2/generated/amazon-skills.json";
 import { resolveAmazonLayout, validateAmazonLayout } from "./amazon-layout.js";
 import { previewAmazonSkill } from "./amazon-formulas.js";
-import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies } from "./amazon-comparison.js";
+import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill } from "./amazon-comparison.js";
 
 const skills = amazonSkills.skills;
 validateAmazonLayout(skills);
 const byId = new Map(skills.map((s) => [s.identity.internalId, s]));
 const newBuild = () => Object.fromEntries(skills.map((s) => [s.identity.internalId, 0]));
-const state = { level: 55, budget: 30, bonuses: [0, 0], active: 0, page: 1, selected: 12, builds: [newBuild(), newBuild()] };
+const state = { level: 55, budget: 30, bonuses: [emptyBonus(), emptyBonus()], active: 0, page: 1, selected: 12, builds: [newBuild(), newBuild()] };
 const escape = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 const sum = (build) => Object.values(build).reduce((a, b) => a + b, 0);
 const activeBuild = () => state.builds[state.active];
+const activeBonus = () => state.bonuses[state.active];
+const effectiveBonus = skill => bonusForSkill(skill, activeBonus());
 const pointsLeft = () => state.budget - sum(activeBuild());
 const inputNumber = (value, fallback, min, max) => {
   if (String(value).trim() === "") return fallback;
@@ -23,7 +25,7 @@ export function renderAmazonSandbox() {
   const current = activeBuild();
   const cards = skills.filter((skill) => resolveAmazonLayout(skill).page === state.page);
   const unplaced = skills.filter((skill) => resolveAmazonLayout(skill).page === null);
-  const preview = previewAmazonSkill(selected, current[state.selected], state.bonuses[state.active], current);
+  const preview = previewAmazonSkill(selected, current[state.selected], effectiveBonus(selected), current);
   const comparisons = compareAmazonBuilds(skills, state.builds, state.bonuses);
   const dependencies = findAmazonDependencies(selected, skills);
   const formulas = Object.entries(selected.raw.skill).filter(([key, value]) => value && /calc|sym|param|reqskill|aurastat/i.test(key) && !key.startsWith("*"));
@@ -36,7 +38,10 @@ export function renderAmazonSandbox() {
       <div class="sandbox-settings">
         <label>Character level <input data-setting="level" type="number" min="1" max="99" value="${state.level}"></label>
         <label>Points to allocate <input data-setting="budget" type="number" min="0" max="150" value="${state.budget}"></label>
-        <label>Build A · +All Skills <input data-bonus-build="0" type="number" min="0" max="100" value="${state.bonuses[0]}"></label><label>Build B · +All Skills <input data-bonus-build="1" type="number" min="0" max="100" value="${state.bonuses[1]}"></label>
+        <label>Build A · +All Skills <input data-bonus-build="0" type="number" min="0" max="100" value="${state.bonuses[0].all}"></label><label>Build B · +All Skills <input data-bonus-build="1" type="number" min="0" max="100" value="${state.bonuses[1].all}"></label>
+      </div>
+      <div class="sandbox-settings">
+        ${[0,1].map(index => `<fieldset><legend>Build ${index === 0 ? "A" : "B"} · +Tree Skills</legend>${[[1,"Bow & Crossbow"],[2,"Passive & Magic"],[3,"Javelin & Spear"]].map(([page,name]) => `<label>${name} <input type="number" min="0" max="100" data-tree-bonus="${page}" data-bonus-build="${index}" value="${state.bonuses[index].trees[page]}"></label>`).join("")}</fieldset>`).join("")}
       </div>
       <div class="sandbox-summary">
         <strong>Build ${state.active === 0 ? "A" : "B"} · ${sum(current)} spent / ${state.budget} available · ${pointsLeft()} remaining</strong>
@@ -50,7 +55,7 @@ export function renderAmazonSandbox() {
           const locked = state.level < skill.selected.requiredLevel;
           return `<div class="tree-node ${state.selected === id ? "chosen" : ""}" style="grid-row:${resolveAmazonLayout(skill).row};grid-column:${resolveAmazonLayout(skill).column}">
             <button class="tree-skill" data-select="${id}" aria-pressed="${state.selected === id}"><span class="tree-glyph">✦</span><span>${escape(skill.identity.internalName)}</span></button>
-            <div class="tree-points"><button data-adjust="${id}" data-delta="-1" aria-label="Remove ${escape(skill.identity.internalName)} point" ${points === 0 ? "disabled" : ""}>−</button><strong>${points}<small> + ${state.bonuses[state.active]}</small></strong><button data-adjust="${id}" data-delta="1" aria-label="Add ${escape(skill.identity.internalName)} point" ${points >= skill.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button></div>
+            <div class="tree-points"><button data-adjust="${id}" data-delta="-1" aria-label="Remove ${escape(skill.identity.internalName)} point" ${points === 0 ? "disabled" : ""}>−</button><strong>${points}<small> + ${effectiveBonus(skill)}</small></strong><button data-adjust="${id}" data-delta="1" aria-label="Add ${escape(skill.identity.internalName)} point" ${points >= skill.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button></div>
             ${locked ? '<small class="tree-warning">Level gated</small>' : ""}${resolveAmazonLayout(skill).status === "provisional" ? '<small class="tree-warning">Provisional position</small>' : ""}
           </div>`;
         }).join("")}
@@ -59,7 +64,8 @@ export function renderAmazonSandbox() {
       <section class="sandbox-inspector">
         <h2>${escape(selected.identity.internalName)}</h2>
         ${state.selected === 365 ? `<p class="annotation"><strong>Vestigial / removed skill:</strong> Shattering Arrow was developed before PD2 Season 1 and removed before release, according to a July 28, 2023 developer Discord response shared by a player. Its definitions remain in the Season 14 data; it is retained here for historical experimentation, not as a normally selectable skill.</p>` : ""}
-        <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · effective skill level ${current[state.selected] ? current[state.selected] + state.bonus : 0} (global bonus assumption; hard points remain capped at 20)</p>
+        <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · effective skill level ${current[state.selected] ? current[state.selected] + effectiveBonus(selected) : 0} (+all, +tree and +skill bonuses; hard points remain capped at 20)</p>
+        <label>Build ${state.active === 0 ? "A" : "B"} · +${escape(selected.identity.internalName)} <input type="number" min="0" max="100" data-skill-bonus="${state.selected}" value="${activeBonus().skills[state.selected] || 0}"></label>
         <div class="tree-points"><button data-adjust="${state.selected}" data-delta="-1" ${current[state.selected] === 0 ? "disabled" : ""}>−</button><strong>${current[state.selected]} / ${selected.selected.maxLevel}</strong><button data-adjust="${state.selected}" data-delta="1" ${current[state.selected] >= selected.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button></div>
         <p class="annotation">Formula references to other skills: ${dependencies.length ? dependencies.map(escape).join(", ") : "none detected"}. Only explicitly supported, source-guarded references are evaluated as synergies.</p>
         <p class="annotation">Native S14 fields. The limited numeric previews below use explicit linear-parameter assumptions, not verified engine output or DPS. Other expressions remain uninterpreted.</p>
@@ -72,7 +78,7 @@ export function renderAmazonSandbox() {
         ${comparisons.map(item => `<div><span>${escape(item.skill)} · ${escape(item.label)}<small>${escape(item.assumption)}</small></span><span>${item.a ?? "—"}</span><span>${item.b ?? "—"}</span><span>${item.delta === null ? "—" : item.delta > 0 ? "+" + item.delta : item.delta}</span></div>`).join("") || "<p>Allocate Multiple Shot or Guided Arrow points to see numeric comparisons.</p>"}</div>
       </section>
       <section class="sandbox-inspector"><h2>Compare builds</h2>
-        <p class="annotation">Build A: ${sum(state.builds[0])} points · Build B: ${sum(state.builds[1])} points. Both share the same character level and point budget; +All Skills bonuses are independent (A: +${state.bonuses[0]}, B: +${state.bonuses[1]}).</p>
+        <p class="annotation">Build A: ${sum(state.builds[0])} points · Build B: ${sum(state.builds[1])} points. Both share the same character level and point budget; +All Skills bonuses are independent (A: +${state.bonuses[0].all}, B: +${state.bonuses[1].all}; tree and skill bonuses are also independent).</p>
         <div class="sandbox-compare"><div><strong>Skill</strong><strong>A</strong><strong>B</strong></div>
         ${skills.filter((skill) => state.builds.some((b) => b[skill.identity.internalId] > 0)).map((skill) => `<div><span>${escape(skill.identity.internalName)}</span><span>${state.builds[0][skill.identity.internalId]}</span><span>${state.builds[1][skill.identity.internalId]}</span></div>`).join("") || "<p>No points allocated yet.</p>"}</div>
       </section>
@@ -119,7 +125,24 @@ export function mountAmazonSandbox(container) {
   container.addEventListener("change", (event) => {
     const field = event.target.closest("[data-setting]");
     const bonusField = event.target.closest("[data-bonus-build]");
-    if (bonusField) { const index = Number(bonusField.dataset.bonusBuild); if (index === 0 || index === 1) state.bonuses[index] = inputNumber(bonusField.value, state.bonuses[index], 0, 100); persist(); redraw(); return; }
+    if (bonusField) {
+      const index = Number(bonusField.dataset.bonusBuild);
+      if (index !== 0 && index !== 1) return;
+      const bonus = state.bonuses[index];
+      if (bonusField.dataset.treeBonus) {
+        const page = Number(bonusField.dataset.treeBonus);
+        if (![1,2,3].includes(page)) return;
+        bonus.trees[page] = inputNumber(bonusField.value,bonus.trees[page],0,100);
+      } else bonus.all = inputNumber(bonusField.value,bonus.all,0,100);
+      persist(); redraw(); return;
+    }
+    const skillField = event.target.closest("[data-skill-bonus]");
+    if (skillField) {
+      const id = Number(skillField.dataset.skillBonus);
+      if (!byId.has(id)) return;
+      activeBonus().skills[id] = inputNumber(skillField.value,activeBonus().skills[id] || 0,0,100);
+      persist(); redraw(); return;
+    }
     if (!field) return;
     const key = field.dataset.setting;
     if (key === "level") state.level = inputNumber(field.value, state.level, 1, 99);
