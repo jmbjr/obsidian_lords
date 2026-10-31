@@ -230,3 +230,7 @@ footer {
 
 .sandbox-metrics{max-width:100%;overflow-x:auto}.sandbox-metrics>div{grid-template-columns:minmax(170px,1fr) 65px 65px 75px}.sandbox-metrics small{display:block;color:#aaa0a9;font-size:.7rem;margin-top:.2rem}
 \n/* Individual skill bonus controls sit beside hard-point controls, without adding inspector inputs. */\n.skill-bonus-controls { display: inline-flex; gap: .2rem; margin-left: .35rem; align-items: center; }\n.skill-bonus-button { color: #a9d5ff; background: #173d67; border: 1px solid #4387cb; border-radius: .25rem; cursor: pointer; min-width: 1.5rem; min-height: 1.5rem; }\n.skill-bonus-button:hover:not(:disabled) { background: #245d96; }\n.skill-bonus-button:disabled { opacity: .35; cursor: not-allowed; }\n
+/* Compact blue up/down stepper for per-skill bonus levels. */
+.skill-bonus-controls { display: inline-flex; flex-direction: column-reverse; gap: 1px; margin-left: .3rem; vertical-align: middle; }
+.skill-bonus-controls .skill-bonus-button { color: #b9dcff; background: #163f71; border-color: #4a91d9; font-size: .65rem; line-height: 1; min-width: 1.45rem; min-height: .85rem; padding: 0 .15rem; }
+.skill-bonus-controls .skill-bonus-button:hover:not(:disabled) { background: #2867a8; }
