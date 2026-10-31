@@ -3,10 +3,16 @@
 // Results are previews, not authoritative in-game damage or DPS.
 const n = (value) => Number(value);
 const linear = (base, perLevel, level) => n(base) + (level - 1) * n(perLevel);
-export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0) {
+export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0, build = {}) {
   if (!skill || hardPoints <= 0) return [];
   const row = skill.raw.skill;
   const level = hardPoints + bonusSkills;
+  if (skill.identity.internalId === 6 && row.EDmgSymPerCalc === "(skill('Inner Sight'.blvl)+skill('Slow Movement'.blvl)+skill('Guided Arrow'.blvl))*par8" && Number(row.Param8) === 20) {
+    const points = [8,17,22].map(id => Number(build[id] || 0));
+    if (points.every(value => Number.isInteger(value) && value >= 0 && value <= 20)) {
+      return [{ label: "Magic damage synergy bonus % (EDmgSymPerCalc)", value: points.reduce((a,b)=>a+b,0) * Number(row.Param8), expression: row.EDmgSymPerCalc, assumption: "20% per hard point in Inner Sight, Slow Movement and Guided Arrow; bonus is not total damage" }];
+    }
+  }
   if (skill.identity.internalId === 12 && row.calc1 === '"min(25,ln12)"' && row.calc4 === "ln56") {
     return [
       { label: "Arrow count (calc1)", value: Math.min(25, linear(row.Param1, row.Param2, level)), expression: row.calc1, assumption: "ln12 = Param1 + (level − 1) × Param2" },
