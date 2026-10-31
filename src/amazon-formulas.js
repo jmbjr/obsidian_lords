@@ -3,15 +3,21 @@
 // Results are previews, not authoritative in-game damage or DPS.
 const n = (value) => Number(value);
 const linear = (base, perLevel, level) => n(base) + (level - 1) * n(perLevel);
+// D2 skillcalc dm12: truncate integer division at each stage; clamp to upper parameter.
+// This is a documented D2-family evaluator interpretation, not PD2 engine verification.
+export const diminishingDm12 = (level, min, max) => {
+  const scale = Math.trunc(110 * level / (level + 6));
+  return Math.min(max, min + Math.trunc(scale * (max - min) / 100));
+};
 export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0, build = {}) {
   if (!skill || hardPoints <= 0) return [];
   const row = skill.raw.skill;
   const level = hardPoints + bonusSkills;
   if (skill.identity.internalId === 9 && row.passivecalc1 === "dm12" && row.passivestat1 === "passive_critical_strike") {
-    return [{ label: "Critical Strike chance (unresolved)", value: null, expression: row.passivecalc1, assumption: "Native S14 diminishing-return token dm12; Param1=5, Param2=75. Engine semantics not yet verified; no percentage inferred" }];
+    return [{ label: "Critical Strike chance % (dm12 preview)", value: diminishingDm12(level, n(row.Param1), n(row.Param2)), expression: row.passivecalc1, assumption: "D2-family dm12 integer diminishing-return evaluator, capped at Param2; PD2 engine parity not verified" }];
   }
   if (skill.identity.internalId === 33 && row.passivecalc1 === "edmn" && row.passivestat1 === "skill_pierce") {
-    return [{ label: "Pierce chance (unresolved)", value: null, expression: row.passivecalc1, assumption: "Native S14 token edmn; Param1=10, Param2=100. Engine semantics not yet verified; no percentage inferred" }];
+    return [{ label: "Pierce chance (unresolved)", value: null, expression: row.passivecalc1, assumption: "Native S14 token edmn is conventionally elemental minimum damage, not a generic chance function; Pierce engine usage unverified" }];
   }
   if (skill.identity.internalId === 6 && row.EDmgSymPerCalc === "(skill('Inner Sight'.blvl)+skill('Slow Movement'.blvl)+skill('Guided Arrow'.blvl))*par8" && Number(row.Param8) === 20) {
     const points = [8,17,22].map(id => Number(build[id] || 0));

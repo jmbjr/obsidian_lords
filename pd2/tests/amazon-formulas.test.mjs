@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { previewAmazonSkill } from "../../src/amazon-formulas.js";
+import { previewAmazonSkill, diminishingDm12 } from "../../src/amazon-formulas.js";
 const data = JSON.parse(await readFile("pd2/generated/amazon-skills.json", "utf8"));
 const skill = (id) => data.skills.find((item) => item.identity.internalId === id);
 assert.deepEqual(previewAmazonSkill(skill(12), 0), []);
@@ -32,9 +32,14 @@ assert.equal(previewAmazonSkill(skill(26), 10, 40, {23:0})[1].value, 80 + 49 * 1
 const alteredStrafe = structuredClone(skill(26));
 alteredStrafe.raw.skill.calc2 = "unknown";
 assert.deepEqual(previewAmazonSkill(alteredStrafe, 10, 0, {23:5}), []);
+assert.equal(diminishingDm12(1,5,75),15);
+assert.equal(diminishingDm12(20,5,75),63);
+assert.equal(diminishingDm12(60,5,75),75);
+assert.equal(previewAmazonSkill(skill(9),1)[0].value,15);
+assert.equal(previewAmazonSkill(skill(9),20,40)[0].value,75);
 for (const [id, token] of [[9,"dm12"],[33,"edmn"]]) {
   const result = previewAmazonSkill(skill(id),20,40);
-  assert.equal(result[0].value,null);
+  assert.equal(result[0].value,id === 9 ? 75 : null);
   assert.equal(result[0].expression,token);
   const altered = structuredClone(skill(id));
   altered.raw.skill.passivecalc1 = "unexpected";
