@@ -1,0 +1,18 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { previewAmazonSkill } from "../../src/amazon-formulas.js";
+const data = JSON.parse(await readFile("pd2/generated/amazon-skills.json", "utf8"));
+const skill = (id) => data.skills.find((item) => item.identity.internalId === id);
+assert.deepEqual(previewAmazonSkill(skill(12), 0), []);
+assert.equal(previewAmazonSkill(skill(12), 1)[0].value, 5);
+assert.equal(previewAmazonSkill(skill(12), 1)[1].value, 50);
+assert.equal(previewAmazonSkill(skill(12), 20)[0].value, 24);
+assert.equal(previewAmazonSkill(skill(12), 20)[1].value, 126);
+assert.equal(previewAmazonSkill(skill(12), 20, 5)[0].value, 25);
+assert.equal(previewAmazonSkill(skill(22), 1)[0].value, 25);
+assert.equal(previewAmazonSkill(skill(22), 5)[0].value, 45);
+assert.deepEqual(previewAmazonSkill(skill(26), 10), []);
+const changed = structuredClone(skill(12));
+changed.raw.skill.calc1 = "unexpected";
+assert.deepEqual(previewAmazonSkill(changed, 5), []);
+console.log("Source-guarded formula previews passed");
