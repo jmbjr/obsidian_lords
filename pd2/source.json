@@ -1,11 +1,11 @@
 {
   "repository": "coleestrin/pd2-tools",
-  "commit": "ff6ebbbf5510bd68cdd343b2d460a4bdd91609c4",
-  "season": 13,
+  "commit": "7952f34719aa3a5cb41334a91fe36dbcbdd8be9c",
+  "season": 14,
   "files": [
     {
       "name": "Skills.txt",
-      "path": "api/src/game-data/pd2/season-13/Skills.txt",
+      "path": "api/src/game-data/pd2/season-14/Skills.txt",
       "requiredColumns": [
         "skill",
         "Id",
@@ -16,7 +16,7 @@
     },
     {
       "name": "SkillDesc.txt",
-      "path": "api/src/game-data/pd2/season-13/SkillDesc.txt",
+      "path": "api/src/game-data/pd2/season-14/SkillDesc.txt",
       "requiredColumns": [
         "skilldesc",
         "SkillPage",
