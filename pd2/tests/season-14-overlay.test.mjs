@@ -24,7 +24,8 @@ assert.match(change.statement, /only during the Poison Strike attack animation/)
 assert.deepEqual(change.affectedSourceFields, []);
 assert.equal(change.affectedMechanic, "poison pierce bonus duration");
 
-assert.equal(normalized.source.season, 13, "overlay must not relabel the normalized source season");
-assert.equal(normalized.raw.skill.calc1, "\"min(ln12, 50)\"", "overlay must not replace the S13 poison-pierce formula");
+assert.equal(normalized.source.season, 14, "native S14 source must retain its season");
+assert.equal(normalized.raw.skill.aurastat1, "passive_pois_pierce");
+assert.equal(normalized.raw.skill.aurastatcalc1, "\"min(ln12, 50)\"", "overlay must not replace the native S14 formula");
 
 console.log("Season 14 Poison Strike overlay fixture passed");
