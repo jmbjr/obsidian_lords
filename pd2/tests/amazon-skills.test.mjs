@@ -9,7 +9,7 @@ const first = await readFile(path, "utf8");
 const data = JSON.parse(first);
 assert.equal(data.source.season, 14);
 assert.equal(data.source.commit, "7952f34719aa3a5cb41334a91fe36dbcbdd8be9c");
-assert.equal(data.skills.length, 17);
+assert.equal(data.skills.length, 31);
 const byId = (id) => data.skills.find((skill) => skill.identity.internalId === id);
 assert.equal(byId(12).identity.internalName, "Multiple Shot");
 assert.equal(byId(12).selected.requiredLevel, 6);
