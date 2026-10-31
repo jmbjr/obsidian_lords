@@ -55,9 +55,10 @@ export function renderAmazonSandbox() {
           </div>`;
         }).join("")}
       </div>
-      ${unplaced.length ? `<p class="annotation">Unverified tree position (select to allocate in inspector): ${unplaced.map((s) => escape(s.identity.internalName)).join(", ")}. These skills can still be allocated below.</p><div class="sandbox-actions">${unplaced.map((s) => `<button data-select="${s.identity.internalId}">${escape(s.identity.internalName)}</button>`).join("")}</div>` : ""}
+      ${unplaced.length ? `<p class="annotation">Unverified tree position (select to allocate in inspector): ${unplaced.map((s) => escape(s.identity.internalName)).join(", ")}. These records remain explorable below, but may not be player-allocatable in-game.</p><div class="sandbox-actions">${unplaced.map((s) => `<button data-select="${s.identity.internalId}">${escape(s.identity.internalName)}</button>`).join("")}</div>` : ""}
       <section class="sandbox-inspector">
         <h2>${escape(selected.identity.internalName)}</h2>
+        ${state.selected === 365 ? `<p class="source-warning"><strong>Unverified player skill</strong><span>Shattering Arrow exists in the native Season 14 Amazon skill data, but has no usable skill-tree position (page/row/column are zero), and we have not confirmed that players can select or allocate it in-game. It remains available here for data exploration; do not treat its presence as proof of in-game availability.</span></p>` : ""}
         <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · effective skill level ${current[state.selected] ? current[state.selected] + state.bonus : 0} (global bonus assumption; hard points remain capped at 20)</p>
         <div class="tree-points"><button data-adjust="${state.selected}" data-delta="-1" ${current[state.selected] === 0 ? "disabled" : ""}>−</button><strong>${current[state.selected]} / ${selected.selected.maxLevel}</strong><button data-adjust="${state.selected}" data-delta="1" ${current[state.selected] >= selected.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button></div>
         <p class="annotation">Formula references to other skills: ${dependencies.length ? dependencies.map(escape).join(", ") : "none detected"}. References are not automatically evaluated as synergies.</p>
