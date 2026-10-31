@@ -21,6 +21,6 @@ Each change records:
 
 ## Provenance boundary
 
-Overlay facts do not become game-table facts. The Poison Strike normalized record remains Season 13 data from the pinned `pd2-tools` commit. The Season 14 overlay records a patch-note behavioral fix separately.
+Overlay facts do not become game-table facts. The Poison Strike normalized record now uses native Season 14 data from the pinned `pd2-tools` commit. The Season 14 overlay is retained as patch-note provenance, not as a delta applied to Season 13 tables. Native S14 stores the poison-pierce expression in `aurastatcalc1` rather than the old S13 `calc1` field.
 
 Future overlay formats should not be generalized until additional real cases require it.
