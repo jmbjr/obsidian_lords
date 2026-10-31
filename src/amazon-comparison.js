@@ -25,7 +25,7 @@ export function compareAmazonBuilds(skills, builds, bonus) {
     return labels.map(label => {
       const av = a.find(v=>v.label===label);
       const bv = b.find(v=>v.label===label);
-      return { id, skill: skill.identity.internalName, label, a: av?.value ?? null, b: bv?.value ?? null, delta: av && bv ? bv.value - av.value : null, assumption: av?.assumption ?? bv?.assumption };
+      return { id, skill: skill.identity.internalName, label, a: av?.value ?? null, b: bv?.value ?? null, delta: typeof av?.value === "number" && typeof bv?.value === "number" ? bv.value - av.value : null, assumption: av?.assumption ?? bv?.assumption };
     });
   });
 }
