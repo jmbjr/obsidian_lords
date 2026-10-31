@@ -55,7 +55,7 @@ export function renderAmazonSandbox() {
           const locked = state.level < skill.selected.requiredLevel;
           return `<div class="tree-node ${state.selected === id ? "chosen" : ""}" style="grid-row:${resolveAmazonLayout(skill).row};grid-column:${resolveAmazonLayout(skill).column}">
             <button class="tree-skill" data-select="${id}" aria-pressed="${state.selected === id}"><span class="tree-glyph">✦</span><span>${escape(skill.identity.internalName)}</span></button>
-            <div class="tree-points"><button data-adjust="${id}" data-delta="-1" aria-label="Remove ${escape(skill.identity.internalName)} point" ${points === 0 ? "disabled" : ""}>−</button><strong>${points}<small> + ${effectiveBonus(skill)}</small></strong><button data-adjust="${id}" data-delta="1" aria-label="Add ${escape(skill.identity.internalName)} point" ${points >= skill.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button></div>
+            <div class="tree-points"><button data-adjust="${id}" data-delta="-1" aria-label="Remove ${escape(skill.identity.internalName)} hard point" ${points === 0 ? "disabled" : ""}>−</button><strong>${points}<small> + ${effectiveBonus(skill)}</small></strong><button data-adjust="${id}" data-delta="1" aria-label="Add ${escape(skill.identity.internalName)} hard point" ${points >= skill.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button><span class="skill-bonus-controls" title="Individual skill bonus levels (blue)"><button class="skill-bonus-button" data-bonus-adjust="${id}" data-delta="-1" aria-label="Remove bonus level from ${escape(skill.identity.internalName)}" ${(activeBonus().skills[id] || 0) <= 0 ? "disabled" : ""}>−</button><button class="skill-bonus-button" data-bonus-adjust="${id}" data-delta="1" aria-label="Add bonus level to ${escape(skill.identity.internalName)}" ${(activeBonus().skills[id] || 0) >= 100 ? "disabled" : ""}>+</button></span></div>
             ${locked ? '<small class="tree-warning">Level gated</small>' : ""}${resolveAmazonLayout(skill).status === "provisional" ? '<small class="tree-warning">Provisional position</small>' : ""}
           </div>`;
         }).join("")}
@@ -65,7 +65,7 @@ export function renderAmazonSandbox() {
         <h2>${escape(selected.identity.internalName)}</h2>
         ${state.selected === 365 ? `<p class="annotation"><strong>Vestigial / removed skill:</strong> Shattering Arrow was developed before PD2 Season 1 and removed before release, according to a July 28, 2023 developer Discord response shared by a player. Its definitions remain in the Season 14 data; it is retained here for historical experimentation, not as a normally selectable skill.</p>` : ""}
         <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · effective skill level ${current[state.selected] ? current[state.selected] + effectiveBonus(selected) : 0} (+all, +tree and +skill bonuses; hard points remain capped at 20)</p>
-        <label>Build ${state.active === 0 ? "A" : "B"} · +${escape(selected.identity.internalName)} <input type="number" min="0" max="100" data-skill-bonus="${state.selected}" value="${activeBonus().skills[state.selected] || 0}"></label>
+        <p class="annotation">Individual bonus levels for this skill: +${activeBonus().skills[state.selected] || 0}. Use the blue + / − controls beside its tree node to adjust.</p>
         <div class="tree-points"><button data-adjust="${state.selected}" data-delta="-1" ${current[state.selected] === 0 ? "disabled" : ""}>−</button><strong>${current[state.selected]} / ${selected.selected.maxLevel}</strong><button data-adjust="${state.selected}" data-delta="1" ${current[state.selected] >= selected.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button></div>
         <p class="annotation">Formula references to other skills: ${dependencies.length ? dependencies.map(escape).join(", ") : "none detected"}. Only explicitly supported, source-guarded references are evaluated as synergies.</p>
         <p class="annotation">Native S14 fields. The limited numeric previews below use explicit linear-parameter assumptions, not verified engine output or DPS. Other expressions remain uninterpreted.</p>
@@ -112,6 +112,11 @@ export function mountAmazonSandbox(container) {
     if (button.dataset.page !== undefined) state.page = Number(button.dataset.page);
     if (button.dataset.select !== undefined) state.selected = Number(button.dataset.select);
     if (button.dataset.reset) state.builds[state.active] = newBuild();
+    if (button.dataset.bonusAdjust !== undefined) {
+      const id = Number(button.dataset.bonusAdjust);
+      const delta = Number(button.dataset.delta);
+      if (byId.has(id) && (delta === 1 || delta === -1)) activeBonus().skills[id] = Math.max(0, Math.min(100, (activeBonus().skills[id] || 0) + delta));
+    }
     if (button.dataset.adjust !== undefined) {
       const id = Number(button.dataset.adjust);
       const delta = Number(button.dataset.delta);
