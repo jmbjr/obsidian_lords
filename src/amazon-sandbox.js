@@ -7,7 +7,7 @@ const skills = amazonSkills.skills;
 validateAmazonLayout(skills);
 const byId = new Map(skills.map((s) => [s.identity.internalId, s]));
 const newBuild = () => Object.fromEntries(skills.map((s) => [s.identity.internalId, 0]));
-const state = { level: 55, budget: 30, bonus: 0, active: 0, page: 1, selected: 12, builds: [newBuild(), newBuild()] };
+const state = { level: 55, budget: 30, bonuses: [0, 0], active: 0, page: 1, selected: 12, builds: [newBuild(), newBuild()] };
 const escape = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 const sum = (build) => Object.values(build).reduce((a, b) => a + b, 0);
 const activeBuild = () => state.builds[state.active];
@@ -23,8 +23,8 @@ export function renderAmazonSandbox() {
   const current = activeBuild();
   const cards = skills.filter((skill) => resolveAmazonLayout(skill).page === state.page);
   const unplaced = skills.filter((skill) => resolveAmazonLayout(skill).page === null);
-  const preview = previewAmazonSkill(selected, current[state.selected], state.bonus, current);
-  const comparisons = compareAmazonBuilds(skills, state.builds, state.bonus);
+  const preview = previewAmazonSkill(selected, current[state.selected], state.bonuses[state.active], current);
+  const comparisons = compareAmazonBuilds(skills, state.builds, state.bonuses);
   const dependencies = findAmazonDependencies(selected, skills);
   const formulas = Object.entries(selected.raw.skill).filter(([key, value]) => value && /calc|sym|param|reqskill|aurastat/i.test(key) && !key.startsWith("*"));
   return `
@@ -36,7 +36,7 @@ export function renderAmazonSandbox() {
       <div class="sandbox-settings">
         <label>Character level <input data-setting="level" type="number" min="1" max="99" value="${state.level}"></label>
         <label>Points to allocate <input data-setting="budget" type="number" min="0" max="150" value="${state.budget}"></label>
-        <label>+Skills from gear/effects <input data-setting="bonus" type="number" min="0" max="100" value="${state.bonus}"></label>
+        <label>Build A · +All Skills <input data-bonus-build="0" type="number" min="0" max="100" value="${state.bonuses[0]}"></label><label>Build B · +All Skills <input data-bonus-build="1" type="number" min="0" max="100" value="${state.bonuses[1]}"></label>
       </div>
       <div class="sandbox-summary">
         <strong>Build ${state.active === 0 ? "A" : "B"} · ${sum(current)} spent / ${state.budget} available · ${pointsLeft()} remaining</strong>
@@ -50,7 +50,7 @@ export function renderAmazonSandbox() {
           const locked = state.level < skill.selected.requiredLevel;
           return `<div class="tree-node ${state.selected === id ? "chosen" : ""}" style="grid-row:${resolveAmazonLayout(skill).row};grid-column:${resolveAmazonLayout(skill).column}">
             <button class="tree-skill" data-select="${id}" aria-pressed="${state.selected === id}"><span class="tree-glyph">✦</span><span>${escape(skill.identity.internalName)}</span></button>
-            <div class="tree-points"><button data-adjust="${id}" data-delta="-1" aria-label="Remove ${escape(skill.identity.internalName)} point" ${points === 0 ? "disabled" : ""}>−</button><strong>${points}<small> + ${state.bonus}</small></strong><button data-adjust="${id}" data-delta="1" aria-label="Add ${escape(skill.identity.internalName)} point" ${points >= skill.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button></div>
+            <div class="tree-points"><button data-adjust="${id}" data-delta="-1" aria-label="Remove ${escape(skill.identity.internalName)} point" ${points === 0 ? "disabled" : ""}>−</button><strong>${points}<small> + ${state.bonuses[state.active]}</small></strong><button data-adjust="${id}" data-delta="1" aria-label="Add ${escape(skill.identity.internalName)} point" ${points >= skill.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button></div>
             ${locked ? '<small class="tree-warning">Level gated</small>' : ""}${resolveAmazonLayout(skill).status === "provisional" ? '<small class="tree-warning">Provisional position</small>' : ""}
           </div>`;
         }).join("")}
@@ -72,7 +72,7 @@ export function renderAmazonSandbox() {
         ${comparisons.map(item => `<div><span>${escape(item.skill)} · ${escape(item.label)}<small>${escape(item.assumption)}</small></span><span>${item.a ?? "—"}</span><span>${item.b ?? "—"}</span><span>${item.delta === null ? "—" : item.delta > 0 ? "+" + item.delta : item.delta}</span></div>`).join("") || "<p>Allocate Multiple Shot or Guided Arrow points to see numeric comparisons.</p>"}</div>
       </section>
       <section class="sandbox-inspector"><h2>Compare builds</h2>
-        <p class="annotation">Build A: ${sum(state.builds[0])} points · Build B: ${sum(state.builds[1])} points. Both share the same level, budget and +skills settings.</p>
+        <p class="annotation">Build A: ${sum(state.builds[0])} points · Build B: ${sum(state.builds[1])} points. Both share the same character level and point budget; +All Skills bonuses are independent (A: +${state.bonuses[0]}, B: +${state.bonuses[1]}).</p>
         <div class="sandbox-compare"><div><strong>Skill</strong><strong>A</strong><strong>B</strong></div>
         ${skills.filter((skill) => state.builds.some((b) => b[skill.identity.internalId] > 0)).map((skill) => `<div><span>${escape(skill.identity.internalName)}</span><span>${state.builds[0][skill.identity.internalId]}</span><span>${state.builds[1][skill.identity.internalId]}</span></div>`).join("") || "<p>No points allocated yet.</p>"}</div>
       </section>
@@ -83,14 +83,14 @@ export function renderAmazonSandbox() {
 export function mountAmazonSandbox(container) {
   if (!container) return;
   try { const saved = normalizeBuildSnapshot(JSON.parse(localStorage.getItem(STORAGE_KEY)), skills); if (saved) Object.assign(state, saved); } catch { /* private browsing or invalid stored data */ }
-  const persist = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify({version:1,level:state.level,budget:state.budget,bonus:state.bonus,builds:state.builds})); } catch { /* storage unavailable */ } };
+  const persist = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify({version:1,level:state.level,budget:state.budget,bonuses:state.bonuses,builds:state.builds})); } catch { /* storage unavailable */ } };
   const redraw = () => { container.innerHTML = renderAmazonSandbox(); };
   redraw();
   container.addEventListener("click", (event) => {
     const button = event.target.closest("button");
     if (!button || !container.contains(button)) return;
     if (button.dataset.copy) {
-      const snapshot = JSON.stringify({version:1,level:state.level,budget:state.budget,bonus:state.bonus,builds:state.builds},null,2);
+      const snapshot = JSON.stringify({version:1,level:state.level,budget:state.budget,bonuses:state.bonuses,builds:state.builds},null,2);
       if (navigator.clipboard?.writeText) navigator.clipboard.writeText(snapshot).catch(() => window.prompt("Copy build JSON:",snapshot));
       else window.prompt("Copy build JSON:",snapshot);
       return;
@@ -118,11 +118,14 @@ export function mountAmazonSandbox(container) {
   });
   container.addEventListener("change", (event) => {
     const field = event.target.closest("[data-setting]");
+    const bonusField = event.target.closest("[data-bonus-build]");
+    if (bonusField) { const index = Number(bonusField.dataset.bonusBuild); if (index === 0 || index === 1) state.bonuses[index] = inputNumber(bonusField.value, state.bonuses[index], 0, 100); persist(); redraw(); return; }
     if (!field) return;
     const key = field.dataset.setting;
     if (key === "level") state.level = inputNumber(field.value, state.level, 1, 99);
     if (key === "budget") state.budget = Math.max(sum(state.builds[0]), sum(state.builds[1]), inputNumber(field.value, state.budget, 0, 150));
-    if (key === "bonus") state.bonus = inputNumber(field.value, state.bonus, 0, 100);
+    
+    persist();
     redraw();
   });
 }
