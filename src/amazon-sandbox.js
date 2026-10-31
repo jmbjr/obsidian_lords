@@ -1,5 +1,6 @@
 import amazonSkills from "../pd2/generated/amazon-skills.json";
 import { resolveAmazonLayout, validateAmazonLayout } from "./amazon-layout.js";
+import { previewAmazonSkill } from "./amazon-formulas.js";
 
 const skills = amazonSkills.skills;
 validateAmazonLayout(skills);
@@ -21,6 +22,7 @@ export function renderAmazonSandbox() {
   const current = activeBuild();
   const cards = skills.filter((skill) => resolveAmazonLayout(skill).page === state.page);
   const unplaced = skills.filter((skill) => resolveAmazonLayout(skill).page === null);
+  const preview = previewAmazonSkill(selected, current[state.selected], state.bonus);
   const formulas = Object.entries(selected.raw.skill).filter(([key, value]) => value && /calc|sym|param|reqskill|aurastat/i.test(key) && !key.startsWith("*"));
   return `
     <section class="hero compact"><p class="eyebrow">PD2 Tools · Experimental</p><h1>Amazon Skill Sandbox</h1>
@@ -55,7 +57,8 @@ export function renderAmazonSandbox() {
         <h2>${escape(selected.identity.internalName)}</h2>
         <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · displayed skill level ${current[state.selected] ? current[state.selected] + state.bonus : 0} (simple +skills assumption)</p>
         <div class="tree-points"><button data-adjust="${state.selected}" data-delta="-1" ${current[state.selected] === 0 ? "disabled" : ""}>−</button><strong>${current[state.selected]} / ${selected.selected.maxLevel}</strong><button data-adjust="${state.selected}" data-delta="1" ${current[state.selected] >= selected.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button></div>
-        <p class="annotation">Native S14 fields. Equations are source expressions, not interpreted results; dependencies may refer to other skills or engine variables.</p>
+        <p class="annotation">Native S14 fields. The limited numeric previews below use explicit linear-parameter assumptions, not verified engine output or DPS. Other expressions remain uninterpreted.</p>
+        ${preview.length ? `<div class="sandbox-preview">${preview.map((item) => `<div><strong>${escape(item.label)}: ${escape(item.value)}</strong><small>${escape(item.expression)} · ${escape(item.assumption)}</small></div>`).join("")}</div>` : `<p class="annotation">No supported numeric preview for this skill yet.</p>`}
         <div class="raw-table">${formulas.map(([key, value]) => `<div class="raw-row"><div><code>${escape(key)}</code></div><code class="raw-value">${escape(value)}</code></div>`).join("")}</div>
       </section>
       <section class="sandbox-inspector"><h2>Compare builds</h2>

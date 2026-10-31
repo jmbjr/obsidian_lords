@@ -225,3 +225,5 @@ footer {
 .sandbox-compare{max-width:540px;font-family:system-ui,sans-serif}
 .sandbox-compare>div{display:grid;grid-template-columns:1fr 50px 50px;gap:1rem;padding:.5rem;border-bottom:1px solid #3d3941}
 @media(max-width:560px){.skill-tree{gap:.25rem;padding:.35rem}.tree-node{padding:.15rem}.tree-skill{font-size:.65rem}.tree-glyph{width:26px;height:26px}.sandbox-inspector{padding:.65rem}}
+
+.sandbox-preview{display:grid;gap:.5rem;margin:1rem 0}.sandbox-preview>div{padding:.75rem;border:1px solid #554a3c;background:#262018;font-family:system-ui,sans-serif}.sandbox-preview small{display:block;margin-top:.3rem;color:#bdb2a4;line-height:1.4}
