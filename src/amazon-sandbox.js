@@ -23,7 +23,7 @@ export function renderAmazonSandbox() {
   const current = activeBuild();
   const cards = skills.filter((skill) => resolveAmazonLayout(skill).page === state.page);
   const unplaced = skills.filter((skill) => resolveAmazonLayout(skill).page === null);
-  const preview = previewAmazonSkill(selected, current[state.selected], state.bonus);
+  const preview = previewAmazonSkill(selected, current[state.selected], state.bonus, current);
   const comparisons = compareAmazonBuilds(skills, state.builds, state.bonus);
   const dependencies = findAmazonDependencies(selected, skills);
   const formulas = Object.entries(selected.raw.skill).filter(([key, value]) => value && /calc|sym|param|reqskill|aurastat/i.test(key) && !key.startsWith("*"));
@@ -55,12 +55,13 @@ export function renderAmazonSandbox() {
           </div>`;
         }).join("")}
       </div>
-      ${unplaced.length ? `<p class="annotation">Unverified tree position (select to allocate in inspector): ${unplaced.map((s) => escape(s.identity.internalName)).join(", ")}. These skills can still be allocated below.</p><div class="sandbox-actions">${unplaced.map((s) => `<button data-select="${s.identity.internalId}">${escape(s.identity.internalName)}</button>`).join("")}</div>` : ""}
+      ${unplaced.length ? `<p class="annotation">Unverified tree position (select to allocate in inspector): ${unplaced.map((s) => escape(s.identity.internalName)).join(", ")}. These records remain explorable here, but may not be player-selectable in-game.</p><div class="sandbox-actions">${unplaced.map((s) => `<button data-select="${s.identity.internalId}">${escape(s.identity.internalName)}</button>`).join("")}</div>` : ""}
       <section class="sandbox-inspector">
         <h2>${escape(selected.identity.internalName)}</h2>
+        ${state.selected === 365 ? `<p class="annotation"><strong>Vestigial / removed skill:</strong> Shattering Arrow was developed before PD2 Season 1 and removed before release, according to a July 28, 2023 developer Discord response shared by a player. Its definitions remain in the Season 14 data; it is retained here for historical experimentation, not as a normally selectable skill.</p>` : ""}
         <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · effective skill level ${current[state.selected] ? current[state.selected] + state.bonus : 0} (global bonus assumption; hard points remain capped at 20)</p>
         <div class="tree-points"><button data-adjust="${state.selected}" data-delta="-1" ${current[state.selected] === 0 ? "disabled" : ""}>−</button><strong>${current[state.selected]} / ${selected.selected.maxLevel}</strong><button data-adjust="${state.selected}" data-delta="1" ${current[state.selected] >= selected.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button></div>
-        <p class="annotation">Formula references to other skills: ${dependencies.length ? dependencies.map(escape).join(", ") : "none detected"}. References are not automatically evaluated as synergies.</p>
+        <p class="annotation">Formula references to other skills: ${dependencies.length ? dependencies.map(escape).join(", ") : "none detected"}. Only explicitly supported, source-guarded references are evaluated as synergies.</p>
         <p class="annotation">Native S14 fields. The limited numeric previews below use explicit linear-parameter assumptions, not verified engine output or DPS. Other expressions remain uninterpreted.</p>
         ${preview.length ? `<div class="sandbox-preview">${preview.map((item) => `<div><strong>${escape(item.label)}: ${escape(item.value)}</strong><small>${escape(item.expression)} · ${escape(item.assumption)}</small></div>`).join("")}</div>` : `<p class="annotation">No supported numeric preview for this skill yet.</p>`}
         <div class="raw-table">${formulas.map(([key, value]) => `<div class="raw-row"><div><code>${escape(key)}</code></div><code class="raw-value">${escape(value)}</code></div>`).join("")}</div>
