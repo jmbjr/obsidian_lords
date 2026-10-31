@@ -19,8 +19,8 @@ export function normalizeBuildSnapshot(input, skills) {
 export function compareAmazonBuilds(skills, builds, bonus) {
   return skills.flatMap(skill => {
     const id = skill.identity.internalId;
-    const a = previewAmazonSkill(skill, builds[0][id] || 0, bonus);
-    const b = previewAmazonSkill(skill, builds[1][id] || 0, bonus);
+    const a = previewAmazonSkill(skill, builds[0][id] || 0, bonus, builds[0]);
+    const b = previewAmazonSkill(skill, builds[1][id] || 0, bonus, builds[1]);
     const labels = [...new Set([...a,...b].map(v=>v.label))];
     return labels.map(label => {
       const av = a.find(v=>v.label===label);
