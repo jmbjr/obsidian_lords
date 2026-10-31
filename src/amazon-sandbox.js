@@ -1,6 +1,8 @@
 import amazonSkills from "../pd2/generated/amazon-skills.json";
+import { resolveAmazonLayout, validateAmazonLayout } from "./amazon-layout.js";
 
 const skills = amazonSkills.skills;
+validateAmazonLayout(skills);
 const byId = new Map(skills.map((s) => [s.identity.internalId, s]));
 const newBuild = () => Object.fromEntries(skills.map((s) => [s.identity.internalId, 0]));
 const state = { level: 55, budget: 30, bonus: 0, active: 0, page: 1, selected: 12, builds: [newBuild(), newBuild()] };
@@ -17,8 +19,8 @@ const inputNumber = (value, fallback, min, max) => {
 export function renderAmazonSandbox() {
   const selected = byId.get(state.selected);
   const current = activeBuild();
-  const cards = skills.filter((skill) => Number(skill.selected.skillPage) === state.page && Number(skill.selected.skillRow) >= 1 && Number(skill.selected.skillRow) <= 6);
-  const unplaced = skills.filter((skill) => ![1, 2].includes(Number(skill.selected.skillPage)) || Number(skill.selected.skillRow) < 1);
+  const cards = skills.filter((skill) => resolveAmazonLayout(skill).page === state.page);
+  const unplaced = skills.filter((skill) => resolveAmazonLayout(skill).page === null);
   const formulas = Object.entries(selected.raw.skill).filter(([key, value]) => value && /calc|sym|param|reqskill|aurastat/i.test(key) && !key.startsWith("*"));
   return `
     <section class="hero compact"><p class="eyebrow">PD2 Tools · Experimental</p><h1>Amazon Skill Sandbox</h1>
@@ -35,20 +37,20 @@ export function renderAmazonSandbox() {
         <strong>Build ${state.active === 0 ? "A" : "B"} · ${sum(current)} spent / ${state.budget} available · ${pointsLeft()} remaining</strong>
         <div class="sandbox-actions"><button data-build="0" aria-pressed="${state.active === 0}">Build A</button><button data-build="1" aria-pressed="${state.active === 1}">Build B</button><button data-reset="true">Clear current build</button></div>
       </div>
-      <div class="sandbox-actions"><button data-page="1" aria-pressed="${state.page === 1}">Bow & Crossbow</button><button data-page="2" aria-pressed="${state.page === 2}">Passive & Magic</button></div>
+      <div class="sandbox-actions"><button data-page="1" aria-pressed="${state.page === 1}">Bow & Crossbow</button><button data-page="2" aria-pressed="${state.page === 2}">Passive & Magic</button><button data-page="3" aria-pressed="${state.page === 3}">Javelin & Spear</button></div>
       <div class="skill-tree" aria-label="Amazon skill tree">
         ${cards.map((skill) => {
           const id = skill.identity.internalId;
           const points = current[id];
           const locked = state.level < skill.selected.requiredLevel;
-          return `<div class="tree-node ${state.selected === id ? "chosen" : ""}" style="grid-row:${skill.selected.skillRow};grid-column:${skill.selected.skillColumn}">
+          return `<div class="tree-node ${state.selected === id ? "chosen" : ""}" style="grid-row:${resolveAmazonLayout(skill).row};grid-column:${resolveAmazonLayout(skill).column}">
             <button class="tree-skill" data-select="${id}" aria-pressed="${state.selected === id}"><span class="tree-glyph">✦</span><span>${escape(skill.identity.internalName)}</span></button>
             <div class="tree-points"><button data-adjust="${id}" data-delta="-1" aria-label="Remove ${escape(skill.identity.internalName)} point" ${points === 0 ? "disabled" : ""}>−</button><strong>${points}<small> + ${state.bonus}</small></strong><button data-adjust="${id}" data-delta="1" aria-label="Add ${escape(skill.identity.internalName)} point" ${points >= skill.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button></div>
-            ${locked ? '<small class="tree-warning">Level gated</small>' : ""}
+            ${locked ? '<small class="tree-warning">Level gated</small>' : ""}${resolveAmazonLayout(skill).status === "provisional" ? '<small class="tree-warning">Provisional position</small>' : ""}
           </div>`;
         }).join("")}
       </div>
-      ${unplaced.length ? `<p class="annotation">Unplaced in source tree: ${unplaced.map((s) => escape(s.identity.internalName)).join(", ")}. These skills can still be allocated below.</p><div class="sandbox-actions">${unplaced.map((s) => `<button data-select="${s.identity.internalId}">${escape(s.identity.internalName)}</button>`).join("")}</div>` : ""}
+      ${unplaced.length ? `<p class="annotation">Unverified tree position (select to allocate in inspector): ${unplaced.map((s) => escape(s.identity.internalName)).join(", ")}. These skills can still be allocated below.</p><div class="sandbox-actions">${unplaced.map((s) => `<button data-select="${s.identity.internalId}">${escape(s.identity.internalName)}</button>`).join("")}</div>` : ""}
       <section class="sandbox-inspector">
         <h2>${escape(selected.identity.internalName)}</h2>
         <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · displayed skill level ${current[state.selected] ? current[state.selected] + state.bonus : 0} (simple +skills assumption)</p>

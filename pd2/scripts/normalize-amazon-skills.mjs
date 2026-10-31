@@ -3,14 +3,8 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const targets = [
-  [6, "Magic Arrow"], [8, "Inner Sight"], [9, "Critical Strike"],
-  [11, "Cold Arrow"], [12, "Multiple Shot"], [17, "Slow Movement"],
-  [18, "Avoid"], [21, "Ice Arrow"], [22, "Guided Arrow"],
-  [23, "Penetrate"], [26, "Strafe"], [29, "Evade"],
-  [31, "Freezing Arrow"], [33, "Pierce"], [16, "Exploding Arrow"],
-  [27, "Immolation Arrow"], [365, "Shattering Arrow"],
-];
+// Include every playable Amazon class skill, excluding internal placeholder rows.
+const excludedInternalIds = new Set([372, 379]);
 function parseTsv(text) {
   const [header, ...lines] = text.replaceAll("\r\n", "\n").trimEnd().split("\n");
   const columns = header.split("\t");
@@ -31,10 +25,12 @@ const source = JSON.parse(provenanceText);
 if (source.season !== 14) throw new Error("Amazon slice requires native Season 14 tables");
 const skills = parseTsv(skillsText);
 const descriptions = parseTsv(descriptionsText);
-const records = targets.map(([id, name]) => {
-  const matches = skills.filter((row) => row.Id === String(id) && row.skill === name && row.charclass === "ama");
-  if (matches.length !== 1) throw new Error(`Expected exactly one Amazon skill ${name} (#${id})`);
-  const row = matches[0];
+const playable = skills.filter((row) => row.charclass === "ama" && !excludedInternalIds.has(Number(row.Id)) && row.maxlvl !== "");
+if (playable.length !== 31) throw new Error(`Expected 31 playable Amazon skills, got ${playable.length}`);
+const records = playable.map((row) => {
+  const id = Number(row.Id);
+  const name = row.skill;
+  if (!Number.isInteger(id)) throw new Error(`Invalid Amazon skill ID: ${row.Id}`);
   const descMatches = descriptions.filter((d) => d.skilldesc === row.skilldesc);
   if (descMatches.length !== 1) throw new Error(`Expected exactly one description for ${name}`);
   const desc = descMatches[0];
@@ -51,7 +47,7 @@ const records = targets.map(([id, name]) => {
 const result = {
   schemaVersion: 1,
   source: { repository: source.repository, commit: source.commit, season: source.season, files: source.files.map(({ name, upstreamPath }) => ({ name, upstreamPath })) },
-  notes: ["Raw formulas are not evaluated.", "This is a curated exploration set, not a complete Amazon skill tree.", "Prerequisite and synergy meanings require independent verification before allocating points."],
+  notes: ["Raw formulas are not evaluated.", "All 31 playable Amazon skills are included; internal placeholder rows are excluded.", "Prerequisite and synergy meanings require independent verification before allocating points."],
   skills: records,
 };
 await mkdir(join(root, "generated"), { recursive: true });
