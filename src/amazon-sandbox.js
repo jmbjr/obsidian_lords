@@ -9,6 +9,11 @@ const byId = new Map(skills.map((s) => [s.identity.internalId, s]));
 const newBuild = () => Object.fromEntries(skills.map((s) => [s.identity.internalId, 0]));
 const state = { level: 55, budget: 30, bonuses: [emptyBonus(), emptyBonus()], active: 0, page: 1, selected: 12, builds: [newBuild(), newBuild()], comparison: { skillIds: [12] } };
 const escape = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+const formatSummaryLevel = (skill, buildIndex) => {
+  const hard = state.builds[buildIndex][skill.identity.internalId] || 0;
+  const effective = hard > 0 ? hard + bonusForSkill(skill, state.bonuses[buildIndex]) : 0;
+  return `<span class="summary-effective-level">${effective}</span> <span class="summary-hard-level">(${hard})</span>`;
+};
 const sum = (build) => Object.values(build).reduce((a, b) => a + b, 0);
 const activeBuild = () => state.builds[state.active];
 const activeBonus = () => state.bonuses[state.active];
@@ -88,7 +93,7 @@ export function renderAmazonSandbox() {
       <section class="sandbox-inspector"><h2>Compare builds</h2>
         <p class="annotation">Build A: ${sum(state.builds[0])} points · Build B: ${sum(state.builds[1])} points. Both share the same character level and point budget; +All Skills bonuses are independent (A: +${state.bonuses[0].all}, B: +${state.bonuses[1].all}; tree and skill bonuses are also independent).</p>
         <div class="sandbox-compare"><div><strong>Skill</strong><strong>A</strong><strong>B</strong></div>
-        ${skills.filter((skill) => state.builds.some((b) => b[skill.identity.internalId] > 0)).map((skill) => `<div><span>${escape(skill.identity.internalName)}</span><span>${state.builds[0][skill.identity.internalId]}</span><span>${state.builds[1][skill.identity.internalId]}</span></div>`).join("") || "<p>No points allocated yet.</p>"}</div>
+        ${skills.filter((skill) => state.builds.some((b) => b[skill.identity.internalId] > 0)).map((skill) => `<div><span>${escape(skill.identity.internalName)}</span><span>${formatSummaryLevel(skill,0)}</span><span>${formatSummaryLevel(skill,1)}</span></div>`).join("") || "<p>No points allocated yet.</p>"}</div>
       </section>
       <p class="annotation">Source: ${escape(amazonSkills.source.repository)} @ ${escape(amazonSkills.source.commit.slice(0, 12))}. This prototype does not calculate DPS. Native prerequisite cycles/unresolved references are flagged for investigation.</p>
     </section>`;
