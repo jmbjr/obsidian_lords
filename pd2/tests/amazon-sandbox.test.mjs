@@ -33,5 +33,6 @@ assert.deepEqual(issues(12,{...blank,6:1}),[]);
 assert.ok(issues(12,{...blank,6:1},5).some(x=>x.includes("level 6")));
 assert.ok(issues(22,{...blank,12:1}).some(x=>x.includes("Magic Arrow")));
 assert.deepEqual(issues(22,{...blank,6:1,12:1}),[]);
-assert.ok(issues(13).some(x=>x.includes("Cyclic source prerequisite")));
+assert.ok(issues(13).some(x=>x.includes("Evade")));
+assert.ok(issues(13).some(x=>x.includes("Slow Movement")));
 assert.ok(amazonBuildIssues({...blank,12:20},62,data.skills).some(x=>x.id===12));
