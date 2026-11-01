@@ -1,13 +1,13 @@
 import amazonSkills from "../pd2/generated/amazon-skills.json";
 import { resolveAmazonLayout, validateAmazonLayout } from "./amazon-layout.js";
 import { previewAmazonSkill } from "./amazon-formulas.js";
-import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill } from "./amazon-comparison.js";
+import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison } from "./amazon-comparison.js";
 
 const skills = amazonSkills.skills;
 validateAmazonLayout(skills);
 const byId = new Map(skills.map((s) => [s.identity.internalId, s]));
 const newBuild = () => Object.fromEntries(skills.map((s) => [s.identity.internalId, 0]));
-const state = { level: 55, budget: 30, bonuses: [emptyBonus(), emptyBonus()], active: 0, page: 1, selected: 12, builds: [newBuild(), newBuild()] };
+const state = { level: 55, budget: 30, bonuses: [emptyBonus(), emptyBonus()], active: 0, page: 1, selected: 12, builds: [newBuild(), newBuild()], comparison: { skillIds: [12] } };
 const escape = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 const sum = (build) => Object.values(build).reduce((a, b) => a + b, 0);
 const activeBuild = () => state.builds[state.active];
@@ -26,7 +26,7 @@ export function renderAmazonSandbox() {
   const cards = skills.filter((skill) => resolveAmazonLayout(skill).page === state.page);
   const unplaced = skills.filter((skill) => resolveAmazonLayout(skill).page === null);
   const preview = previewAmazonSkill(selected, current[state.selected], effectiveBonus(selected), current);
-  const comparisons = compareAmazonBuilds(skills, state.builds, state.bonuses);
+  const comparisons = compareAmazonBuilds(skills, state.builds, state.bonuses, state.comparison);
   const dependencies = findAmazonDependencies(selected, skills);
   const formulas = Object.entries(selected.raw.skill).filter(([key, value]) => value && /calc|sym|param|reqskill|aurastat/i.test(key) && !key.startsWith("*"));
   return `
@@ -72,10 +72,15 @@ export function renderAmazonSandbox() {
         ${preview.length ? `<div class="sandbox-preview">${preview.map((item) => `<div><strong>${escape(item.label)}: ${escape(item.value === null ? "Not calculated" : item.value)}</strong><small>${escape(item.expression)} · ${escape(item.assumption)}</small></div>`).join("")}</div>` : `<p class="annotation">No supported numeric preview for this skill yet.</p>`}
         <div class="raw-table">${formulas.map(([key, value]) => `<div class="raw-row"><div><code>${escape(key)}</code></div><code class="raw-value">${escape(value)}</code></div>`).join("")}</div>
       </section>
+      <section class="sandbox-inspector"><h2>Comparison configuration</h2>
+        <p class="annotation">Choose skills to include. Available numeric metrics are shown for selected skills; unsupported formulas are not invented.</p>
+        <div class="comparison-skill-picker">${skills.map(skill => `<label><input type="checkbox" data-compare-skill="${skill.identity.internalId}" ${state.comparison.skillIds.includes(skill.identity.internalId) ? "checked" : ""}> ${escape(skill.identity.internalName)}</label>`).join("")}</div>
+        <div class="sandbox-actions"><button data-copy-config="true">Copy comparison config JSON</button><button data-import-config="true">Load comparison config JSON</button><button data-export-full="true">Export full comparison JSON file</button><button data-import-full="true">Import full comparison JSON file</button><input data-full-file type="file" accept=".json,application/json" hidden></div>
+      </section>
       <section class="sandbox-inspector"><h2>Calculated build comparison</h2>
         <p class="annotation">B − A shows the change between builds. A dash means that build has no allocated hard points for that skill. Results are limited formula previews, not DPS.</p>
         <div class="sandbox-compare sandbox-metrics"><div><strong>Skill · metric</strong><strong>A</strong><strong>B</strong><strong>Δ B−A</strong></div>
-        ${comparisons.map(item => `<div><span>${escape(item.skill)} · ${escape(item.label)}<small>${escape(item.assumption)}</small></span><span>${item.a ?? "—"}</span><span>${item.b ?? "—"}</span><span>${item.delta === null ? "—" : item.delta > 0 ? "+" + item.delta : item.delta}</span></div>`).join("") || "<p>Allocate Multiple Shot or Guided Arrow points to see numeric comparisons.</p>"}</div>
+        ${comparisons.map(item => `<div><span>${escape(item.skill)} · ${escape(item.label)}<small>${escape(item.assumption)}</small></span><span>${item.a ?? "—"}</span><span>${item.b ?? "—"}</span><span>${item.delta === null ? "—" : item.delta > 0 ? "+" + item.delta : item.delta}</span></div>`).join("") || "<p>Select skills above and allocate points to see supported numeric comparisons.</p>"}</div>
       </section>
       <section class="sandbox-inspector"><h2>Compare builds</h2>
         <p class="annotation">Build A: ${sum(state.builds[0])} points · Build B: ${sum(state.builds[1])} points. Both share the same character level and point budget; +All Skills bonuses are independent (A: +${state.bonuses[0].all}, B: +${state.bonuses[1].all}; tree and skill bonuses are also independent).</p>
@@ -88,15 +93,32 @@ export function renderAmazonSandbox() {
 
 export function mountAmazonSandbox(container) {
   if (!container) return;
-  try { const saved = normalizeBuildSnapshot(JSON.parse(localStorage.getItem(STORAGE_KEY)), skills); if (saved) Object.assign(state, saved); } catch { /* private browsing or invalid stored data */ }
-  const persist = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify({version:1,level:state.level,budget:state.budget,bonuses:state.bonuses,builds:state.builds})); } catch { /* storage unavailable */ } };
+  try { const saved = normalizeBuildSnapshot(JSON.parse(localStorage.getItem(STORAGE_KEY)), skills); if (saved) { Object.assign(state, saved); state.comparison = normalizeComparisonConfig(JSON.parse(localStorage.getItem(STORAGE_KEY))?.comparison,skills) || state.comparison; } } catch { /* private browsing or invalid stored data */ }
+  const persist = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify({version:1,level:state.level,budget:state.budget,bonuses:state.bonuses,builds:state.builds,comparison:state.comparison})); } catch { /* storage unavailable */ } };
   const redraw = () => { container.innerHTML = renderAmazonSandbox(); };
+  const fullSnapshot = () => ({format:"obsidian-lords-amazon-comparison",version:1,level:state.level,budget:state.budget,builds:state.builds,bonuses:state.bonuses,comparison:state.comparison});
+  const copyJson = value => { const text = JSON.stringify(value,null,2); if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).catch(() => window.prompt("Copy JSON:",text)); else window.prompt("Copy JSON:",text); };
   redraw();
   container.addEventListener("click", (event) => {
     const button = event.target.closest("button");
     if (!button || !container.contains(button)) return;
+    if (button.dataset.copyConfig) { copyJson(state.comparison); return; }
+    if (button.dataset.importConfig) {
+      const raw = window.prompt("Paste comparison config JSON:");
+      if (raw === null) return;
+      try { const config = normalizeComparisonConfig(JSON.parse(raw),skills); if (!config) throw Error("Invalid config"); state.comparison = config; persist(); redraw(); }
+      catch { window.alert("Invalid comparison config. No changes were made."); }
+      return;
+    }
+    if (button.dataset.exportFull) {
+      const blob = new Blob([JSON.stringify(fullSnapshot(),null,2)],{type:"application/json"});
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a"); link.href=url; link.download="amazon-comparison.json"; link.click(); URL.revokeObjectURL(url);
+      return;
+    }
+    if (button.dataset.importFull) { container.querySelector("[data-full-file]")?.click(); return; }
     if (button.dataset.copy) {
-      const snapshot = JSON.stringify({version:1,level:state.level,budget:state.budget,bonuses:state.bonuses,builds:state.builds},null,2);
+      const snapshot = JSON.stringify({version:1,level:state.level,budget:state.budget,bonuses:state.bonuses,builds:state.builds,comparison:state.comparison},null,2);
       if (navigator.clipboard?.writeText) navigator.clipboard.writeText(snapshot).catch(() => window.prompt("Copy build JSON:",snapshot));
       else window.prompt("Copy build JSON:",snapshot);
       return;
@@ -104,7 +126,7 @@ export function mountAmazonSandbox(container) {
     if (button.dataset.import) {
       const text = window.prompt("Paste exported build JSON:");
       if (text === null) return;
-      try { const saved = normalizeBuildSnapshot(JSON.parse(text), skills); if (!saved) throw new Error("Invalid build format"); Object.assign(state,saved); persist(); redraw(); }
+      try { const saved = normalizeBuildSnapshot(JSON.parse(text), skills); if (!saved) throw new Error("Invalid build format"); Object.assign(state,saved); state.comparison = normalizeComparisonConfig(JSON.parse(text).comparison,skills) || state.comparison; persist(); redraw(); }
       catch { window.alert("Invalid build JSON. No changes were made."); }
       return;
     }
@@ -127,7 +149,20 @@ export function mountAmazonSandbox(container) {
     persist();
     redraw();
   });
-  container.addEventListener("change", (event) => {
+  container.addEventListener("change", async (event) => {
+    if (event.target.matches("[data-full-file]")) {
+      const file = event.target.files?.[0]; if (!file) return;
+      try { const parsed = normalizeFullComparison(JSON.parse(await file.text()),skills); if (!parsed) throw Error("Invalid full comparison"); Object.assign(state,parsed); persist(); redraw(); }
+      catch { window.alert("Invalid full comparison file. No changes were made."); }
+      return;
+    }
+    if (event.target.matches("[data-compare-skill]")) {
+      const id = Number(event.target.dataset.compareSkill);
+      const ids = new Set(state.comparison.skillIds);
+      if (event.target.checked) ids.add(id); else ids.delete(id);
+      state.comparison = normalizeComparisonConfig({skillIds:[...ids]},skills) || state.comparison;
+      persist(); redraw(); return;
+    }
     const field = event.target.closest("[data-setting]");
     const bonusField = event.target.closest("[data-bonus-build]");
     if (bonusField) {
