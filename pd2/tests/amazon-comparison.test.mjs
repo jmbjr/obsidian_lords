@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, bonusForSkill } from "../../src/amazon-comparison.js";
+import { normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison } from "../../src/amazon-comparison.js";
 const skills = JSON.parse(await readFile("pd2/generated/amazon-skills.json","utf8")).skills;
 const empty = Object.fromEntries(skills.map(s=>[s.identity.internalId,0]));
 const a={...empty,12:5,22:1}, b={...empty,12:20,22:5};
@@ -39,3 +39,16 @@ assert.equal(bonusForSkill(skills.find(s=>s.identity.internalId===9),scoped.bonu
 const scopedRows=compareAmazonBuilds(skills,scoped.builds,scoped.bonuses);
 assert.equal(scopedRows.find(r=>r.id===12&&r.label.startsWith("Damage modifier")).delta,24);
 assert.deepEqual(normalizeBuildSnapshot(JSON.parse(JSON.stringify(scoped)),skills).bonuses,scoped.bonuses);
+
+const config=normalizeComparisonConfig({skillIds:[12,22,12]},skills);
+assert.deepEqual(config.skillIds,[12,22]);
+assert.equal(normalizeComparisonConfig({skillIds:[999999]},skills),null);
+assert.equal(normalizeComparisonConfig({skillIds:["12"]},skills),null);
+assert.equal(compareAmazonBuilds(skills,independent.builds,independent.bonuses,{skillIds:[]}).length,0);
+assert.ok(compareAmazonBuilds(skills,independent.builds,independent.bonuses,config).every(r=>[12,22].includes(r.id)));
+const full={format:"obsidian-lords-amazon-comparison",...independent,comparison:config};
+const loaded=normalizeFullComparison(JSON.parse(JSON.stringify(full)),skills);
+assert.deepEqual(loaded.comparison,config);
+assert.deepEqual(loaded.builds,independent.builds);
+assert.deepEqual(loaded.bonuses,independent.bonuses);
+assert.equal(normalizeFullComparison({...full,comparison:{skillIds:[99999]}},skills),null);

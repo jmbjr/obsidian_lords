@@ -15,6 +15,18 @@ export function bonusForSkill(skill, bonus) {
   const page = skill.selected.skillPage;
   return (bonus?.all || 0) + (bonus?.trees?.[page] || 0) + (bonus?.skills?.[skill.identity.internalId] || 0);
 }
+export function normalizeComparisonConfig(input, skills) {
+  if (!input || typeof input !== "object" || !Array.isArray(input.skillIds)) return null;
+  const allowed = new Set(skills.map(s => s.identity.internalId));
+  if (input.skillIds.some(id => !Number.isInteger(id) || !allowed.has(id))) return null;
+  return { skillIds: [...new Set(input.skillIds)] };
+}
+export function normalizeFullComparison(input, skills) {
+  if (!input || input.format !== "obsidian-lords-amazon-comparison" || input.version !== 1) return null;
+  const snapshot = normalizeBuildSnapshot(input, skills);
+  const comparison = normalizeComparisonConfig(input.comparison, skills);
+  return snapshot && comparison ? { ...snapshot, comparison } : null;
+}
 export const STORAGE_KEY = "obsidian-lords-amazon-builds-v1";
 export function normalizeBuildSnapshot(input, skills) {
   if (!input || typeof input !== "object" || input.version !== 1 || !Array.isArray(input.builds) || input.builds.length !== 2) return null;
@@ -31,8 +43,9 @@ export function normalizeBuildSnapshot(input, skills) {
   const spent = Math.max(...builds.map(b => Object.values(b).reduce((a,c)=>a+c,0)));
   return { version: 1, level: bounded(input.level,1,99,55), budget: Math.max(spent,bounded(input.budget,0,150,30)), bonuses: Array.isArray(input.bonuses) && input.bonuses.length === 2 ? input.bonuses.map(v => normalizeBonus(v,skills)) : [normalizeBonus(bounded(input.bonus,0,100,0),skills), normalizeBonus(bounded(input.bonus,0,100,0),skills)], builds };
 }
-export function compareAmazonBuilds(skills, builds, bonuses) {
-  return skills.flatMap(skill => {
+export function compareAmazonBuilds(skills, builds, bonuses, comparison = null) {
+  const included = comparison ? new Set(comparison.skillIds) : null;
+  return skills.filter(skill => !included || included.has(skill.identity.internalId)).flatMap(skill => {
     const id = skill.identity.internalId;
     const a = previewAmazonSkill(skill, builds[0][id] || 0, bonusForSkill(skill,bonuses[0]), builds[0]);
     const b = previewAmazonSkill(skill, builds[1][id] || 0, bonusForSkill(skill,bonuses[1]), builds[1]);
