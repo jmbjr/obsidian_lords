@@ -247,3 +247,6 @@ footer {
 /* Build summary: effective levels blue, hard points white in parentheses. */
 .summary-effective-level { color: #73baff; font-weight: 700; }
 .summary-hard-level { color: #f3f0f5; }
+
+/* Keep effective level and parenthesized hard points together in each summary cell. */
+.sandbox-compare:not(.sandbox-metrics) > div > span:not(:first-child) { white-space: nowrap; }
