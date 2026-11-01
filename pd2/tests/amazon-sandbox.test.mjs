@@ -24,3 +24,15 @@ for (const skill of data.skills) {
   assert.ok(skill.raw.description);
 }
 console.log("Amazon source-coordinate fixture passed");
+
+import { amazonAllocationIssues, amazonBuildIssues } from "../../src/amazon-comparison.js";
+const blank = Object.fromEntries(data.skills.map(s=>[s.identity.internalId,0]));
+const issues = (id,build=blank,level=62) => amazonAllocationIssues(data.skills.find(s=>s.identity.internalId===id),build,level,data.skills);
+assert.ok(issues(12).some(x=>x.includes("Magic Arrow")));
+assert.deepEqual(issues(12,{...blank,6:1}),[]);
+assert.ok(issues(12,{...blank,6:1},5).some(x=>x.includes("level 6")));
+assert.ok(issues(22,{...blank,12:1}).some(x=>x.includes("Magic Arrow")));
+assert.deepEqual(issues(22,{...blank,6:1,12:1}),[]);
+assert.ok(issues(13).some(x=>x.includes("Evade")));
+assert.ok(issues(13).some(x=>x.includes("Slow Movement")));
+assert.ok(amazonBuildIssues({...blank,12:20},62,data.skills).some(x=>x.id===12));

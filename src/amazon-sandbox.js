@@ -1,7 +1,7 @@
 import amazonSkills from "../pd2/generated/amazon-skills.json";
 import { resolveAmazonLayout, validateAmazonLayout } from "./amazon-layout.js";
 import { previewAmazonSkill } from "./amazon-formulas.js";
-import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison } from "./amazon-comparison.js";
+import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison, amazonAllocationIssues, amazonBuildIssues } from "./amazon-comparison.js";
 
 const skills = amazonSkills.skills;
 validateAmazonLayout(skills);
@@ -28,11 +28,12 @@ export function renderAmazonSandbox() {
   const preview = previewAmazonSkill(selected, current[state.selected], effectiveBonus(selected), current);
   const comparisons = compareAmazonBuilds(skills, state.builds, state.bonuses, state.comparison);
   const dependencies = findAmazonDependencies(selected, skills);
+  const buildIssues = state.builds.map(build => amazonBuildIssues(build,state.level,skills));
   const formulas = Object.entries(selected.raw.skill).filter(([key, value]) => value && /calc|sym|param|reqskill|aurastat/i.test(key) && !key.startsWith("*"));
   return `
     <section class="hero compact"><p class="eyebrow">PD2 Tools · Experimental</p><h1>Amazon Skill Sandbox</h1>
       <p class="lede">Plan and compare two skill allocations using native Season 14 skill-tree coordinates. Layout is source-based; icons and artwork are placeholders.</p>
-      <div class="source-warning"><strong>Prototype: allocation first</strong><span>Hard points are manually budgeted (max 20 per skill); bonus skill levels can raise effective levels to 60 and beyond. Level gates and prerequisites are flagged, not enforced. Raw formulas are displayed but not evaluated into damage numbers. No automatic quest-point or respec assumptions.</span></div>
+      <div class="source-warning"><strong>Prototype: allocation first</strong><span>Hard points are manually budgeted (max 20 per skill); bonus skill levels can raise effective levels to 60 and beyond. New allocations respect level gates and supported prerequisites; imported or previously allocated invalid builds are flagged without data loss. Raw formulas are displayed but not evaluated into damage numbers. No automatic quest-point or respec assumptions.</span></div>
     </section>
     <section class="section wide">
       <div class="sandbox-settings">
@@ -45,6 +46,7 @@ export function renderAmazonSandbox() {
       </div>
       <div class="sandbox-summary">
         <strong>Build ${state.active === 0 ? "A" : "B"} · ${sum(current)} spent / ${state.budget} available · ${pointsLeft()} remaining</strong>
+        ${buildIssues.map((issues,index) => issues.length ? `<p class="tree-warning">Build ${index ? "B" : "A"}: ${issues.length} allocation warning(s). ${escape(issues.slice(0,3).map(x=>x.skill+": "+x.message).join("; "))}${issues.length>3 ? "…" : ""}</p>` : "").join("")}
         <div class="sandbox-actions"><button data-copy="true">Copy build JSON</button><button data-import="true">Import build JSON</button><button data-build="0" aria-pressed="${state.active === 0}">Build A</button><button data-build="1" aria-pressed="${state.active === 1}">Build B</button><button data-reset="true">Clear current build</button></div>
       </div>
       <div class="sandbox-actions"><button data-page="1" aria-pressed="${state.page === 1}">Bow & Crossbow</button><button data-page="2" aria-pressed="${state.page === 2}">Passive & Magic</button><button data-page="3" aria-pressed="${state.page === 3}">Javelin & Spear</button></div>
@@ -52,11 +54,12 @@ export function renderAmazonSandbox() {
         ${cards.map((skill) => {
           const id = skill.identity.internalId;
           const points = current[id];
-          const locked = state.level < skill.selected.requiredLevel;
+          const reasons = amazonAllocationIssues(skill,current,state.level,skills);
+          const locked = reasons.length > 0;
           return `<div class="tree-node ${state.selected === id ? "chosen" : ""}" style="grid-row:${resolveAmazonLayout(skill).row};grid-column:${resolveAmazonLayout(skill).column}">
             <button class="tree-skill" data-select="${id}" aria-pressed="${state.selected === id}"><span class="tree-glyph">✦</span><span>${escape(skill.identity.internalName)}</span></button>
-            <div class="tree-points"><button data-adjust="${id}" data-delta="-1" aria-label="Remove ${escape(skill.identity.internalName)} hard point" ${points === 0 ? "disabled" : ""}>−</button><strong>${points}<small> + ${effectiveBonus(skill)}</small></strong><button data-adjust="${id}" data-delta="1" aria-label="Add ${escape(skill.identity.internalName)} hard point" ${points >= skill.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button><span class="skill-bonus-controls" title="Individual skill bonus levels (blue arrows)"><button class="skill-bonus-button" data-bonus-adjust="${id}" data-delta="-1" aria-label="Remove bonus level from ${escape(skill.identity.internalName)}" ${(activeBonus().skills[id] || 0) <= 0 ? "disabled" : ""}>▼</button><button class="skill-bonus-button" data-bonus-adjust="${id}" data-delta="1" aria-label="Add bonus level to ${escape(skill.identity.internalName)}" ${(activeBonus().skills[id] || 0) >= 100 ? "disabled" : ""}>▲</button></span></div>
-            ${locked ? '<small class="tree-warning">Level gated</small>' : ""}${resolveAmazonLayout(skill).status === "provisional" ? '<small class="tree-warning">Provisional position</small>' : ""}
+            <div class="tree-points"><button data-adjust="${id}" data-delta="-1" aria-label="Remove ${escape(skill.identity.internalName)} hard point" ${points === 0 ? "disabled" : ""}>−</button><strong>${points}<small> + ${effectiveBonus(skill)}</small></strong><button data-adjust="${id}" data-delta="1" aria-label="Add ${escape(skill.identity.internalName)} hard point" ${points >= skill.selected.maxLevel || pointsLeft() <= 0 || locked ? "disabled" : ""}>+</button><span class="skill-bonus-controls" title="Individual skill bonus levels (blue arrows)"><button class="skill-bonus-button" data-bonus-adjust="${id}" data-delta="-1" aria-label="Remove bonus level from ${escape(skill.identity.internalName)}" ${(activeBonus().skills[id] || 0) <= 0 ? "disabled" : ""}>▼</button><button class="skill-bonus-button" data-bonus-adjust="${id}" data-delta="1" aria-label="Add bonus level to ${escape(skill.identity.internalName)}" ${(activeBonus().skills[id] || 0) >= 100 ? "disabled" : ""}>▲</button></span></div>
+            ${locked ? `<small class="tree-warning">${escape(reasons.join("; "))}</small>` : ""}${resolveAmazonLayout(skill).status === "provisional" ? '<small class="tree-warning">Provisional position</small>' : ""}
           </div>`;
         }).join("")}
       </div>
@@ -66,7 +69,7 @@ export function renderAmazonSandbox() {
         ${state.selected === 365 ? `<p class="annotation"><strong>Vestigial / removed skill:</strong> Shattering Arrow was developed before PD2 Season 1 and removed before release, according to a July 28, 2023 developer Discord response shared by a player. Its definitions remain in the Season 14 data; it is retained here for historical experimentation, not as a normally selectable skill.</p>` : ""}
         <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · effective skill level ${current[state.selected] ? current[state.selected] + effectiveBonus(selected) : 0} (+all, +tree and +skill bonuses; hard points remain capped at 20)</p>
         <p class="annotation">Individual bonus levels for this skill: +${activeBonus().skills[state.selected] || 0}. Use the blue + / − controls beside its tree node to adjust.</p>
-        <div class="tree-points"><button data-adjust="${state.selected}" data-delta="-1" ${current[state.selected] === 0 ? "disabled" : ""}>−</button><strong>${current[state.selected]} / ${selected.selected.maxLevel}</strong><button data-adjust="${state.selected}" data-delta="1" ${current[state.selected] >= selected.selected.maxLevel || pointsLeft() <= 0 ? "disabled" : ""}>+</button></div>
+        <div class="tree-points"><button data-adjust="${state.selected}" data-delta="-1" ${current[state.selected] === 0 ? "disabled" : ""}>−</button><strong>${current[state.selected]} / ${selected.selected.maxLevel}</strong><button data-adjust="${state.selected}" data-delta="1" ${current[state.selected] >= selected.selected.maxLevel || pointsLeft() <= 0 || amazonAllocationIssues(selected,current,state.level,skills).length ? "disabled" : ""}>+</button></div>
         <p class="annotation">Formula references to other skills: ${dependencies.length ? dependencies.map(escape).join(", ") : "none detected"}. Only explicitly supported, source-guarded references are evaluated as synergies.</p>
         <p class="annotation">Native S14 fields. The limited numeric previews below use explicit linear-parameter assumptions, not verified engine output or DPS. Other expressions remain uninterpreted.</p>
         ${preview.length ? `<div class="sandbox-preview">${preview.map((item) => `<div><strong>${escape(item.label)}: ${escape(item.value === null ? "Not calculated" : item.value)}</strong><small>${escape(item.expression)} · ${escape(item.assumption)}</small></div>`).join("")}</div>` : `<p class="annotation">No supported numeric preview for this skill yet.</p>`}
@@ -87,7 +90,7 @@ export function renderAmazonSandbox() {
         <div class="sandbox-compare"><div><strong>Skill</strong><strong>A</strong><strong>B</strong></div>
         ${skills.filter((skill) => state.builds.some((b) => b[skill.identity.internalId] > 0)).map((skill) => `<div><span>${escape(skill.identity.internalName)}</span><span>${state.builds[0][skill.identity.internalId]}</span><span>${state.builds[1][skill.identity.internalId]}</span></div>`).join("") || "<p>No points allocated yet.</p>"}</div>
       </section>
-      <p class="annotation">Source: ${escape(amazonSkills.source.repository)} @ ${escape(amazonSkills.source.commit.slice(0, 12))}. This prototype intentionally does not calculate DPS or enforce skill-tree prerequisites.</p>
+      <p class="annotation">Source: ${escape(amazonSkills.source.repository)} @ ${escape(amazonSkills.source.commit.slice(0, 12))}. This prototype does not calculate DPS. Native prerequisite cycles/unresolved references are flagged for investigation.</p>
     </section>`;
 }
 
@@ -144,7 +147,7 @@ export function mountAmazonSandbox(container) {
       const delta = Number(button.dataset.delta);
       const skill = byId.get(id);
       const current = activeBuild()[id];
-      if (skill && ((delta === 1 && current < skill.selected.maxLevel && pointsLeft() > 0) || (delta === -1 && current > 0))) activeBuild()[id] += delta;
+      if (skill && ((delta === 1 && current < skill.selected.maxLevel && pointsLeft() > 0 && amazonAllocationIssues(skill,activeBuild(),state.level,skills).length === 0) || (delta === -1 && current > 0))) activeBuild()[id] += delta;
     }
     persist();
     redraw();

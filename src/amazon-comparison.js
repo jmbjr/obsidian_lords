@@ -61,3 +61,27 @@ export function findAmazonDependencies(skill, skills) {
   const expr = Object.entries(skill.raw.skill).filter(([key,value]) => /calc|sym/i.test(key) && typeof value === "string").map(([,value])=>value).join(" ");
   return skills.filter(other => other.identity.internalId !== skill.identity.internalId && (expr.includes("skill('"+other.identity.internalName+"'") || expr.includes("skill(\""+other.identity.internalName+"\""))).map(s=>s.identity.internalName);
 }
+
+// Source-grounded hard-point gates. Existing/imported allocations are diagnosed, never silently rewritten.
+export function amazonAllocationIssues(skill, build, level, skills) {
+  const byName = new Map(skills.map(s => [s.identity.internalName, s]));
+  const missing = [];
+  if (level < skill.selected.requiredLevel) missing.push("Requires character level " + skill.selected.requiredLevel);
+  const seen = new Set([skill.identity.internalName]);
+  const visit = (node) => {
+    for (const key of ["reqskill1","reqskill2","reqskill3"]) {
+      const name = node.raw.skill[key];
+      if (!name) continue;
+      const required = byName.get(name);
+      if (!required) { missing.push("Unresolved prerequisite: " + name); continue; }
+      if (seen.has(name)) { missing.push("Cyclic source prerequisite: " + name); continue; }
+      if (!(build[required.identity.internalId] > 0)) missing.push("Requires 1 hard point in " + name);
+      seen.add(name); visit(required); seen.delete(name);
+    }
+  };
+  visit(skill);
+  return [...new Set(missing)];
+}
+export function amazonBuildIssues(build, level, skills) {
+  return skills.filter(s => build[s.identity.internalId] > 0).flatMap(s => amazonAllocationIssues(s,build,level,skills).map(message => ({id:s.identity.internalId,skill:s.identity.internalName,message})));
+}
