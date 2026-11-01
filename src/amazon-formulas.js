@@ -29,6 +29,7 @@ export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0, build = {
     return [
       { label: "Arrow count (calc1)", value: Math.min(25, linear(row.Param1, row.Param2, level)), expression: row.calc1, assumption: "ln12 = Param1 + (level − 1) × Param2" },
       { label: "Damage modifier % (calc4)", value: linear(row.Param5, row.Param6, level), expression: row.calc4, assumption: "ln56 = Param5 + (level − 1) × Param6; not total damage" },
+      ...(row.ToHit === "8" && row.LevToHit === "6" ? [{ label: "Attack rating bonus % (ToHit/LevToHit)", value: linear(row.ToHit, row.LevToHit, level), expression: "ToHit + (level − 1) × LevToHit", assumption: "Native S14 ToHit=8, LevToHit=6; matches in-game +122% at level 20 and +128% at level 21; not final attack rating" }] : []),
     ];
   }
   if (skill.identity.internalId === 26 && row.calc1 === '"min(par3 + lvl - 1, par4)"' && row.calc2 === "ln12 + (skill('Penetrate'.blvl) * par8)") {

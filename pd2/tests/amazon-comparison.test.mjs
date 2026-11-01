@@ -29,7 +29,7 @@ const same={...empty,12:20};
 const independent=normalizeBuildSnapshot({version:1,level:62,budget:30,bonuses:[0,1],builds:[same,same]},skills);
 assert.deepEqual(independent.bonuses.map(b=>b.all),[0,1]);
 const compared=compareAmazonBuilds(skills,independent.builds,independent.bonuses);
-assert.deepEqual(compared.filter(r=>r.id===12).map(r=>[r.a,r.b,r.delta]),[[24,25,1],[126,130,4]]);
+assert.deepEqual(compared.filter(r=>r.id===12).map(r=>[r.a,r.b,r.delta]),[[24,25,1],[126,130,4],[122,128,6]]);
 assert.deepEqual(normalizeBuildSnapshot(JSON.parse(JSON.stringify(independent)),skills).bonuses,independent.bonuses);
 
 // Phase 2: tree and skill bonuses stack, and remain independent per build.
