@@ -69,3 +69,20 @@ assert.equal(previewAmazonSkill(skill(11),20,1)[0].value,210);
 const changedCold = structuredClone(skill(11));
 changedCold.raw.skill.ToHit = "11";
 assert.deepEqual(previewAmazonSkill(changedCold,20),[]);
+
+// Broad Bow & Crossbow coverage, native source guards and hard-point synergies.
+for (const id of [6,7,11,12,16,21,22,26,27,31]) {
+  assert.equal(previewAmazonSkill(skill(id),0).length,0);
+  assert.ok(previewAmazonSkill(skill(id),10).length>0,"Missing numeric metrics for bow skill "+id);
+}
+assert.equal(previewAmazonSkill(skill(7),20).find(x=>x.label.includes("projectile count")).value,8);
+assert.equal(previewAmazonSkill(skill(16),20).find(x=>x.label.includes("Cluster bombs")).value,7);
+assert.equal(previewAmazonSkill(skill(16),20,20).find(x=>x.label.includes("Explosion radius")).value,8);
+assert.equal(previewAmazonSkill(skill(31),20,20).find(x=>x.label.includes("Damage radius")).value,9);
+assert.equal(previewAmazonSkill(skill(27),10).find(x=>x.label.includes("Fire disc radius")).value,3);
+assert.equal(previewAmazonSkill(skill(11),10,0,{21:3,6:2}).find(x=>x.label.includes("synergy")).value,75);
+assert.equal(previewAmazonSkill(skill(27),10,40,{16:3,7:2,6:1}).find(x=>x.label.includes("synergy")).value,30);
+assert.equal(previewAmazonSkill(skill(21),10,0,{11:1,31:2,6:3}).find(x=>x.label.includes("synergy")).value,78);
+assert.equal(previewAmazonSkill(skill(31),10,0,{21:2,11:3}).find(x=>x.label.includes("synergy")).value,30);
+const changedBow = structuredClone(skill(16)); changedBow.raw.skill.calc2="unsupported";
+assert.equal(previewAmazonSkill(changedBow,20).some(x=>x.label.includes("Cluster bombs")),false);
