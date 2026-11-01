@@ -18,7 +18,7 @@ export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0, build = {
   const bow = skill.selected.skillPage === "1";
   const result = [];
   const metric = (label,value,expression,assumption) => result.push({label,value,expression,assumption});
-  if (bow && row.ToHit && row.LevToHit && /^\\d+$/.test(row.ToHit) && /^\\d+$/.test(row.LevToHit)) {
+  if (bow && ({6:["10","9"],7:["10","10"],11:["10","10"],16:["20","10"],21:["20","10"],27:["30","9"],31:["40","10"]}[skill.identity.internalId] || []).join(":") === [row.ToHit,row.LevToHit].join(":")) {
     metric("Attack rating bonus % (ToHit/LevToHit)",linear(row.ToHit,row.LevToHit,level),"ToHit + (level − 1) × LevToHit","Native S14 table linear preview; not final attack rating or in-game verified");
   }
   const synergy = (expected, params) => {
