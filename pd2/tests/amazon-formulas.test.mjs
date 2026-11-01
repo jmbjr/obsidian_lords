@@ -51,3 +51,12 @@ for (const [id, token] of [[9,"dm12"],[33,"edmn"]]) {
   assert.deepEqual(previewAmazonSkill(altered,20,40),[]);
 }
 console.log("Source-guarded formula previews passed");
+
+// Fire Arrow native S14 attack rating: source-guarded and based on effective level.
+assert.equal(previewAmazonSkill(skill(7),0).length,0);
+assert.equal(previewAmazonSkill(skill(7),1)[0].value,10);
+assert.equal(previewAmazonSkill(skill(7),20)[0].value,200);
+assert.equal(previewAmazonSkill(skill(7),20,1)[0].value,210);
+const changedFire = structuredClone(skill(7));
+changedFire.raw.skill.LevToHit = "11";
+assert.deepEqual(previewAmazonSkill(changedFire,20),[]);
