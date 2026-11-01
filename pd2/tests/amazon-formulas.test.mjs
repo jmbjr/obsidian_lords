@@ -24,12 +24,12 @@ const alteredHit = structuredClone(skill(12));
 alteredHit.raw.skill.ToHit = "unexpected";
 assert.equal(previewAmazonSkill(alteredHit,20).length,2);
 const magic = skill(6);
-assert.equal(previewAmazonSkill(magic, 1, 40, {8:3,17:2,22:4})[0].value, 180);
-assert.equal(previewAmazonSkill(magic, 1, 0, {8:3,17:2,22:4})[0].value, 180);
+assert.equal(previewAmazonSkill(magic, 1, 40, {8:3,17:2,22:4}).find(x=>x.label.includes("synergy")).value, 180);
+assert.equal(previewAmazonSkill(magic, 1, 0, {8:3,17:2,22:4}).find(x=>x.label.includes("synergy")).value, 180);
 assert.equal(previewAmazonSkill(magic, 0, 40, {8:3,17:2,22:4}).length, 0);
 const invalidMagic = structuredClone(magic);
 invalidMagic.raw.skill.EDmgSymPerCalc = "unknown";
-assert.deepEqual(previewAmazonSkill(invalidMagic, 1, 0, {8:3}), []);
+assert.equal(previewAmazonSkill(invalidMagic, 1, 0, {8:3}).some(x=>x.label.includes("synergy")),false);
 const strafe = previewAmazonSkill(skill(26), 10, 40, {23:5});
 assert.equal(strafe[0].value, 5);
 assert.equal(strafe[1].value, 80 + 49 * 12 + 5 * 10);
@@ -52,20 +52,38 @@ for (const [id, token] of [[9,"dm12"],[33,"edmn"]]) {
 }
 console.log("Source-guarded formula previews passed");
 
+const metricValue = (id, hard, bonus, label, build = {}) => previewAmazonSkill(skill(id),hard,bonus,build).find(x => x.label.includes(label))?.value;
 // Fire Arrow native S14 attack rating: source-guarded and based on effective level.
 assert.equal(previewAmazonSkill(skill(7),0).length,0);
-assert.equal(previewAmazonSkill(skill(7),1)[0].value,10);
-assert.equal(previewAmazonSkill(skill(7),20)[0].value,200);
-assert.equal(previewAmazonSkill(skill(7),20,1)[0].value,210);
+assert.equal(metricValue(7,1,0,"Attack rating"),10);
+assert.equal(metricValue(7,20,0,"Attack rating"),200);
+assert.equal(metricValue(7,20,1,"Attack rating"),210);
 const changedFire = structuredClone(skill(7));
 changedFire.raw.skill.LevToHit = "11";
-assert.deepEqual(previewAmazonSkill(changedFire,20),[]);
+assert.equal(previewAmazonSkill(changedFire,20).some(x=>x.label.includes("Attack rating")),false);
 
 // Cold Arrow uses the same native S14 ToHit/LevToHit pair as Fire Arrow.
 assert.equal(previewAmazonSkill(skill(11),0).length,0);
-assert.equal(previewAmazonSkill(skill(11),1)[0].value,10);
-assert.equal(previewAmazonSkill(skill(11),20)[0].value,200);
-assert.equal(previewAmazonSkill(skill(11),20,1)[0].value,210);
+assert.equal(metricValue(11,1,0,"Attack rating"),10);
+assert.equal(metricValue(11,20,0,"Attack rating"),200);
+assert.equal(metricValue(11,20,1,"Attack rating"),210);
 const changedCold = structuredClone(skill(11));
 changedCold.raw.skill.ToHit = "11";
-assert.deepEqual(previewAmazonSkill(changedCold,20),[]);
+assert.equal(previewAmazonSkill(changedCold,20).some(x=>x.label.includes("Attack rating")),false);
+
+// Broad Bow & Crossbow coverage, native source guards and hard-point synergies.
+for (const id of [6,7,11,12,16,21,22,26,27,31]) {
+  assert.equal(previewAmazonSkill(skill(id),0).length,0);
+  assert.ok(previewAmazonSkill(skill(id),10).length>0,"Missing numeric metrics for bow skill "+id);
+}
+assert.equal(previewAmazonSkill(skill(7),20).find(x=>x.label.includes("projectile count")).value,8);
+assert.equal(previewAmazonSkill(skill(16),20).find(x=>x.label.includes("Cluster bombs")).value,7);
+assert.equal(previewAmazonSkill(skill(16),20,20).find(x=>x.label.includes("Explosion radius")).value,8);
+assert.equal(previewAmazonSkill(skill(31),20,20).find(x=>x.label.includes("Damage radius")).value,9);
+assert.equal(previewAmazonSkill(skill(27),10).find(x=>x.label.includes("Fire disc radius")).value,3);
+assert.equal(previewAmazonSkill(skill(11),10,0,{21:3,6:2}).find(x=>x.label.includes("synergy")).value,75);
+assert.equal(previewAmazonSkill(skill(27),10,40,{16:3,7:2,6:1}).find(x=>x.label.includes("synergy")).value,30);
+assert.equal(previewAmazonSkill(skill(21),10,0,{11:1,31:2,6:3}).find(x=>x.label.includes("synergy")).value,78);
+assert.equal(previewAmazonSkill(skill(31),10,0,{21:2,11:3}).find(x=>x.label.includes("synergy")).value,30);
+const changedBow = structuredClone(skill(16)); changedBow.raw.skill.calc2="unsupported";
+assert.equal(previewAmazonSkill(changedBow,20).some(x=>x.label.includes("Cluster bombs")),false);
