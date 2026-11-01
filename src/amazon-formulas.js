@@ -9,6 +9,16 @@ export const diminishingDm12 = (level, min, max) => {
   const scale = Math.trunc(110 * level / (level + 6));
   return Math.min(max, min + Math.trunc(scale * (max - min) / 100));
 };
+// Interpret the native edmn token as elemental minimum by source-table level bands.
+// The Pierce passive consumes this source value as skill_pierce; final in-game
+// pierce percentage (including gear and runtime rules) remains unverified.
+export const elementalMinByLevel = (row, level) => {
+  if (!Number.isInteger(level) || level < 1) return null;
+  const increments = [row.EMinLev1,row.EMinLev2,row.EMinLev3,row.EMinLev4,row.EMinLev5].map(n);
+  const counts = [Math.min(Math.max(level-1,0),7),Math.min(Math.max(level-8,0),8),Math.min(Math.max(level-16,0),6),Math.min(Math.max(level-22,0),6),Math.max(level-28,0)];
+  if (![row.EMin,...increments].every(value => Number.isFinite(n(value)))) return null;
+  return n(row.EMin) + counts.reduce((sum,count,i)=>sum+count*increments[i],0);
+};
 export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0, build = {}, grantedBySkillBonus = false) {
   if (!skill || (hardPoints <= 0 && !grantedBySkillBonus)) return [];
   const row = skill.raw.skill;
@@ -102,16 +112,13 @@ export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0, build = {
         if (fixed("calc2","ln56") && row.Param5==="25" && row.Param6==="3") add("Summon item level (calc2)",linear(row.Param5,row.Param6,level),row.calc2);
         break;
       case 33: // Pierce
-        if (fixed("passivecalc1","edmn") && fixed("passivestat1","skill_pierce")) add("Pierce chance (unresolved)",null,row.passivecalc1,"Native edmn evaluator unverified; no chance invented");
+        if (fixed("passivecalc1","edmn") && fixed("passivestat1","skill_pierce")) add("Pierce passive stat (edmn raw preview)",elementalMinByLevel(row,level),row.passivecalc1,"Native EMin/EMinLev1–5 level-band evaluation of skill_pierce input; final in-game pierce chance %, gear stacking and engine parity unverified");
         break;
     }
     return passive;
   }
   if (skill.identity.internalId === 9 && row.passivecalc1 === "dm12" && row.passivestat1 === "passive_critical_strike") {
     return [{ label: "Critical Strike chance % (dm12 preview)", value: diminishingDm12(level, n(row.Param1), n(row.Param2)), expression: row.passivecalc1, assumption: "D2-family dm12 integer diminishing-return evaluator, capped at Param2; PD2 engine parity not verified" }];
-  }
-  if (skill.identity.internalId === 33 && row.passivecalc1 === "edmn" && row.passivestat1 === "skill_pierce") {
-    return [{ label: "Pierce chance (unresolved)", value: null, expression: row.passivecalc1, assumption: "Native S14 token edmn is conventionally elemental minimum damage, not a generic chance function; Pierce engine usage unverified" }];
   }
   if (skill.identity.internalId === 6 && row.EDmgSymPerCalc === "(skill('Inner Sight'.blvl)+skill('Slow Movement'.blvl)+skill('Guided Arrow'.blvl))*par8" && Number(row.Param8) === 20) {
     const points = [8,17,22].map(id => Number(build[id] || 0));

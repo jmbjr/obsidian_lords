@@ -21,7 +21,7 @@ const magic=skills.find(s=>s.identity.internalId===6);
 assert.ok(findAmazonDependencies(magic,skills).includes("Guided Arrow"));
 const passives=compareAmazonBuilds(skills,[{...empty,9:5,33:5},{...empty,9:20,33:20}],[40,40]);
 assert.equal(passives.find(r=>r.id===9).delta,3);
-assert.equal(passives.find(r=>r.id===33).delta,null);
+assert.equal(passives.find(r=>r.id===33).delta,15);
 console.log("Build comparison, dependency references and snapshot validation passed");
 
 // Phase 1: independent global bonuses, including legacy shared-bonus migration.
