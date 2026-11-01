@@ -52,10 +52,10 @@ export function renderAmazonSandbox() {
       <div class="sandbox-settings">
         <label>Character level <input data-setting="level" type="number" min="1" max="99" value="${state.level}"></label>
         <label>Points to allocate <input data-setting="budget" type="number" min="0" max="150" value="${state.budget}"></label>
-        <label>Build A · +All Skills <input data-bonus-build="0" type="number" min="0" max="100" value="${state.bonuses[0].all}"></label><label>Build B · +All Skills <input data-bonus-build="1" type="number" min="0" max="100" value="${state.bonuses[1].all}"></label>
+        ${[0,1].map(index => `<div class="bonus-setting"><span>Build ${index === 0 ? "A" : "B"} · +All Skills</span><span class="bonus-setting-value bonus-all-value">${state.bonuses[index].all}</span><span class="bonus-setting-stepper bonus-all-stepper"><button data-scope-bonus="all" data-bonus-build="${index}" data-delta="1" aria-label="Increase Build ${index === 0 ? "A" : "B"} all-skills bonus" ${state.bonuses[index].all >= 100 ? "disabled" : ""}>▲</button><button data-scope-bonus="all" data-bonus-build="${index}" data-delta="-1" aria-label="Decrease Build ${index === 0 ? "A" : "B"} all-skills bonus" ${state.bonuses[index].all <= 0 ? "disabled" : ""}>▼</button></span></div>`).join("")}
       </div>
       <div class="sandbox-settings">
-        ${[0,1].map(index => `<fieldset><legend>Build ${index === 0 ? "A" : "B"} · +Tree Skills</legend>${[[1,"Bow & Crossbow"],[2,"Passive & Magic"],[3,"Javelin & Spear"]].map(([page,name]) => `<label>${name} <input type="number" min="0" max="100" data-tree-bonus="${page}" data-bonus-build="${index}" value="${state.bonuses[index].trees[page]}"></label>`).join("")}</fieldset>`).join("")}
+        ${[0,1].map(index => `<fieldset><legend>Build ${index === 0 ? "A" : "B"} · +Tree Skills</legend>${[[1,"Bow & Crossbow"],[2,"Passive & Magic"],[3,"Javelin & Spear"]].map(([page,name]) => `<div class="bonus-setting"><span>${name}</span><span class="bonus-setting-value bonus-tree-value">${state.bonuses[index].trees[page]}</span><span class="bonus-setting-stepper bonus-tree-stepper"><button data-scope-bonus="tree" data-tree-bonus="${page}" data-bonus-build="${index}" data-delta="1" aria-label="Increase Build ${index === 0 ? "A" : "B"} ${name} bonus" ${state.bonuses[index].trees[page] >= 100 ? "disabled" : ""}>▲</button><button data-scope-bonus="tree" data-tree-bonus="${page}" data-bonus-build="${index}" data-delta="-1" aria-label="Decrease Build ${index === 0 ? "A" : "B"} ${name} bonus" ${state.bonuses[index].trees[page] <= 0 ? "disabled" : ""}>▼</button></span></div>`).join("")}</fieldset>`).join("")}
       </div>
       <div class="sandbox-summary">
         <strong>Build ${state.active === 0 ? "A" : "B"} · ${sum(current)} spent / ${state.budget} available · ${pointsLeft()} remaining</strong>
@@ -150,6 +150,17 @@ export function mountAmazonSandbox(container) {
     if (button.dataset.page !== undefined) state.page = Number(button.dataset.page);
     if (button.dataset.select !== undefined) state.selected = Number(button.dataset.select);
     if (button.dataset.reset) state.builds[state.active] = newBuild();
+    if (button.dataset.scopeBonus !== undefined) {
+      const index = Number(button.dataset.bonusBuild);
+      const delta = Number(button.dataset.delta);
+      const page = Number(button.dataset.treeBonus);
+      if ((index === 0 || index === 1) && (delta === 1 || delta === -1)) {
+        const bonus = state.bonuses[index];
+        if (button.dataset.scopeBonus === "all") bonus.all = Math.max(0, Math.min(100, bonus.all + delta));
+        if (button.dataset.scopeBonus === "tree" && [1,2,3].includes(page)) bonus.trees[page] = Math.max(0, Math.min(100, bonus.trees[page] + delta));
+      }
+      persist(); redraw(); return;
+    }
     if (button.dataset.bonusAdjust !== undefined) {
       const id = Number(button.dataset.bonusAdjust);
       const delta = Number(button.dataset.delta);
