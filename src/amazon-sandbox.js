@@ -18,6 +18,14 @@ const sum = (build) => Object.values(build).reduce((a, b) => a + b, 0);
 const activeBuild = () => state.builds[state.active];
 const activeBonus = () => state.bonuses[state.active];
 const effectiveBonus = skill => bonusForSkill(skill, activeBonus());
+const skillLevelBreakdown = (skill, hard) => {
+  const bonus = activeBonus();
+  const individual = bonus.skills[skill.identity.internalId] || 0;
+  const tree = bonus.trees[skill.selected.skillPage] || 0;
+  const all = bonus.all || 0;
+  const total = hard > 0 ? hard + individual + tree + all : 0;
+  return `<span class="skill-level-breakdown"><span class="skill-level-total">${total}</span> <span class="skill-level-hard">(${hard})</span> <span class="skill-level-individual">+ (${individual})</span> <span class="skill-level-tree">+ (${tree})</span> <span class="skill-level-all">+ (${all})</span></span>`;
+};
 const pointsLeft = () => state.budget - sum(activeBuild());
 const inputNumber = (value, fallback, min, max) => {
   if (String(value).trim() === "") return fallback;
@@ -63,7 +71,7 @@ export function renderAmazonSandbox() {
           const locked = reasons.length > 0;
           return `<div class="tree-node ${state.selected === id ? "chosen" : ""}" style="grid-row:${resolveAmazonLayout(skill).row};grid-column:${resolveAmazonLayout(skill).column}">
             <button class="tree-skill" data-select="${id}" aria-pressed="${state.selected === id}"><span class="tree-glyph">✦</span><span>${escape(skill.identity.internalName)}</span></button>
-            <div class="tree-points"><span class="hard-point-controls"><button data-adjust="${id}" data-delta="1" aria-label="Add ${escape(skill.identity.internalName)} hard point" ${points >= skill.selected.maxLevel || pointsLeft() <= 0 || locked ? "disabled" : ""}>▲</button><button data-adjust="${id}" data-delta="-1" aria-label="Remove ${escape(skill.identity.internalName)} hard point" ${points === 0 ? "disabled" : ""}>▼</button></span><strong>${points}<small> + ${effectiveBonus(skill)}</small></strong><span class="skill-bonus-controls" title="Individual skill bonus levels (blue arrows)"><button class="skill-bonus-button" data-bonus-adjust="${id}" data-delta="-1" aria-label="Remove bonus level from ${escape(skill.identity.internalName)}" ${(activeBonus().skills[id] || 0) <= 0 ? "disabled" : ""}>▼</button><button class="skill-bonus-button" data-bonus-adjust="${id}" data-delta="1" aria-label="Add bonus level to ${escape(skill.identity.internalName)}" ${(activeBonus().skills[id] || 0) >= 100 ? "disabled" : ""}>▲</button></span></div>
+            <div class="tree-points"><span class="hard-point-controls"><button data-adjust="${id}" data-delta="1" aria-label="Add ${escape(skill.identity.internalName)} hard point" ${points >= skill.selected.maxLevel || pointsLeft() <= 0 || locked ? "disabled" : ""}>▲</button><button data-adjust="${id}" data-delta="-1" aria-label="Remove ${escape(skill.identity.internalName)} hard point" ${points === 0 ? "disabled" : ""}>▼</button></span>${skillLevelBreakdown(skill, points)}<span class="skill-bonus-controls" title="Individual skill bonus levels (blue arrows)"><button class="skill-bonus-button" data-bonus-adjust="${id}" data-delta="-1" aria-label="Remove bonus level from ${escape(skill.identity.internalName)}" ${(activeBonus().skills[id] || 0) <= 0 ? "disabled" : ""}>▼</button><button class="skill-bonus-button" data-bonus-adjust="${id}" data-delta="1" aria-label="Add bonus level to ${escape(skill.identity.internalName)}" ${(activeBonus().skills[id] || 0) >= 100 ? "disabled" : ""}>▲</button></span></div>
             ${locked ? `<small class="tree-warning">${escape(reasons.join("; "))}</small>` : ""}${resolveAmazonLayout(skill).status === "provisional" ? '<small class="tree-warning">Provisional position</small>' : ""}
           </div>`;
         }).join("")}
