@@ -60,3 +60,12 @@ assert.equal(previewAmazonSkill(skill(7),20,1)[0].value,210);
 const changedFire = structuredClone(skill(7));
 changedFire.raw.skill.LevToHit = "11";
 assert.deepEqual(previewAmazonSkill(changedFire,20),[]);
+
+// Cold Arrow uses the same native S14 ToHit/LevToHit pair as Fire Arrow.
+assert.equal(previewAmazonSkill(skill(11),0).length,0);
+assert.equal(previewAmazonSkill(skill(11),1)[0].value,10);
+assert.equal(previewAmazonSkill(skill(11),20)[0].value,200);
+assert.equal(previewAmazonSkill(skill(11),20,1)[0].value,210);
+const changedCold = structuredClone(skill(11));
+changedCold.raw.skill.ToHit = "11";
+assert.deepEqual(previewAmazonSkill(changedCold,20),[]);
