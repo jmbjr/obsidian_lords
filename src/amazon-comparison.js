@@ -47,8 +47,8 @@ export function compareAmazonBuilds(skills, builds, bonuses, comparison = null) 
   const included = comparison ? new Set(comparison.skillIds) : null;
   return skills.filter(skill => !included || included.has(skill.identity.internalId)).flatMap(skill => {
     const id = skill.identity.internalId;
-    const a = previewAmazonSkill(skill, builds[0][id] || 0, bonusForSkill(skill,bonuses[0]), builds[0]);
-    const b = previewAmazonSkill(skill, builds[1][id] || 0, bonusForSkill(skill,bonuses[1]), builds[1]);
+    const a = previewAmazonSkill(skill, builds[0][id] || 0, bonusForSkill(skill,bonuses[0]), builds[0], (bonuses[0]?.skills?.[id] || 0) > 0);
+    const b = previewAmazonSkill(skill, builds[1][id] || 0, bonusForSkill(skill,bonuses[1]), builds[1], (bonuses[1]?.skills?.[id] || 0) > 0);
     const labels = [...new Set([...a,...b].map(v=>v.label))];
     return labels.map(label => {
       const av = a.find(v=>v.label===label);

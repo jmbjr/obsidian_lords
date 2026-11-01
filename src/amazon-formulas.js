@@ -9,8 +9,8 @@ export const diminishingDm12 = (level, min, max) => {
   const scale = Math.trunc(110 * level / (level + 6));
   return Math.min(max, min + Math.trunc(scale * (max - min) / 100));
 };
-export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0, build = {}) {
-  if (!skill || hardPoints <= 0) return [];
+export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0, build = {}, grantedBySkillBonus = false) {
+  if (!skill || (hardPoints <= 0 && !grantedBySkillBonus)) return [];
   const row = skill.raw.skill;
   const level = hardPoints + bonusSkills;
   // Native S14 Bow & Crossbow source-table previews. Each metric is independently

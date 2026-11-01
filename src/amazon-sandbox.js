@@ -11,7 +11,7 @@ const state = { level: 55, budget: 30, bonuses: [emptyBonus(), emptyBonus()], ac
 const escape = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 const formatSummaryLevel = (skill, buildIndex) => {
   const hard = state.builds[buildIndex][skill.identity.internalId] || 0;
-  const effective = hard > 0 ? hard + bonusForSkill(skill, state.bonuses[buildIndex]) : 0;
+  const effective = hard > 0 || (state.bonuses[buildIndex].skills[skill.identity.internalId] || 0) > 0 ? hard + bonusForSkill(skill, state.bonuses[buildIndex]) : 0;
   return `<span class="summary-effective-level">${effective}</span> <span class="summary-hard-level">(${hard})</span>`;
 };
 const sum = (build) => Object.values(build).reduce((a, b) => a + b, 0);
@@ -23,7 +23,7 @@ const skillLevelBreakdown = (skill, hard) => {
   const individual = bonus.skills[skill.identity.internalId] || 0;
   const tree = bonus.trees[skill.selected.skillPage] || 0;
   const all = bonus.all || 0;
-  const total = hard > 0 ? hard + individual + tree + all : 0;
+  const total = hard > 0 || individual > 0 ? hard + individual + tree + all : 0;
   return `<span class="skill-level-breakdown"><span class="skill-level-total">${total}</span><span class="skill-level-components">(<span class="skill-level-hard">${hard}</span> + <span class="skill-level-individual">${individual}</span> + <span class="skill-level-tree">${tree}</span> + <span class="skill-level-all">${all}</span>)</span></span>`;
 };
 const pointsLeft = () => state.budget - sum(activeBuild());
@@ -38,7 +38,7 @@ export function renderAmazonSandbox() {
   const current = activeBuild();
   const cards = skills.filter((skill) => resolveAmazonLayout(skill).page === state.page);
   const unplaced = skills.filter((skill) => resolveAmazonLayout(skill).page === null);
-  const preview = previewAmazonSkill(selected, current[state.selected], effectiveBonus(selected), current);
+  const preview = previewAmazonSkill(selected, current[state.selected], effectiveBonus(selected), current, (activeBonus().skills[selected.identity.internalId] || 0) > 0);
   const comparisons = compareAmazonBuilds(skills, state.builds, state.bonuses, state.comparison);
   const dependencies = findAmazonDependencies(selected, skills);
   const buildIssues = state.builds.map(build => amazonBuildIssues(build,state.level,skills));
@@ -101,7 +101,7 @@ export function renderAmazonSandbox() {
       <section class="sandbox-inspector"><h2>Compare builds</h2>
         <p class="annotation">Build A: ${sum(state.builds[0])} points · Build B: ${sum(state.builds[1])} points. Both share the same character level and point budget; +All Skills bonuses are independent (A: +${state.bonuses[0].all}, B: +${state.bonuses[1].all}; tree and skill bonuses are also independent).</p>
         <div class="sandbox-compare"><div><strong>Skill</strong><strong>A</strong><strong>B</strong></div>
-        ${skills.filter((skill) => state.builds.some((b) => b[skill.identity.internalId] > 0)).map((skill) => `<div><span>${escape(skill.identity.internalName)}</span><span>${formatSummaryLevel(skill,0)}</span><span>${formatSummaryLevel(skill,1)}</span></div>`).join("") || "<p>No points allocated yet.</p>"}</div>
+        ${skills.filter((skill) => state.builds.some((b, index) => b[skill.identity.internalId] > 0 || (state.bonuses[index].skills[skill.identity.internalId] || 0) > 0)).map((skill) => `<div><span>${escape(skill.identity.internalName)}</span><span>${formatSummaryLevel(skill,0)}</span><span>${formatSummaryLevel(skill,1)}</span></div>`).join("") || "<p>No points allocated yet.</p>"}</div>
       </section>
       <p class="annotation">Source: ${escape(amazonSkills.source.repository)} @ ${escape(amazonSkills.source.commit.slice(0, 12))}. This prototype does not calculate DPS. Native prerequisite cycles/unresolved references are flagged for investigation.</p>
     </section>`;
