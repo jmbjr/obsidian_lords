@@ -87,3 +87,18 @@ assert.equal(previewAmazonSkill(skill(21),10,0,{11:1,31:2,6:3}).find(x=>x.label.
 assert.equal(previewAmazonSkill(skill(31),10,0,{21:2,11:3}).find(x=>x.label.includes("synergy")).value,30);
 const changedBow = structuredClone(skill(16)); changedBow.raw.skill.calc2="unsupported";
 assert.equal(previewAmazonSkill(changedBow,20).some(x=>x.label.includes("Cluster bombs")),false);
+
+// Passive & Magic coverage, including Inner Sight and unresolved evaluator tokens.
+for (const id of [8,9,13,17,18,23,28,29,32,33]) {
+  assert.deepEqual(previewAmazonSkill(skill(id),0),[]);
+  assert.ok(previewAmazonSkill(skill(id),10).length>0,"Missing Passive & Magic preview "+id);
+}
+assert.equal(previewAmazonSkill(skill(8),1).find(x=>x.label.includes("duration")).value,200);
+assert.equal(previewAmazonSkill(skill(8),20).find(x=>x.label.includes("range")).value,29);
+assert.equal(previewAmazonSkill(skill(8),40).find(x=>x.label.includes("attack rating reduction")).value,40);
+assert.equal(previewAmazonSkill(skill(23),20).find(x=>x.label.includes("Attack rating")).value,225);
+assert.equal(previewAmazonSkill(skill(23),20,40).find(x=>x.label.includes("Physical pierce")).value,10);
+assert.equal(previewAmazonSkill(skill(32),20).find(x=>x.label.includes("bonus HP")).value,133);
+assert.equal(previewAmazonSkill(skill(29),20)[0].value,null);
+const alteredSight=structuredClone(skill(8));alteredSight.raw.skill.auralencalc="unknown";
+assert.equal(previewAmazonSkill(alteredSight,20).some(x=>x.label.includes("duration")),false);
