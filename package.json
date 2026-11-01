@@ -11,7 +11,7 @@
     "data:fetch": "node pd2/scripts/fetch-data.mjs",
     "data:check": "node pd2/scripts/fetch-data.mjs --check",
     "data:normalize": "node pd2/scripts/normalize-poison-strike.mjs && node pd2/scripts/normalize-amazon-skills.mjs",
-    "data:test": "npm run data:prepare && node --test pd2/tests/poison-strike.test.mjs pd2/tests/season-14-overlay.test.mjs pd2/tests/spectral-plate-experiment.test.mjs pd2/tests/amazon-skills.test.mjs pd2/tests/amazon-sandbox.test.mjs pd2/tests/amazon-formulas.test.mjs pd2/tests/amazon-comparison.test.mjs pd2/tests/multishot-procs.test.mjs pd2/tests/combat-effects.test.mjs",
+    "data:test": "npm run data:prepare && node --test pd2/tests/poison-strike.test.mjs pd2/tests/season-14-overlay.test.mjs pd2/tests/spectral-plate-experiment.test.mjs pd2/tests/amazon-skills.test.mjs pd2/tests/amazon-sandbox.test.mjs pd2/tests/amazon-formulas.test.mjs pd2/tests/amazon-comparison.test.mjs pd2/tests/multishot-procs.test.mjs pd2/tests/combat-effects.test.mjs pd2/tests/multishot-combat.test.mjs",
     "data:prepare": "npm run data:fetch && npm run data:normalize"
   },
   "devDependencies": {
