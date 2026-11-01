@@ -7,7 +7,7 @@ test("Critical Strike and Deadly Strike are mutually exclusive, not additive", (
   assert.equal(s.criticalChance,.5);
   assert.equal(s.effectiveDeadlyChance,.2);
   assert.ok(Math.abs(s.normalChance-.3)<1e-12);
-  assert.equal(s.expectedPhysicalMultiplier,1.7);
+  assert.ok(Math.abs(s.expectedPhysicalMultiplier - 1.7) < 1e-12);
   assert.equal(strikeOutcomes({criticalChance:100,deadlyChance:100}).expectedPhysicalMultiplier,2);
   assert.equal(strikeOutcomes().expectedPhysicalMultiplier,1);
 });
