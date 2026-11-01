@@ -60,6 +60,53 @@ export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0, build = {
     }
   }
   if (result.length && ![12,22,26].includes(skill.identity.internalId)) return result;
+  // Passive & Magic: source-guarded independent previews; not engine-verified.
+  if (skill.selected.skillPage === "2") {
+    const passive = [];
+    const add = (label,value,expression,assumption="Native S14 source-table preview; engine parity not verified") => passive.push({label,value,expression,assumption});
+    const fixed = (field,expression) => row[field] === expression;
+    switch(skill.identity.internalId) {
+      case 8: // Inner Sight
+        if (fixed("auralencalc","ln34") && row.Param3==="200" && row.Param4==="100") add("Aura duration (source units)",linear(row.Param3,row.Param4,level),row.auralencalc);
+        if (fixed("aurarangecalc",'"min(ln56, 30)"') && row.Param5==="10" && row.Param6==="1") add("Aura range (source units)",Math.min(30,linear(row.Param5,row.Param6,level)),row.aurarangecalc);
+        if (fixed("aurastatcalc2",'-"min(9+(lvl*par7),40)"') && row.Param7==="1") add("Enemy attack rating reduction % (magnitude)",Math.min(9+level,40),row.aurastatcalc2,"Native negative stat; shown as positive reduction magnitude, not enemy final AR");
+        break;
+      case 9: // Critical Strike
+        if (fixed("passivecalc1","dm12") && fixed("passivestat1","passive_critical_strike") && row.Param1==="5" && row.Param2==="75") add("Critical Strike chance % (dm12 preview)",diminishingDm12(level,5,75),row.passivecalc1,"D2-family dm12 integer interpretation; engine parity not verified");
+        break;
+      case 13: // Dodge
+        if (fixed("passivecalc1","dm12") && fixed("passivestat1","passive_dodge") && row.Param1==="0" && row.Param2==="40") add("Dodge chance % (dm12 preview)",diminishingDm12(level,0,40),row.passivecalc1);
+        if (fixed("passivecalc3","4 + lvl") && fixed("passivestat3","item_fastergethitrate")) add("Faster hit recovery % (passivecalc3)",4+level,row.passivecalc3);
+        break;
+      case 17: // Slow Movement
+        if (fixed("auralencalc","ln34") && row.Param3==="250" && row.Param4==="5") add("Aura duration (source units)",linear(row.Param3,row.Param4,level),row.auralencalc);
+        if (fixed("aurarangecalc",'"min(ln56,24)"') && row.Param5==="18" && row.Param6==="1") add("Aura range (source units)",Math.min(24,linear(row.Param5,row.Param6,level)),row.aurarangecalc);
+        if (fixed("aurastatcalc2",'-"min(ln78,65)"') && row.Param7==="20" && row.Param8==="2") add("Enemy velocity reduction % (magnitude)",Math.min(65,linear(row.Param7,row.Param8,level)),row.aurastatcalc2,"Native negative stat; shown as reduction magnitude, engine parity unverified");
+        break;
+      case 18: // Avoid: native passivecalc1 is constant zero; do not infer chance.
+        if (fixed("passivecalc1","0") && fixed("passivestat1","passive_avoid")) add("Avoid passivecalc1 (source units)",0,row.passivecalc1,"Source explicitly says zero; not a verified avoidance chance");
+        break;
+      case 23: // Penetrate
+        if (fixed("passivecalc1","ln12") && fixed("passivestat1","item_tohit_percent") && row.Param1==="35" && row.Param2==="10") add("Attack rating bonus % (passivecalc1)",linear(row.Param1,row.Param2,level),row.passivecalc1);
+        if (fixed("passivecalc2","blvl/2") && fixed("passivestat2","passive_phys_pierce")) add("Physical pierce (source units)",Math.trunc(hardPoints/2),row.passivecalc2,"blvl means hard points; source units and in-game parity unverified");
+        break;
+      case 28: // Dopplezon
+        if (fixed("aurastatcalc1",'"min(lvl*par3,85)"') && row.Param3==="5") add("Summon fire resistance % (source preview)",Math.min(level*5,85),row.aurastatcalc1);
+        if (fixed("DmgSymPerCalc","(skill('Strafe'.blvl)+skill('Valkyrie'.blvl))*par8") && row.Param8==="10") add("Summon damage synergy bonus %",10*(Number(build[26]||0)+Number(build[32]||0)),row.DmgSymPerCalc,"Hard-point synergy; not total summon damage");
+        break;
+      case 29: // Evade
+        if (fixed("passivecalc1",'"min(edmn, par2)"') && row.Param2==="40") add("Evade chance (unresolved)",null,row.passivecalc1,"edmn evaluator not established; no chance invented");
+        break;
+      case 32: // Valkyrie
+        if (fixed("calc1","par1 * (lvl - 1) + skill('Dopplezon'.blvl) * par8") && row.Param1==="7" && row.Param8==="0") add("Summon bonus HP % (calc1)",7*(level-1),row.calc1,"Native formula; Dopplezon multiplier is zero in pinned S14");
+        if (fixed("calc2","ln56") && row.Param5==="25" && row.Param6==="3") add("Summon item level (calc2)",linear(row.Param5,row.Param6,level),row.calc2);
+        break;
+      case 33: // Pierce
+        if (fixed("passivecalc1","edmn") && fixed("passivestat1","skill_pierce")) add("Pierce chance (unresolved)",null,row.passivecalc1,"Native edmn evaluator unverified; no chance invented");
+        break;
+    }
+    return passive;
+  }
   if (skill.identity.internalId === 9 && row.passivecalc1 === "dm12" && row.passivestat1 === "passive_critical_strike") {
     return [{ label: "Critical Strike chance % (dm12 preview)", value: diminishingDm12(level, n(row.Param1), n(row.Param2)), expression: row.passivecalc1, assumption: "D2-family dm12 integer diminishing-return evaluator, capped at Param2; PD2 engine parity not verified" }];
   }
