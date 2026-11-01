@@ -13,6 +13,53 @@ export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0, build = {
   if (!skill || hardPoints <= 0) return [];
   const row = skill.raw.skill;
   const level = hardPoints + bonusSkills;
+  // Native S14 Bow & Crossbow source-table previews. Each metric is independently
+  // guarded by its expression and parameters; no generic expression evaluator.
+  const bow = skill.selected.skillPage === "1";
+  const result = [];
+  const metric = (label,value,expression,assumption) => result.push({label,value,expression,assumption});
+  if (bow && row.ToHit && row.LevToHit && /^\\d+$/.test(row.ToHit) && /^\\d+$/.test(row.LevToHit)) {
+    metric("Attack rating bonus % (ToHit/LevToHit)",linear(row.ToHit,row.LevToHit,level),"ToHit + (level − 1) × LevToHit","Native S14 table linear preview; not final attack rating or in-game verified");
+  }
+  const synergy = (expected, params) => {
+    if (row.EDmgSymPerCalc !== expected) return;
+    const values = params.map(([id,param]) => [Number(build[id] || 0), Number(row["Param"+param])]);
+    if (values.some(([points,percent]) => !Number.isInteger(points) || points < 0 || points > 20 || !Number.isFinite(percent))) return;
+    metric("Elemental damage synergy bonus % (EDmgSymPerCalc)",values.reduce((total,[points,percent])=>total+points*percent,0),row.EDmgSymPerCalc,"Native S14 synergy expression; hard points only; bonus %, not total damage or in-game verified");
+  };
+  if (bow) {
+    switch(skill.identity.internalId) {
+      case 6:
+        synergy("(skill('Inner Sight'.blvl)+skill('Slow Movement'.blvl)+skill('Guided Arrow'.blvl))*par8",[[8,8],[17,8],[22,8]]);
+        break;
+      case 7:
+        if (row.calc1 === '"min(14,2+(lvl/par2))"' && row.Param2 === "3") metric("Fire Arrow projectile count (calc1 preview)",Math.min(14,2+Math.trunc(level/3)),row.calc1,"Native integer-division interpretation; projectile behavior not in-game verified");
+        synergy("(skill('Immolation Arrow'.blvl)+skill('Magic Arrow'.blvl))*par8",[[27,8],[6,8]]);
+        break;
+      case 11:
+        // calc1 includes stat('extra_cold_arrows'.accr), not available from manual +skills.
+        synergy("(skill('Ice Arrow'.blvl))*par7 +(skill('Magic Arrow'.blvl)) * par8",[[21,7],[6,8]]);
+        break;
+      case 21:
+        synergy("(skill('Cold Arrow'.blvl)+skill('Freezing Arrow'.blvl))*par8 + (skill('Magic Arrow'.blvl))*par6",[[11,8],[31,8],[6,6]]);
+        break;
+      case 16:
+        if (row.calc1 === "par1+(blvl / 4)" && row.Param1 === "3") metric("Explosion radius (calc1 source units)",3+Math.trunc(hardPoints/4),row.calc1,"blvl means hard points; radius units and in-game parity unverified");
+        if (row.calc2 === '"min((par2+(lvl/5)),8)"' && row.Param2 === "3") metric("Cluster bombs (calc2 preview)",Math.min(8,3+Math.trunc(level/5)),row.calc2,"Native integer-division interpretation; engine parity unverified");
+        synergy("(skill('Immolation Arrow'.blvl)) * par8 + (skill('Magic Arrow'.blvl))*par7",[[27,8],[6,7]]);
+        break;
+      case 27:
+        if (row.calc1 === "par1" && row.Param1 === "3") metric("Fire disc radius (calc1 source units)",3,row.calc1,"Native S14 parameter; engine units unverified");
+        if (row.calc2 === "par2" && row.Param2 === "4") metric("Radial damage radius (calc2 source units)",4,row.calc2,"Native S14 parameter; engine units unverified");
+        synergy("(skill('Exploding Arrow'.blvl)+skill('Fire Arrow'.blvl)+skill('Magic Arrow'.blvl))*par8",[[16,8],[7,8],[6,8]]);
+        break;
+      case 31:
+        if (row.calc1 === "par1+(blvl / 4)" && row.Param1 === "4") metric("Damage radius (calc1 source units)",4+Math.trunc(hardPoints/4),row.calc1,"blvl means hard points; radius units and in-game parity unverified");
+        synergy("(skill('Ice Arrow'.blvl))*par8 + skill('Cold Arrow'.blvl)*par6",[[21,8],[11,6]]);
+        break;
+    }
+  }
+  if (result.length && ![12,22,26].includes(skill.identity.internalId)) return result;
   if (skill.identity.internalId === 9 && row.passivecalc1 === "dm12" && row.passivestat1 === "passive_critical_strike") {
     return [{ label: "Critical Strike chance % (dm12 preview)", value: diminishingDm12(level, n(row.Param1), n(row.Param2)), expression: row.passivecalc1, assumption: "D2-family dm12 integer diminishing-return evaluator, capped at Param2; PD2 engine parity not verified" }];
   }
