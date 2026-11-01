@@ -264,3 +264,10 @@ footer {
 .tree-points .skill-level-individual { color:#73baff; }
 .tree-points .skill-level-tree { color:#ffae60; }
 .tree-points .skill-level-all { color:#83d995; }
+
+/* Three-row tree node: total, compact parenthesized sources, paired steppers. */
+.tree-points { flex-direction:column; gap:.18rem; }
+.tree-points .skill-level-breakdown { display:flex; flex-direction:column; align-items:center; gap:.1rem; }
+.tree-points .skill-level-total { font-size:1rem; line-height:1.1; }
+.tree-points .skill-level-components { font-size:.65rem; line-height:1.15; white-space:nowrap; color:#f3f0f5; }
+.tree-points .tree-point-steppers { display:flex; justify-content:center; align-items:center; gap:.35rem; }
