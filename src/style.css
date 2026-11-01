@@ -283,3 +283,12 @@ footer {
 .bonus-all-stepper button { color:#baf2c5; background:#19492d; border:1px solid #4a9962; }
 .bonus-tree-stepper button { color:#ffd3a4; background:#633b18; border:1px solid #c1843e; }
 .bonus-setting-stepper button:disabled { opacity:.35; cursor:not-allowed; }
+
+/* Explicitly hypothetical Multiple Shot per-eligible-hit probability scenario. */
+.multishot-scenario { margin:1rem 0; padding:1rem; border:1px solid #4d5668; border-radius:.45rem; background:#191d24; }
+.multishot-scenario h3 { margin:0 0 .65rem; font-family:system-ui,sans-serif; font-size:1.05rem; }
+.multishot-proc-inputs { display:flex; flex-wrap:wrap; gap:.75rem; margin:.8rem 0; }
+.multishot-proc-inputs label { display:flex; flex:1 1 190px; flex-direction:column; gap:.3rem; font-family:system-ui,sans-serif; font-size:.8rem; }
+.multishot-proc-inputs input { width:100%; max-width:11rem; padding:.35rem; background:#272b35; border:1px solid #5d6370; border-radius:.3rem; color:#eee; }
+.multishot-proc-result { font-family:system-ui,sans-serif; font-size:.88rem; }
+.multishot-proc-result strong { color:#73baff; }

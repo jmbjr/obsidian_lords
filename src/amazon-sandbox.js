@@ -1,12 +1,14 @@
 import amazonSkills from "../pd2/generated/amazon-skills.json";
 import { resolveAmazonLayout, validateAmazonLayout } from "./amazon-layout.js";
 import { previewAmazonSkill } from "./amazon-formulas.js";
+import { multishotProcScenario } from "./multishot-procs.js";
 import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison, amazonAllocationIssues, amazonBuildIssues } from "./amazon-comparison.js";
 
 const skills = amazonSkills.skills;
 validateAmazonLayout(skills);
 const byId = new Map(skills.map((s) => [s.identity.internalId, s]));
 const newBuild = () => Object.fromEntries(skills.map((s) => [s.identity.internalId, 0]));
+const procScenario = { hits: 5, chance: 20 };
 const state = { level: 55, budget: 30, bonuses: [emptyBonus(), emptyBonus()], active: 0, page: 1, selected: 12, builds: [newBuild(), newBuild()], comparison: { skillIds: [12] } };
 const escape = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 const formatSummaryLevel = (skill, buildIndex) => {
@@ -42,6 +44,13 @@ export function renderAmazonSandbox() {
   const comparisons = compareAmazonBuilds(skills, state.builds, state.bonuses, state.comparison);
   const dependencies = findAmazonDependencies(selected, skills);
   const buildIssues = state.builds.map(build => amazonBuildIssues(build,state.level,skills));
+  const multi = byId.get(12);
+  const multiHard = current[12] || 0;
+  const multiBonus = activeBonus().skills[12] || 0;
+  const multiLevel = multiHard || multiBonus ? multiHard + bonusForSkill(multi, activeBonus()) : 0;
+  const multiArrows = multiLevel ? Math.min(25, multiLevel + 4) : 0;
+  const scenarioHits = Math.min(procScenario.hits, multiArrows);
+  const procOutcome = multishotProcScenario(scenarioHits, procScenario.chance);
   const formulas = Object.entries(selected.raw.skill).filter(([key, value]) => value && /calc|sym|param|reqskill|aurastat/i.test(key) && !key.startsWith("*"));
   return `
     <section class="hero compact"><p class="eyebrow">PD2 Tools · Experimental</p><h1>Amazon Skill Sandbox</h1>
@@ -86,6 +95,18 @@ export function renderAmazonSandbox() {
         <p class="annotation">Formula references to other skills: ${dependencies.length ? dependencies.map(escape).join(", ") : "none detected"}. Only explicitly supported, source-guarded references are evaluated as synergies.</p>
         <p class="annotation">Native S14 fields. The limited numeric previews below use explicit linear-parameter assumptions, not verified engine output or DPS. Other expressions remain uninterpreted.</p>
         ${preview.length ? `<div class="sandbox-preview">${preview.map((item) => `<div><strong>${escape(item.label)}: ${escape(item.value === null ? "Not calculated" : item.value)}</strong><small>${escape(item.expression)} · ${escape(item.assumption)}</small></div>`).join("")}</div>` : `<p class="annotation">No supported numeric preview for this skill yet.</p>`}
+        ${state.selected === 12 ? `<section class="multishot-scenario" aria-label="Multiple Shot proc research scenario">
+          <h3>Multiple Shot · effect eligibility experiment</h3>
+          <p class="annotation"><strong>Working S14 assumption:</strong> all ${multiArrows} launched arrows can apply Crushing Blow, Open Wounds, Blind and Slow <em>if they successfully hit</em>. The same equipped effect chance applies to each eligible hit; no arrow-position penalty or diminishing proc chance is assumed. This is <strong>not</strong> verified server behavior.</p>
+          <p class="annotation">Deadly Strike and Critical Strike are separate physical-damage strike mechanics, historically available on all arrows; they must not be added as independent stacking effects. Knockback / Freeze Target are mentioned in secondary S14 sources, while on-striking spell casts remain unverified.</p>
+          <div class="multishot-proc-inputs">
+            <label>Successful eligible hits across targets <input data-proc-setting="hits" type="number" min="0" max="${multiArrows}" value="${scenarioHits}"></label>
+            <label>Chance of one selected effect per hit (%) <input data-proc-setting="chance" type="number" min="0" max="100" value="${procScenario.chance}"></label>
+          </div>
+          <p class="multishot-proc-result"><strong>${procOutcome.expectedApplications.toFixed(2)}</strong> expected applications · <strong>${procOutcome.atLeastOnePercent.toFixed(2)}%</strong> chance of at least one application</p>
+          <p class="annotation">These are independent Bernoulli trials <strong>per confirmed eligible hit</strong>, not per launched arrow. Even 25 arrows do not imply 25 hits on one monster. Hit chance, target geometry, Pierce, NextHit and effect-specific refresh/stack behavior are not modeled. Choose one effect at a time (e.g. 20% CB).</p>
+          <p class="annotation">Sources: <a href="https://pd2cheatsheet.com/" target="_blank" rel="noopener noreferrer">S14 changes</a> · <a href="https://github.com/coleestrin/pd2-tools/blob/7952f34719aa3a5cb41334a91fe36dbcbdd8be9c/api/src/game-data/pd2/season-14/Skills.txt" target="_blank" rel="noopener noreferrer">Pinned skill data (25-arrow cap)</a>. Proc probabilities and all-arrow eligibility are assumptions pending runtime verification.</p>
+        </section>` : ""}
         <div class="raw-table">${formulas.map(([key, value]) => `<div class="raw-row"><div><code>${escape(key)}</code></div><code class="raw-value">${escape(value)}</code></div>`).join("")}</div>
       </section>
       <section class="sandbox-inspector"><h2>Comparison configuration</h2>
@@ -189,6 +210,12 @@ export function mountAmazonSandbox(container) {
       if (event.target.checked) ids.add(id); else ids.delete(id);
       state.comparison = normalizeComparisonConfig({skillIds:[...ids]},skills) || state.comparison;
       persist(); redraw(); return;
+    }
+    const procField = event.target.closest("[data-proc-setting]");
+    if (procField) {
+      if (procField.dataset.procSetting === "chance") procScenario.chance = inputNumber(procField.value, procScenario.chance, 0, 100);
+      if (procField.dataset.procSetting === "hits") procScenario.hits = inputNumber(procField.value, procScenario.hits, 0, 25);
+      redraw(); return;
     }
     const field = event.target.closest("[data-setting]");
     const bonusField = event.target.closest("[data-bonus-build]");
