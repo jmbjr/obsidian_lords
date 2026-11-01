@@ -25,9 +25,9 @@ export function previewAmazonSkill(skill, hardPoints, bonusSkills = 0, build = {
       return [{ label: "Magic damage synergy bonus % (EDmgSymPerCalc)", value: points.reduce((a,b)=>a+b,0) * Number(row.Param8), expression: row.EDmgSymPerCalc, assumption: "20% per hard point in Inner Sight, Slow Movement and Guided Arrow; bonus is not total damage" }];
     }
   }
-  // Fire Arrow: native S14 attack-rating bonus, not total attack rating or hit chance.
-  if (skill.identity.internalId === 7 && row.ToHit === "10" && row.LevToHit === "10") {
-    return [{ label: "Attack rating bonus % (ToHit/LevToHit)", value: linear(row.ToHit, row.LevToHit, level), expression: "ToHit + (level − 1) × LevToHit", assumption: "Native S14 Fire Arrow ToHit=10, LevToHit=10; linear source-table preview, not yet verified against PD2 in-game tooltip; not final attack rating" }];
+  // Fire and Cold Arrow: native S14 attack-rating bonus, not total attack rating or hit chance.
+  if ([7,11].includes(skill.identity.internalId) && row.ToHit === "10" && row.LevToHit === "10") {
+    return [{ label: "Attack rating bonus % (ToHit/LevToHit)", value: linear(row.ToHit, row.LevToHit, level), expression: "ToHit + (level − 1) × LevToHit", assumption: "Native S14 "+skill.identity.internalName+" ToHit=10, LevToHit=10; linear source-table preview, not yet verified against PD2 in-game tooltip; not final attack rating" }];
   }
   if (skill.identity.internalId === 12 && row.calc1 === '"min(25,ln12)"' && row.calc4 === "ln56") {
     return [
