@@ -4,6 +4,7 @@ import { previewAmazonSkill } from "./amazon-formulas.js";
 import { multishotProcScenario } from "./multishot-procs.js";
 import { multipleShotTargetScenario } from "./multishot-combat.js";
 import { multipleShotBasicAttack } from "./multishot-basic-attack.js";
+import { amazonCriticalStrikeChance } from "./amazon-critical-strike.js";
 import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison, amazonAllocationIssues, amazonBuildIssues } from "./amazon-comparison.js";
 
 const skills = amazonSkills.skills;
@@ -12,6 +13,7 @@ const byId = new Map(skills.map((s) => [s.identity.internalId, s]));
 const newBuild = () => Object.fromEntries(skills.map((s) => [s.identity.internalId, 0]));
 const procScenario = { hits: 5, chance: 20 };
 const combatScenario = { hits: 1, physical: 100, crit: 0, deadly: 0, crushing: 20, wounds: 20, life: 10000 };
+const critScenario = { useBuild: true };
 const basicScenario = { weaponMin: 100, weaponMax: 100, otherED: 0, baseAR: 1000, otherAR: 0, defense: 1000, monsterLevel: 55, targetBlock: 0, useDamage: false };
 const state = { level: 55, budget: 30, bonuses: [emptyBonus(), emptyBonus()], active: 0, page: 1, selected: 12, builds: [newBuild(), newBuild()], comparison: { skillIds: [12] } };
 const escape = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
@@ -57,7 +59,9 @@ export function renderAmazonSandbox() {
   const procOutcome = multishotProcScenario(scenarioHits, procScenario.chance);
   const basicOutcome = multiLevel ? multipleShotBasicAttack({skillLevel:multiLevel,weaponMin:Math.min(basicScenario.weaponMin,basicScenario.weaponMax),weaponMax:Math.max(basicScenario.weaponMin,basicScenario.weaponMax),otherEnhancedDamagePercent:basicScenario.otherED,baseAttackRating:basicScenario.baseAR,otherAttackRatingPercent:basicScenario.otherAR,monsterDefense:basicScenario.defense,attackerLevel:state.level,monsterLevel:basicScenario.monsterLevel,targetBlockPercent:basicScenario.targetBlock}) : null;
   const scenarioPhysical = basicScenario.useDamage && basicOutcome ? (basicOutcome.physicalMin+basicOutcome.physicalMax)/2 : combatScenario.physical;
-  const combatOutcome = multipleShotTargetScenario({landedHitsInWindow:combatScenario.hits,physicalDamagePerHit:scenarioPhysical,criticalChance:combatScenario.crit,deadlyChance:combatScenario.deadly,crushingChance:combatScenario.crushing,openWoundsChance:combatScenario.wounds,currentTargetLife:combatScenario.life,attackerLevel:state.level});
+  const buildCriticalChance = amazonCriticalStrikeChance(byId.get(9),current,activeBonus());
+  const activeCriticalChance = critScenario.useBuild && buildCriticalChance !== null ? buildCriticalChance : combatScenario.crit;
+  const combatOutcome = multipleShotTargetScenario({landedHitsInWindow:combatScenario.hits,physicalDamagePerHit:scenarioPhysical,criticalChance:activeCriticalChance,deadlyChance:combatScenario.deadly,crushingChance:combatScenario.crushing,openWoundsChance:combatScenario.wounds,currentTargetLife:combatScenario.life,attackerLevel:state.level});
   const formulas = Object.entries(selected.raw.skill).filter(([key, value]) => value && /calc|sym|param|reqskill|aurastat/i.test(key) && !key.startsWith("*"));
   return `
     <section class="hero compact"><p class="eyebrow">PD2 Tools · Experimental</p><h1>Amazon Skill Sandbox</h1>
@@ -122,8 +126,10 @@ export function renderAmazonSandbox() {
           <label class="annotation"><input data-basic-toggle="damage" type="checkbox" ${basicScenario.useDamage ? "checked" : ""} ${!basicOutcome ? "disabled" : ""}> Feed mean calculated physical damage into the separate per-target combat scenario (otherwise keep the manually entered value).</label>
           <h3>Per-target combat effects · 5-second scenario</h3>
           <p class="annotation"><strong>Separate scenario:</strong> Enter observed or assumed landed hits on <em>one target over five seconds</em>, not arrows launched per volley. This does not estimate collision, Pierce, repeat hits or attack speed. All direct physical damage below is pre-resistance; CB and OW use the simplified target resistance assumption of 0%.</p>
+          <label class="annotation"><input data-crit-mode="build" type="checkbox" ${critScenario.useBuild ? "checked" : ""} ${buildCriticalChance === null ? "disabled" : ""}> Use Build ${state.active === 0 ? "A" : "B"} Critical Strike passive automatically (${buildCriticalChance === null ? "unsupported source expression" : buildCriticalChance + "%" }).</label>
+          <p class="annotation">Critical Strike used in calculations: <strong>${activeCriticalChance}%</strong> (${critScenario.useBuild && buildCriticalChance !== null ? "source-guarded build preview" : "manual setting"}). Bonus levels from +All/+Passive tree apply only when the passive is learned or directly granted by +Critical Strike; no hard points and no direct grant means 0%.</p>
           <div class="multishot-proc-inputs">
-            ${[["hits","Landed hits on this target in 5s",0,100],["physical","Physical damage per landed hit (before strikes)",0,10000000],["crit","Critical Strike %",0,100],["deadly","Deadly Strike %",0,100],["crushing","Crushing Blow %",0,100],["wounds","Open Wounds %",0,100],["life","Current monster life",0,1000000000]].map(([key,label,min,max])=>`<label>${label}<input data-combat-setting="${key}" type="number" min="${min}" max="${max}" value="${combatScenario[key]}"></label>`).join("")}
+            ${[["hits","Landed hits on this target in 5s",0,100],["physical","Physical damage per landed hit (before strikes)",0,10000000],["crit","Manual Critical Strike % (used only when build auto-mode is off)",0,100],["deadly","Deadly Strike %",0,100],["crushing","Crushing Blow %",0,100],["wounds","Open Wounds %",0,100],["life","Current monster life",0,1000000000]].map(([key,label,min,max])=>`<label>${label}<input data-combat-setting="${key}" type="number" min="${min}" max="${max}" value="${combatScenario[key]}"></label>`).join("")}
           </div>
           <p class="annotation">Physical damage used by this scenario: <strong>${scenarioPhysical.toFixed(1)}</strong> per landed hit, ${basicScenario.useDamage && basicOutcome ? "mean of the calculated bow range" : "manual input"}.</p>
           <p class="multishot-proc-result">Expected physical damage: <strong>${combatOutcome.expectedPhysicalDamage.toFixed(1)}</strong> · Expected Crushing Blow damage at fixed current life: <strong>${combatOutcome.expectedCrushingDamageAtFixedLife.toFixed(1)}</strong></p>
@@ -246,6 +252,8 @@ export function mountAmazonSandbox(container) {
         redraw(); return;
       }
     }
+    const critToggle = event.target.closest("[data-crit-mode]");
+    if (critToggle) { critScenario.useBuild = critToggle.checked; redraw(); return; }
     const combatField = event.target.closest("[data-combat-setting]");
     if (combatField) {
       const key = combatField.dataset.combatSetting;
