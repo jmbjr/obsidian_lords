@@ -6,13 +6,13 @@ import { multipleShotTargetScenario } from "./multishot-combat.js";
 export function compareMarginalEffects({
   landedHitsInWindow = 0, physicalDamagePerHit = 0,
   criticalChance = 0, deadlyChance = 0, crushingChance = 0,
-  openWoundsChance = 0, currentTargetLife = 10000,
+  openWoundsChance = 0, openWoundsDamagePerSecond = 0, currentTargetLife = 10000,
   attackerLevel = 1, nextHardPointCriticalChance = null,
   targetType = "ordinary", players = 1, effectivePhysicalResistance = 0,
 } = {}) {
   const common = {
     landedHitsInWindow, physicalDamagePerHit,
-    criticalChance, deadlyChance, crushingChance, openWoundsChance,
+    criticalChance, deadlyChance, crushingChance, openWoundsChance, openWoundsDamagePerSecond,
     currentTargetLife, attackerLevel, targetType, players,
     effectivePhysicalResistance,
   };
@@ -32,8 +32,10 @@ export function compareMarginalEffects({
       valid: true, update: { deadlyChance: Math.min(100, deadlyChance + 10) } },
     { id: "crushing", label: "+10 percentage points Crushing Blow",
       valid: true, update: { crushingChance: Math.min(100, crushingChance + 10) } },
-    { id: "wounds", label: "+10 percentage points Open Wounds",
+    { id: "wounds", label: "+10 percentage points Open Wounds chance",
       valid: true, update: { openWoundsChance: Math.min(100, openWoundsChance + 10) } },
+    { id: "woundDamage", label: "+10 Open Wounds Damage Per Second",
+      valid: true, update: { openWoundsDamagePerSecond: openWoundsDamagePerSecond + 10 } },
   ];
   return {
     baseline: baseMetrics,
