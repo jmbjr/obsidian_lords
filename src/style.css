@@ -292,3 +292,11 @@ footer {
 .multishot-proc-inputs input { width:100%; max-width:11rem; padding:.35rem; background:#272b35; border:1px solid #5d6370; border-radius:.3rem; color:#eee; }
 .multishot-proc-result { font-family:system-ui,sans-serif; font-size:.88rem; }
 .multishot-proc-result strong { color:#73baff; }
+
+/* Per-target marginal-upgrade comparison: four distinct units/labels. */
+.marginal-comparison { margin: .8rem 0 1rem; overflow-x: auto; border-top: 1px solid #4d5668; }
+.marginal-row { display: grid; grid-template-columns: minmax(175px,1.5fr) repeat(3,minmax(105px,1fr)); gap: .65rem; align-items:center; padding:.65rem .35rem; border-bottom:1px solid #383b45; font: .78rem system-ui,sans-serif; min-width: 515px; }
+.marginal-row > strong:not(:first-child) { color: #9cd3ff; font-variant-numeric: tabular-nums; }
+.marginal-row > span { color: #e6dace; }
+.marginal-row:first-child { font-weight: 700; font-size: .73rem; color: #d0c8bc; }
+.marginal-row > small { color: #aea7ab; }
