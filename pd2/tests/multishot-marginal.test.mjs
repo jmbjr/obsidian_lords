@@ -40,3 +40,16 @@ test("zero landed hits yields no upgrade contribution, and invalid inputs reject
   for(const row of r.changes) for(const d of Object.values(row.delta))close(d,0);
   assert.throws(()=>compareMarginalEffects({deadlyChance:120}),RangeError);
 });
+
+test("Open Wounds chance and Damage Per Second stat contribute independently",()=>{
+  const base={landedHitsInWindow:5,physicalDamagePerHit:100,
+    openWoundsChance:100,openWoundsDamagePerSecond:25,attackerLevel:55};
+  const r=compareMarginalEffects(base);
+  close(byId(r,"wounds").delta.openWoundsBleedDps,0);
+  assert.ok(byId(r,"woundDamage").delta.openWoundsBleedDps>0);
+  close(byId(r,"woundDamage").delta.openWoundsExpectedStacks,0);
+  close(byId(r,"woundDamage").delta.physicalDamage,0);
+  close(byId(r,"woundDamage").delta.crushingDamageAtFixedLife,0);
+  const zero=compareMarginalEffects({...base,openWoundsChance:0});
+  close(byId(zero,"woundDamage").delta.openWoundsBleedDps,0);
+});
