@@ -151,9 +151,9 @@ export function renderAmazonSandbox() {
           <p class="multishot-proc-result">Open Wounds expected active stacks: <strong>${combatOutcome.wounds.expectedActiveStacks.toFixed(2)} / 3</strong> · Estimated bleed: <strong>${combatOutcome.wounds.estimatedBleedDps.toFixed(1)} per second</strong></p>
           <h3>Marginal upgrades · compare one change at a time</h3>
           <p class="annotation">Each row changes <em>only one input</em> from the current scenario: +1 investable Critical Strike hard point (uses the S14 passive curve), or +10 percentage points of equipment DS, CB or OW (capped at 100%). No gear item or skill-point substitution is assumed. <strong>These are hypothetical upgrades, not equal-cost alternatives.</strong></p>
-          <div class="raw-table" aria-label="Marginal upgrade effects">
-            <div class="raw-row"><strong>Upgrade</strong><strong>Physical damage Δ / 5s hits</strong><strong>CB damage Δ / 5s hits</strong><strong>OW bleed Δ per second</strong></div>
-            ${marginal.changes.map(change => `<div class="raw-row">
+          <div class="marginal-comparison" role="table" aria-label="Marginal upgrade effects">
+            <div class="marginal-row" role="row"><strong>Upgrade</strong><strong>Physical damage Δ / 5s hits</strong><strong>CB damage Δ / 5s hits</strong><strong>OW bleed Δ per second</strong></div>
+            ${marginal.changes.map(change => `<div class="marginal-row" role="row">
               <span>${escape(change.label)}${change.available ? ` (${change.beforeChance.toFixed(0)}% → ${change.afterChance.toFixed(0)}%)` : ""}</span>
               ${change.available ? `<strong>+${change.delta.physicalDamage.toFixed(2)}</strong><strong>+${change.delta.crushingDamageAtFixedLife.toFixed(2)}</strong><strong>+${change.delta.openWoundsBleedDps.toFixed(2)}</strong>` : '<small>Unavailable</small><small>Requires eligible hard point and automatic build CS</small><small>—</small>'}
             </div>`).join("")}
