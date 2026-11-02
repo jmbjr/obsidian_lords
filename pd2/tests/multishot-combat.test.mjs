@@ -25,3 +25,10 @@ test("input validation propagates from combat foundation",()=>{
   assert.throws(()=>multipleShotTargetScenario({landedHitsInWindow:1,criticalChance:120}),RangeError);
   assert.throws(()=>multipleShotTargetScenario({physicalDamagePerHit:-1}),RangeError);
 });
+
+test("Open Wounds equipment DPS stat raises bleed magnitude without altering stack chance",()=>{
+  const initial=multipleShotTargetScenario({landedHitsInWindow:3,openWoundsChance:100,attackerLevel:55});
+  const boosted=multipleShotTargetScenario({landedHitsInWindow:3,openWoundsChance:100,openWoundsDamagePerSecond:50,attackerLevel:55});
+  assert.equal(initial.wounds.expectedActiveStacks,boosted.wounds.expectedActiveStacks);
+  assert.ok(boosted.wounds.estimatedBleedDps>initial.wounds.estimatedBleedDps);
+});

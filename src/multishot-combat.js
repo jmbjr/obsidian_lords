@@ -5,7 +5,7 @@ import { strikeOutcomes, crushingBlowOnHit, openWoundsDamagePerStack, openWounds
 export function multipleShotTargetScenario({
   landedHitsInWindow = 0, physicalDamagePerHit = 0,
   criticalChance = 0, deadlyChance = 0, crushingChance = 0,
-  openWoundsChance = 0, currentTargetLife = 10000, attackerLevel = 1,
+  openWoundsChance = 0, openWoundsDamagePerSecond = 0, currentTargetLife = 10000, attackerLevel = 1,
   targetType = "ordinary", players = 1, effectivePhysicalResistance = 0,
 } = {}) {
   if (!Number.isFinite(landedHitsInWindow) || landedHitsInWindow < 0) throw new RangeError("Invalid landed hits");
@@ -16,7 +16,7 @@ export function multipleShotTargetScenario({
     targetType, players, ranged: true, effectivePhysicalResistance,
   });
   const woundPerStack = openWoundsDamagePerStack({
-    attackerLevel, effectivePhysicalResistance,
+    attackerLevel, flatBonus: openWoundsDamagePerSecond, effectivePhysicalResistance,
   });
   const wounds = openWoundsWindow({
     landedHits: landedHitsInWindow, chance: openWoundsChance,
