@@ -3,6 +3,7 @@ import { resolveAmazonLayout, validateAmazonLayout } from "./amazon-layout.js";
 import { previewAmazonSkill } from "./amazon-formulas.js";
 import { multishotProcScenario } from "./multishot-procs.js";
 import { multipleShotTargetScenario } from "./multishot-combat.js";
+import { multipleShotBasicAttack } from "./multishot-basic-attack.js";
 import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison, amazonAllocationIssues, amazonBuildIssues } from "./amazon-comparison.js";
 
 const skills = amazonSkills.skills;
@@ -11,6 +12,7 @@ const byId = new Map(skills.map((s) => [s.identity.internalId, s]));
 const newBuild = () => Object.fromEntries(skills.map((s) => [s.identity.internalId, 0]));
 const procScenario = { hits: 5, chance: 20 };
 const combatScenario = { hits: 1, physical: 100, crit: 0, deadly: 0, crushing: 20, wounds: 20, life: 10000 };
+const basicScenario = { weaponMin: 100, weaponMax: 100, otherED: 0, baseAR: 1000, otherAR: 0, defense: 1000, monsterLevel: 55, targetBlock: 0, useDamage: false };
 const state = { level: 55, budget: 30, bonuses: [emptyBonus(), emptyBonus()], active: 0, page: 1, selected: 12, builds: [newBuild(), newBuild()], comparison: { skillIds: [12] } };
 const escape = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 const formatSummaryLevel = (skill, buildIndex) => {
@@ -53,7 +55,9 @@ export function renderAmazonSandbox() {
   const multiArrows = multiLevel ? Math.min(25, multiLevel + 4) : 0;
   const scenarioHits = Math.min(procScenario.hits, multiArrows);
   const procOutcome = multishotProcScenario(scenarioHits, procScenario.chance);
-  const combatOutcome = multipleShotTargetScenario({landedHitsInWindow:combatScenario.hits,physicalDamagePerHit:combatScenario.physical,criticalChance:combatScenario.crit,deadlyChance:combatScenario.deadly,crushingChance:combatScenario.crushing,openWoundsChance:combatScenario.wounds,currentTargetLife:combatScenario.life,attackerLevel:state.level});
+  const basicOutcome = multiLevel ? multipleShotBasicAttack({skillLevel:multiLevel,weaponMin:Math.min(basicScenario.weaponMin,basicScenario.weaponMax),weaponMax:Math.max(basicScenario.weaponMin,basicScenario.weaponMax),otherEnhancedDamagePercent:basicScenario.otherED,baseAttackRating:basicScenario.baseAR,otherAttackRatingPercent:basicScenario.otherAR,monsterDefense:basicScenario.defense,attackerLevel:state.level,monsterLevel:basicScenario.monsterLevel,targetBlockPercent:basicScenario.targetBlock}) : null;
+  const scenarioPhysical = basicScenario.useDamage && basicOutcome ? (basicOutcome.physicalMin+basicOutcome.physicalMax)/2 : combatScenario.physical;
+  const combatOutcome = multipleShotTargetScenario({landedHitsInWindow:combatScenario.hits,physicalDamagePerHit:scenarioPhysical,criticalChance:combatScenario.crit,deadlyChance:combatScenario.deadly,crushingChance:combatScenario.crushing,openWoundsChance:combatScenario.wounds,currentTargetLife:combatScenario.life,attackerLevel:state.level});
   const formulas = Object.entries(selected.raw.skill).filter(([key, value]) => value && /calc|sym|param|reqskill|aurastat/i.test(key) && !key.startsWith("*"));
   return `
     <section class="hero compact"><p class="eyebrow">PD2 Tools · Experimental</p><h1>Amazon Skill Sandbox</h1>
@@ -108,11 +112,20 @@ export function renderAmazonSandbox() {
           </div>
           <p class="multishot-proc-result"><strong>${procOutcome.expectedApplications.toFixed(2)}</strong> expected applications · <strong>${procOutcome.atLeastOnePercent.toFixed(2)}%</strong> chance of at least one application</p>
           <p class="annotation">These are independent Bernoulli trials <strong>per confirmed eligible hit</strong>, not per launched arrow. Even 25 arrows do not imply 25 hits on one monster. Hit chance, target geometry, Pierce, NextHit and effect-specific refresh/stack behavior are not modeled. Choose one effect at a time (e.g. 20% CB).</p>
+          <h3>Basic weapon damage &amp; attack rating · S14 preview</h3>
+          <p class="annotation">Enter <strong>already calculated bow damage</strong> (including on-weapon modifiers), base AR, and other applicable off-weapon damage / AR bonuses. Include Dexterity, auras and other modifiers in these manual bonus totals as appropriate; no gear parsing or Dexterity conversion is assumed. Target defense and level are manual. The PD2 S14 hit-chance formula, not vanilla's fixed 95% cap, is used.</p>
+          <div class="multishot-proc-inputs">
+            ${[["weaponMin","Bow minimum physical damage",0,10000000],["weaponMax","Bow maximum physical damage",0,10000000],["otherED","Other off-weapon enhanced damage %",-100,100000],["baseAR","Base attack rating before % bonuses",0,100000000],["otherAR","Other AR bonuses %",-100,100000],["defense","Monster defense",0,100000000],["monsterLevel","Monster level",1,150],["targetBlock","Monster block %",0,100]].map(([key,label,min,max])=>`<label>${label}<input data-basic-setting="${key}" type="number" min="${min}" max="${max}" value="${basicScenario[key]}"></label>`).join("")}
+          </div>
+          ${basicOutcome ? `<p class="multishot-proc-result">Per-arrow physical damage before strikes/resistance: <strong>${basicOutcome.physicalMin}–${basicOutcome.physicalMax}</strong> · Attack rating: <strong>${basicOutcome.attackRating}</strong> · Hit chance before block: <strong>${(basicOutcome.hitChance*100).toFixed(1)}%</strong> · After target block: <strong>${(basicOutcome.landedChance*100).toFixed(1)}%</strong></p>
+            <p class="annotation">Multiple Shot skill bonuses at level ${multiLevel}: +${basicOutcome.skillDamagePercent}% physical ED and +${basicOutcome.skillAttackRatingPercent}% AR. These are additive with the applicable other % bonuses. This is damage <strong>per landed arrow</strong>, not 25× damage to one monster.</p>` : `<p class="annotation">Allocate or grant Multiple Shot to preview its weapon damage and attack-rating bonuses.</p>`}
+          <label class="annotation"><input data-basic-toggle="damage" type="checkbox" ${basicScenario.useDamage ? "checked" : ""} ${!basicOutcome ? "disabled" : ""}> Feed mean calculated physical damage into the separate per-target combat scenario (otherwise keep the manually entered value).</label>
           <h3>Per-target combat effects · 5-second scenario</h3>
           <p class="annotation"><strong>Separate scenario:</strong> Enter observed or assumed landed hits on <em>one target over five seconds</em>, not arrows launched per volley. This does not estimate collision, Pierce, repeat hits or attack speed. All direct physical damage below is pre-resistance; CB and OW use the simplified target resistance assumption of 0%.</p>
           <div class="multishot-proc-inputs">
             ${[["hits","Landed hits on this target in 5s",0,100],["physical","Physical damage per landed hit (before strikes)",0,10000000],["crit","Critical Strike %",0,100],["deadly","Deadly Strike %",0,100],["crushing","Crushing Blow %",0,100],["wounds","Open Wounds %",0,100],["life","Current monster life",0,1000000000]].map(([key,label,min,max])=>`<label>${label}<input data-combat-setting="${key}" type="number" min="${min}" max="${max}" value="${combatScenario[key]}"></label>`).join("")}
           </div>
+          <p class="annotation">Physical damage used by this scenario: <strong>${scenarioPhysical.toFixed(1)}</strong> per landed hit, ${basicScenario.useDamage && basicOutcome ? "mean of the calculated bow range" : "manual input"}.</p>
           <p class="multishot-proc-result">Expected physical damage: <strong>${combatOutcome.expectedPhysicalDamage.toFixed(1)}</strong> · Expected Crushing Blow damage at fixed current life: <strong>${combatOutcome.expectedCrushingDamageAtFixedLife.toFixed(1)}</strong></p>
           <p class="multishot-proc-result">Open Wounds expected active stacks: <strong>${combatOutcome.wounds.expectedActiveStacks.toFixed(2)} / 3</strong> · Estimated bleed: <strong>${combatOutcome.wounds.estimatedBleedDps.toFixed(1)} per second</strong></p>
           <p class="annotation">Do not add these numbers as DPS: the first two represent expected damage over the specified hit opportunities, CB target life changes after damage, and OW is a steady-window bleed estimate. No per-target multi-arrow hit behavior is asserted. Default values are examples, <strong>not imported gear or target stats</strong>. Ordinary enemy, one player, ranged CB, zero physical resistance, no CB efficiency/OW flat bonus assumed.</p>
@@ -221,6 +234,17 @@ export function mountAmazonSandbox(container) {
       if (event.target.checked) ids.add(id); else ids.delete(id);
       state.comparison = normalizeComparisonConfig({skillIds:[...ids]},skills) || state.comparison;
       persist(); redraw(); return;
+    }
+    const basicToggle = event.target.closest("[data-basic-toggle]");
+    if (basicToggle) { basicScenario.useDamage = basicToggle.checked; redraw(); return; }
+    const basicField = event.target.closest("[data-basic-setting]");
+    if (basicField) {
+      const key = basicField.dataset.basicSetting;
+      const ranges = {weaponMin:[0,10000000],weaponMax:[0,10000000],otherED:[-100,100000],baseAR:[0,100000000],otherAR:[-100,100000],defense:[0,100000000],monsterLevel:[1,150],targetBlock:[0,100]};
+      if (Object.hasOwn(ranges,key)) {
+        basicScenario[key] = inputNumber(basicField.value,basicScenario[key],...ranges[key]);
+        redraw(); return;
+      }
     }
     const combatField = event.target.closest("[data-combat-setting]");
     if (combatField) {
