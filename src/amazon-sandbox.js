@@ -8,6 +8,7 @@ import { amazonCriticalStrikeChance } from "./amazon-critical-strike.js";
 import { armoryCharacterUrl, importArmoryAmazon, loadPublishedArmoryCharacter } from "./pd2-armory.js";
 import { defaultEquipmentSettings, resolveEquipmentBuild } from "./amazon-equipment-controls.js";
 import { projectArmoryCharacterSheet } from "./armory-character-sheet.js";
+import { projectAmazonRangedAttack } from "./amazon-ranged-attack.js";
 import { compareMarginalEffects } from "./multishot-marginal.js";
 import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison, amazonAllocationIssues, amazonBuildIssues } from "./amazon-comparison.js";
 
@@ -21,6 +22,7 @@ const critScenario = { useBuild: true };
 const armoryImports = [null,null];
 const equipmentSettings = [defaultEquipmentSettings(),defaultEquipmentSettings()];
 const manualBonuses = [emptyBonus(),emptyBonus()];
+const measuredBaseAttackRating = [null,null];
 let armoryMessage = "";
 let armoryName = "Magizon";
 let armoryDraft = "";
@@ -55,6 +57,7 @@ const detachImportedGear = () => {
     armoryImports[index]=null;
     manualBonuses[index]=emptyBonus();
     equipmentSettings[index]=defaultEquipmentSettings();
+    measuredBaseAttackRating[index]=null;
   }
 };
 const skillLevelBreakdown = (skill, hard) => {
@@ -78,6 +81,9 @@ export function renderAmazonSandbox() {
   const cards = skills.filter((skill) => resolveAmazonLayout(skill).page === state.page);
   const unplaced = skills.filter((skill) => resolveAmazonLayout(skill).page === null);
   const preview = previewAmazonSkill(selected, current[state.selected], effectiveBonus(selected), current, (activeBonus().skills[selected.identity.internalId] || 0) > 0);
+  const attackProjection = armoryImports[state.active] ? projectAmazonRangedAttack(
+    armoryImports[state.active].source,skills,current,activeBonus(),
+    {...equipmentSettings[state.active],baseAttackRatingOverride:measuredBaseAttackRating[state.active]}) : null;
   const comparisons = compareAmazonBuilds(skills, state.builds, state.bonuses, state.comparison);
   const dependencies = findAmazonDependencies(selected, skills);
   const buildIssues = state.builds.map(build => amazonBuildIssues(build,state.level,skills));
@@ -214,6 +220,36 @@ export function renderAmazonSandbox() {
           <p class="annotation">${sheet.unmodeledItemCount} source items in unverified/stored/mercenary scopes; inventory charms are deliberately not applied. Recheck against in-game screenshots before claiming parity.</p>
         </section>`;
       })() : ""}
+      ${attackProjection ? `<section class="sandbox-inspector" aria-label="M6 imported attack projection">
+        <h2>Ranged attack · Build ${state.active?"B":"A"} · M6</h2>
+        <p class="annotation">Experimental <strong>Multiple Shot</strong> source-backed preview. The physical range is a partial calculation, not verified character-screen damage; it excludes charms and unresolved buffs. Equipment changes and hard-point adjustments recompute immediately.</p>
+        <div class="character-stat-grid">
+          <div><strong>Physical damage · partial</strong>
+            <p>Multiple Shot level ${attackProjection.effective} · skill ED ${attackProjection.skillED===null?"unavailable":attackProjection.skillED+"%"}</p>
+            <p>Resolved weapon ${escape(attackProjection.weapon.name||"none")}: ${attackProjection.weapon.physical.min??"?"}–${attackProjection.weapon.physical.max??"?"}</p>
+            <p>Off-weapon flat min/max: +${attackProjection.contributions.offWeaponMin.value} / +${attackProjection.contributions.offWeaponMax.value}</p>
+            <p>Off-weapon ED: +${attackProjection.contributions.offWeaponED.value}% · Dexterity ${attackProjection.contributions.dexterity.value??"?"}</p>
+            <p>Estimated range: <strong>${attackProjection.physical.min??"—"}–${attackProjection.physical.max??"—"}</strong></p>
+          </div>
+          <div><strong>Attack rating · conditional</strong>
+            <label>Measured base AR before equipment (optional)
+              <input data-armory-base-ar type="number" min="0" max="100000000" placeholder="Unknown" value="${measuredBaseAttackRating[state.active]??""}">
+            </label>
+            <p>Flat equipment AR: +${attackProjection.contributions.flatAttackRating.value}</p>
+            <p>Equipment AR %: +${attackProjection.contributions.percentAttackRating.value}% · Multiple Shot AR %: ${attackProjection.skillAR===null?"—":"+"+attackProjection.skillAR+"%"}</p>
+            <p>Estimated selected-skill AR: <strong>${attackProjection.attackRating.value??"Not calculated"}</strong></p>
+            <small>Enter only an independently measured base AR; the calculator does not invent one from Dexterity. This remains an estimate.</small>
+          </div>
+          <div><strong>Amazon attack frames · sourced A1 model</strong>
+            <p>Selected weapon: ${escape(attackProjection.weapon.name||"none")} · base code ${escape(attackProjection.weapon.baseCode||"unknown")}</p>
+            <p>Equipped IAS: <strong>${attackProjection.contributions.ias.value}%</strong></p>
+            <p>WSM ${attackProjection.speed.wsm??"?"} · EIAS ${attackProjection.speed.eias??"?"}</p>
+            <p>Frames per attack: <strong>${attackProjection.speed.frames??"Unknown"}</strong>${attackProjection.speed.frames!==null?" (25 FPS / "+(25/attackProjection.speed.frames).toFixed(2)+" attacks/s)":""}</p>
+            <small>PD2 A1 animation; assumes zero aura/skill speed and no slows. Compare against in-game breakpoint display; may differ in runtime.</small>
+          </div>
+        </div>
+        <p class="annotation">These projections are based on the active ${escape(equipmentSettings[state.active].weaponSet)} hand set, and change with item toggles. The combat sandbox's separate manual target inputs are intentionally unchanged.</p>
+      </section>` : ""}
       ${armoryImports[state.active] ? `<p class="annotation">Armory: <strong>${escape(armoryImports[state.active].name)}</strong> · ${armoryImports[state.active].equippedCount} active equipped items · ${armoryImports[state.active].warnings.length} caveats. Raw item data is kept only for this page session; the existing exported build JSON remains skill-only. ${armoryImports[state.active].warnings.map(x=>escape(x)).join("; ")}</p>` : ""}
       <div class="sandbox-actions"><button data-page="1" aria-pressed="${state.page === 1}">Bow & Crossbow</button><button data-page="2" aria-pressed="${state.page === 2}">Passive & Magic</button><button data-page="3" aria-pressed="${state.page === 3}">Javelin & Spear</button></div>
       <div class="skill-tree" aria-label="Amazon skill tree">
@@ -316,6 +352,7 @@ export function mountAmazonSandbox(container) {
     state.builds[dest] = imported.build;
     manualBonuses[dest] = emptyBonus();
     equipmentSettings[dest] = initialSettings;
+    measuredBaseAttackRating[dest] = null;
     state.bonuses[dest] = resolved.bonus;
     state.level = imported.level; // Existing sandbox shares level across A/B.
     state.budget = Math.max(state.budget,sum(imported.build),sum(state.builds[1-dest]));
@@ -427,6 +464,13 @@ export function mountAmazonSandbox(container) {
     redraw();
   });
   container.addEventListener("change", async (event) => {
+    if (event.target.matches("[data-armory-base-ar]")) {
+      if (!armoryImports[state.active]) return;
+      const value=event.target.value.trim();
+      if (value!=="" && (!/^\\d+$/.test(value) || Number(value)>100000000)) return;
+      measuredBaseAttackRating[state.active] = value===""?null:Number(value);
+      redraw();return;
+    }
     if (event.target.matches("[data-equipment-set]")) {
       const value = event.target.value;
       if (!["main","switch"].includes(value) || !armoryImports[state.active]) return;
