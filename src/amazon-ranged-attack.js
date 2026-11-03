@@ -30,10 +30,11 @@ export function pd2AmazonRangedFrames({ias,weaponCode,skillSpeed=0}={}) {
 }
 
 export function projectAmazonRangedAttack(payload,skills,build,bonus,options={}) {
-  const {weaponSet="main",includeEquipment=true,excludedItemIds=[],baseAttackRatingOverride=null,skillId=12,skillSpeed=0}=options;
+  const {weaponSet="main",includeEquipment=true,excludedItemIds=[],includeCharms=true,excludedCharmIds=[],baseAttackRatingOverride=null,skillId=12,skillSpeed=0}=options;
   const graph=normalizeArmoryEquipment(payload);
-  const selection=selectEquipmentSources(graph,{weaponSet,includeEquipment,excludedItemIds});
-  const sheet=projectArmoryCharacterSheet(payload,{weaponSet,includeEquipment,excludedItemIds});
+  const selected={weaponSet,includeEquipment,excludedItemIds,includeCharms,excludedCharmIds};
+  const selection=selectEquipmentSources(graph,selected);
+  const sheet=projectArmoryCharacterSheet(payload,selected);
   const skill=skills.find(x=>x.identity.internalId===skillId)||null;
   const hard=Number(build?.[skillId]||0),direct=Number(bonus?.skills?.[skillId]||0);
   const effective=skill && (hard>0||direct>0)?hard+bonusForSkill(skill,bonus):0;
