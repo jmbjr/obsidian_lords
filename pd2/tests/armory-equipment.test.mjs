@@ -53,8 +53,8 @@ test("inventory charms and mercenary equipment remain separate unresolved scopes
   const chosen=selectEquipmentSources(graph);
   assert.ok(chosen.unresolvedItems.some(x=>x.item.scope==="inventory-charm-candidate"));
   assert.ok(chosen.unresolvedItems.some(x=>x.item.owner==="mercenary"));
-  assert.ok(!chosen.candidateModifiers.some(x=>x.item.owner==="mercenary"));
-  assert.ok(!chosen.candidateModifiers.some(x=>x.item.scope==="inventory-charm-candidate"));
+  assert.ok(!chosen.candidateModifiers.some(x=>x.sourcePath.startsWith("mercenary.")));
+  assert.ok(!chosen.candidateModifiers.some(x=>chosen.unresolvedItems.some(y=>y.item.scope==="inventory-charm-candidate" && x.itemId===y.item.id)));
   assert.equal(classifyArmoryItem({location:{zone:"Stored",storage:"Inventory"},base:{type_code:"scha"}},"character"),"inventory-charm-candidate");
   assert.equal(classifyArmoryItem({location:{zone:"Stored",storage:"Stash"},base:{type_code:"scha"}},"character"),"stored-or-other");
   assert.equal(classifyArmoryItem({location:{zone:"Equipped",equipment_id:4}},"mercenary"),"mercenary");
