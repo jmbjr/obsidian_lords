@@ -82,6 +82,9 @@ test("PD2 specific animation table computes frames from pinned EIAS/WSM instead 
   assert.equal(bow.animation,"bow");
   assert.equal(bow.eias,30);
   assert.equal(bow.frames,11);
+  // The user screenshot shows 46 IAS / 10 frames; 6 IAS exists on an
+  // as-yet-unresolved inventory charm, so this is a parity hypothesis.
+  assert.equal(pd2AmazonRangedFrames({ias:46,weaponCode:"8sb"}).frames,10);
   const crossbow=pd2AmazonRangedFrames({ias:100,weaponCode:"hxb"});
   assert.equal(crossbow.wsm,10);
   assert.equal(crossbow.animation,"xbw");
