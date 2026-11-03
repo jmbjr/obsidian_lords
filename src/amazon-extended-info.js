@@ -5,6 +5,7 @@
 import { normalizeArmoryEquipment, selectEquipmentSources } from "./armory-equipment.js";
 import { amazonCriticalStrikeChance } from "./amazon-critical-strike.js";
 import { projectAmazonRangedAttack } from "./amazon-ranged-attack.js";
+import { projectArmoryCharacterSheet } from "./armory-character-sheet.js";
 
 const METRICS = [
   // Category, stable key, label, native modifier(s), display unit.
@@ -119,6 +120,7 @@ export function projectAmazonExtendedInfo(payload,skills,build,bonus,options={})
   const rows=METRICS.map(config=>additiveMetric(selection.activeSources,config));
   rows.push(...ELEMENTS.map(config=>elementalMetric(selection.activeSources,config)));
   const ranged=projectAmazonRangedAttack(payload,skills,build,bonus,options);
+  const sheet=projectArmoryCharacterSheet(payload,options);
   const critical=amazonCriticalStrikeChance(skills.find(s=>s.identity.internalId===9),build,bonus);
   rows.push({
     category:"Critical & procs",id:"criticalStrike",label:"Critical Strike (skill preview)",unit:"%",
@@ -142,10 +144,18 @@ export function projectAmazonExtendedInfo(payload,skills,build,bonus,options={})
     "A ranged weapon loadout does not supply a verified game-display base-one-hand damage value."));
   rows.push(unsupported("Attack additions","baseTwoHandDamage","Base two-handed damage",
     "Weapon resolved damage is available in M5/M6, but the extended-info base two-hand display has different semantics."));
-  rows.push(unsupported("Attack additions","baseAttackRating","Base AR including Dexterity",
-    "No verified full baseline AR equation yet; M6 supports measured base AR override only."));
-  rows.push(unsupported("Defense","baseDefenseDexterity","Base defense from Dexterity",
-    "Requires verified game-screen base-defense equation, rounding and active gear context."));
+  rows.push({category:"Attack additions",id:"baseAttackRating",label:"Base AR including Dexterity and flat gear",unit:"",
+    equipmentValue:null,finalValue:sheet.attackRating.baseTotal.value,status:"source-derived",
+    sources:sheet.attackRating.baseTotal.sources,unresolved:[],
+    note:"Unmodified base AR only, not selected-skill or passive/percent-modified AR."});
+  rows.push({category:"Defense",id:"baseDefenseDexterity",label:"Base defense from Dexterity",unit:"",
+    equipmentValue:null,finalValue:sheet.defense.fromDexterity.value,status:"source-derived",
+    sources:sheet.defense.fromDexterity.sources,unresolved:[],
+    note:"D2 floor(Dexterity/4), observed in pinned PD2 screen; excludes armor/buffs."});
+  rows.push({category:"Defense",id:"unmodifiedDefense",label:"Defense before percent modifiers",unit:"",
+    equipmentValue:null,finalValue:sheet.defense.unmodified.value,status:"source-derived",
+    sources:sheet.defense.unmodified.sources,unresolved:[],
+    note:"Dexterity defense plus resolved selected gear and active charms; not final defense with percent modifiers or running state."});
   return {
     schemaVersion:1,
     characterName:payload.character.name,
