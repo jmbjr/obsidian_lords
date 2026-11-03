@@ -54,6 +54,12 @@ export function projectArmoryCharacterSheet(payload,options={}) {
       kind:"resolved-item-defense",item:item.name,slot:item.slot,itemId:item.id}];
   });
   const equippedDefense=armorPieces.reduce((n,x)=>n+x.amount,0);
+  // The item's defense.total already includes its own local armorclass
+  // modifiers. On a weapon or other non-defense item, a flat armorclass
+  // modifier is a separate character contribution; include it once.
+  const nonArmorDefense=active.filter(item=>numberOrNull(item.raw?.defense?.total)===null);
+  const flatDefenseSources=fromMods(nonArmorDefense,["armorclass"]);
+  const flatNonArmorDefense=flatDefenseSources.reduce((n,x)=>n+x.amount,0);
   const weaponSlot=selection.weaponSet==="main"?4:11;
   const weapon=active.find(item=>item.slot===weaponSlot && item.category==="weapon")||null;
   const damage=weapon?.raw?.damage?.two_handed||null;
@@ -78,6 +84,8 @@ export function projectArmoryCharacterSheet(payload,options={}) {
     resistances,baseResistances,
     defense:{
       equippedItems:{value:equippedDefense,status:"equipment-derived",sources:armorPieces},
+      flatNonArmor:{value:flatNonArmorDefense,status:"equipment-derived",sources:flatDefenseSources},
+      knownEquipmentContribution:{value:equippedDefense+flatNonArmorDefense,status:"partial",sources:[...armorPieces,...flatDefenseSources]},
       final:{value:null,status:"unsupported",
         reason:"Dexterity contribution, active buffs, and defense formula/rounding are not modeled"}},
     attackRating:{
