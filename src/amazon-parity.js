@@ -17,10 +17,10 @@ const valueOrNull = x=>typeof x==="number"&&Number.isFinite(x)?x:null;
 
 export function buildAmazonParityObservations(payload,skills,options={}) {
   if(!payload?.character||!Array.isArray(payload.items))throw new TypeError("Full Armory snapshot required");
-  const {weaponSet="main",includeEquipment=true,excludedItemIds=[]}=options;
-  const imported=importArmoryAmazon(payload,skills,{weaponSet,includeEquipment,excludedItemIds});
+  const {weaponSet="main",includeEquipment=true,excludedItemIds=[],includeCharms=true,excludedCharmIds=[]}=options;
+  const selected={weaponSet,includeEquipment,excludedItemIds,includeCharms,excludedCharmIds};
+  const imported=importArmoryAmazon(payload,skills,selected);
   const build=options.build??imported.build,bonus=options.bonus??imported.bonus;
-  const selected={weaponSet,includeEquipment,excludedItemIds};
   const sheet=projectArmoryCharacterSheet(payload,selected);
   const ranged=projectAmazonRangedAttack(payload,skills,build,bonus,selected);
   const info=projectAmazonExtendedInfo(payload,skills,build,bonus,selected).byId;
@@ -99,7 +99,8 @@ export function buildAmazonParityObservations(payload,skills,options={}) {
   const isPinned=payload.character.name?.toLowerCase()===observations.provenance.observedCharacter.toLowerCase() &&
     payload._obsidianLordsSync?.syncedAt===pinned.syncedAt;
   const baselineConfiguration=weaponSet==="main" && includeEquipment===true &&
-    excludedItemIds.length===0 && options.build===undefined && options.bonus===undefined;
+    excludedItemIds.length===0 && includeCharms===true && excludedCharmIds.length===0 &&
+    options.build===undefined && options.bonus===undefined;
   const charmCandidates=[];
   for(let i=0;i<payload.items.length;i++){
     const item=payload.items[i];
@@ -110,7 +111,7 @@ export function buildAmazonParityObservations(payload,skills,options={}) {
       if(!["strength","item_fasterattackrate","tohit","armorclass"].includes(mod.name)||
         !Array.isArray(mod.values)||mod.values.length!==1||!Number.isFinite(mod.values[0]))continue;
       charmCandidates.push({item:item.name,modifier:mod.name,amount:mod.values[0],
-        sourcePath:`items[${i}].modifiers[${j}]`,status:"unverified-charm-activation"});
+        sourcePath:`items[${i}].modifiers[${j}]`,status:"active-position-charm-source"});
     }
   }
   const candidates={
@@ -132,11 +133,11 @@ export function buildAmazonParityObservations(payload,skills,options={}) {
     else if(calculated.status==="partial")verdict="partial";
     else verdict=gap===0?"match":"mismatch";
     const evidence=charmCandidates.filter(c=>c.modifier===candidates[expect.key]);
-    const candidateSum=evidence.reduce((n,e)=>n+e.amount,0);
     return {...expect,modeled:calculated.value,modelStatus:calculated.status,
       verdict,numericGap:gap,evidence:calculated.sources,explanation:calculated.note,
       candidateCharmEvidence:evidence,
-      candidateReconciles:eligible&&evidence.length>0&&calculated.value+candidateSum===expected};
+      candidateReconciles:eligible&&evidence.length>0&&calculated.value===expected&&
+        evidence.some(c=>calculated.sources.some(source=>source.path===c.sourcePath))};
   });
   const counts=Object.fromEntries(["match","mismatch","partial","unavailable","not-observed","snapshot-drift","configuration-drift"]
     .map(v=>[v,rows.filter(row=>row.verdict===v).length]));
@@ -148,9 +149,9 @@ export function buildAmazonParityObservations(payload,skills,options={}) {
         screenshotValue:s.identity.internalId===12?21:null})),
     caveats:[
       "The original screenshots are transcribed, not stored in this repo and not timestamp-synchronized to the snapshot",
-      "Only the main weapon set with all original equipment included and no manual build/bonus changes is comparable to this reference",
+      "Only the main weapon set, all active charms, all original equipped gear and no manual build/bonus changes are comparable to this reference",
       "A partial model's numericGap is an observational difference, not a proven calculation error",
-      "Stored Inventory charms are diagnostic candidates only; activation must be verified before inclusion",
+      "Only position-verified bottom four-row charms are active by default; unusual unique-charm limits remain unsupported",
       "Derived fields cannot be declared matched solely because a partial subtotal equals a screenshot reading",
     ]};
 }
