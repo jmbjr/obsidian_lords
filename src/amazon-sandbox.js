@@ -5,7 +5,7 @@ import { multishotProcScenario } from "./multishot-procs.js";
 import { multipleShotTargetScenario } from "./multishot-combat.js";
 import { multipleShotBasicAttack } from "./multishot-basic-attack.js";
 import { amazonCriticalStrikeChance } from "./amazon-critical-strike.js";
-import { armoryCharacterUrl, importArmoryAmazon } from "./pd2-armory.js";
+import { armoryCharacterUrl, importArmoryAmazon, loadPublishedArmoryCharacter } from "./pd2-armory.js";
 import { compareMarginalEffects } from "./multishot-marginal.js";
 import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison, amazonAllocationIssues, amazonBuildIssues } from "./amazon-comparison.js";
 
@@ -20,6 +20,7 @@ const armoryImports = [null,null];
 let armoryMessage = "";
 let armoryName = "Magizon";
 let armoryDraft = "";
+let armorySyncStatus = "";
 const basicScenario = { weaponMin: 100, weaponMax: 100, otherED: 0, baseAR: 1000, otherAR: 0, defense: 1000, monsterLevel: 55, targetBlock: 0, useDamage: false };
 const state = { level: 55, budget: 30, bonuses: [emptyBonus(), emptyBonus()], active: 0, page: 1, selected: 12, builds: [newBuild(), newBuild()], comparison: { skillIds: [12] } };
 const escape = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
@@ -104,11 +105,15 @@ export function renderAmazonSandbox() {
       </div>
       <div class="annotation" role="group" aria-label="Import PD2 Armory character">
         <strong>Import from PD2 Armory (Build ${state.active ? "B" : "A"})</strong>
-        <p>GitHub Pages cannot fetch the PD2 API directly because its response does not permit cross-origin browser requests. Open the official character JSON in a new tab, copy it, then paste or upload it here. No third-party proxy is used.</p>
+        <p>For a fresh character snapshot, use the owner-only GitHub workflow to sync PD2 data to our site. After that workflow finishes deploying Pages, load the latest published snapshot. Direct browser requests to PD2 remain blocked by CORS; manual JSON paste and file import are still available below.</p>
         <div class="sandbox-actions">
           <label>Character name <input data-armory-name type="text" maxlength="24" value="${escape(armoryName)}" autocomplete="off"></label>
+          <a class="button" href="https://github.com/jmbjr/obsidian_lords/actions/workflows/sync-pd2-character.yml" target="_blank" rel="noopener noreferrer">Request GitHub sync</a>
+          <button data-armory-load-published="true" type="button">Load latest published JSON</button>
           <button data-armory-open="true" type="button">Open official character JSON</button>
         </div>
+        <p class="annotation">Sync is restricted to authorized GitHub accounts (currently jmbjr). On GitHub choose <strong>Run workflow</strong>, enter the same character name, and check that the workflow/deployment succeeds. Published snapshots are public; loading them does not require GitHub login.</p>
+        <p class="annotation" role="status">${escape(armorySyncStatus)}</p>
         <label>Character JSON <textarea data-armory-json rows="4" placeholder="Paste complete PD2 Armory character JSON">${escape(armoryDraft)}</textarea></label>
         <div class="sandbox-actions">
           <button data-armory-apply="true" type="button">Import pasted JSON into Build ${state.active ? "B" : "A"}</button>
@@ -230,6 +235,21 @@ export function mountAmazonSandbox(container) {
   container.addEventListener("click", async (event) => {
     const button = event.target.closest("button");
     if (!button || !container.contains(button)) return;
+    if (button.dataset.armoryLoadPublished) {
+      const name = armoryName.trim();
+      armorySyncStatus = "Loading published character snapshot…";
+      redraw();
+      try {
+        const payload = await loadPublishedArmoryCharacter(name,import.meta.env.BASE_URL);
+        applyArmoryPayload(payload);
+        armorySyncStatus = `Published snapshot for ${payload.character.name} synced at ${payload._obsidianLordsSync.syncedAt} (UTC). Loaded into Build ${state.active?"B":"A"}.`;
+        redraw();
+      } catch(err) {
+        armorySyncStatus = `Could not load published character: ${err.message}`;
+        redraw();
+      }
+      return;
+    }
     if (button.dataset.armoryOpen) {
       const name = armoryName.trim();
       if (!/^[A-Za-z][A-Za-z0-9_-]{1,23}$/.test(name)) {
