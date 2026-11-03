@@ -6,6 +6,7 @@ import { multipleShotTargetScenario } from "./multishot-combat.js";
 import { multipleShotBasicAttack } from "./multishot-basic-attack.js";
 import { amazonCriticalStrikeChance } from "./amazon-critical-strike.js";
 import { armoryCharacterUrl, importArmoryAmazon, loadPublishedArmoryCharacter } from "./pd2-armory.js";
+import { defaultEquipmentSettings, resolveEquipmentBuild } from "./amazon-equipment-controls.js";
 import { compareMarginalEffects } from "./multishot-marginal.js";
 import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison, amazonAllocationIssues, amazonBuildIssues } from "./amazon-comparison.js";
 
@@ -17,6 +18,8 @@ const procScenario = { hits: 5, chance: 20 };
 const combatScenario = { hits: 1, physical: 100, crit: 0, deadly: 0, crushing: 20, wounds: 20, woundDamage: 0, life: 10000 };
 const critScenario = { useBuild: true };
 const armoryImports = [null,null];
+const equipmentSettings = [defaultEquipmentSettings(),defaultEquipmentSettings()];
+const manualBonuses = [emptyBonus(),emptyBonus()];
 let armoryMessage = "";
 let armoryName = "Magizon";
 let armoryDraft = "";
@@ -32,7 +35,26 @@ const formatSummaryLevel = (skill, buildIndex) => {
 const sum = (build) => Object.values(build).reduce((a, b) => a + b, 0);
 const activeBuild = () => state.builds[state.active];
 const activeBonus = () => state.bonuses[state.active];
+const editBonus = index => armoryImports[index] ? manualBonuses[index] : state.bonuses[index];
+const recomputeGear = index => {
+  const record = armoryImports[index];
+  if (!record) return;
+  const resolved = resolveEquipmentBuild(record.source,skills,manualBonuses[index],equipmentSettings[index]);
+  state.bonuses[index] = resolved.bonus;
+  record.selection = resolved.selection;
+  record.equippedCount = resolved.selection.activeItems.length;
+  record.skillSources = resolved.sources;
+  record.unresolved = resolved.unresolved;
+  record.equipmentBonus = resolved.equipmentBonus;
+};
 const effectiveBonus = skill => bonusForSkill(skill, activeBonus());
+const detachImportedGear = () => {
+  for(const index of [0,1]){
+    armoryImports[index]=null;
+    manualBonuses[index]=emptyBonus();
+    equipmentSettings[index]=defaultEquipmentSettings();
+  }
+};
 const skillLevelBreakdown = (skill, hard) => {
   const bonus = activeBonus();
   const individual = bonus.skills[skill.identity.internalId] || 0;
@@ -121,6 +143,40 @@ export function renderAmazonSandbox() {
         </div>
         <div role="status">${escape(armoryMessage)}</div>
       </div>
+      ${armoryImports[state.active] ? (() => {
+        const record = armoryImports[state.active], settings = equipmentSettings[state.active];
+        const selected = record.selection;
+        const items = [...selected.activeItems, ...selected.inactiveItems.map(row => row.item)]
+          .filter(item => ["shared-equipped","hand-main","hand-switch"].includes(item.scope))
+          .sort((a,b)=>(a.slot??0)-(b.slot??0));
+        return `<fieldset class="sandbox-inspector" aria-label="Build ${state.active?"B":"A"} equipment selection">
+          <legend>Build ${state.active?"B":"A"} equipment · ${escape(record.name)}</legend>
+          <p class="annotation">Two weapon sets switch <strong>only the hand slots</strong> (4/5 versus 11/12). Armor, jewelry and all other equipment remain shared. Equipment contributes supported +skills; character damage, defenses, and other equipment-derived stats are not yet connected.</p>
+          <div class="sandbox-actions">
+            <label>Weapon set
+              <select data-equipment-set>
+                <option value="main" ${settings.weaponSet==="main"?"selected":""}>Main (hands 4 and 5)</option>
+                <option value="switch" ${settings.weaponSet==="switch"?"selected":""}>Alternate (hands 11 and 12)</option>
+              </select>
+            </label>
+            <label><input type="checkbox" data-equipment-all ${settings.includeEquipment?"checked":""}> Include all equipment</label>
+          </div>
+          <p class="annotation">This is Build ${state.active?"B":"A"}'s independent configuration. Items on the inactive hand set are shown below but do not contribute until that set is selected.</p>
+          <div class="comparison-skill-picker">
+            ${items.map(item => {
+              const excluded=settings.excludedItemIds.includes(item.id);
+              const handInactive=(item.scope==="hand-main" && settings.weaponSet!=="main") || (item.scope==="hand-switch" && settings.weaponSet!=="switch");
+              return `<label title="${escape(item.sourcePath)}">
+                <input type="checkbox" data-equipment-item="${escape(item.id)}" ${excluded?"":"checked"}>
+                ${escape(item.slotLabel || "Slot "+item.slot)}: ${escape(item.name || "Unnamed item")}
+                <small>${handInactive?" (inactive weapon set)":!settings.includeEquipment?" (master equipment off)":excluded?" (excluded)":" (selected)"}</small>
+              </label>`;
+            }).join("")}
+          </div>
+          <p class="annotation">Equipment skill bonuses: +${record.equipmentBonus.all} Amazon, Bow +${record.equipmentBonus.trees[1]}, Passive +${record.equipmentBonus.trees[2]}, Javelin +${record.equipmentBonus.trees[3]}; direct: ${Object.entries(record.equipmentBonus.skills).map(([id,n])=>escape(byId.get(Number(id))?.identity.internalName||id)+" +"+n).join(", ")||"none"}. ${record.unresolved.length} unsupported active skill modifier(s) preserved.</p>
+          <p class="annotation">Manual blue-arrow bonuses are a separate scratch layer and persist when equipment is switched or excluded. Source snapshots are not modified. ${record.selection.unresolvedItems.length} non-equipped or scope-unverified records are excluded from player skill calculations.</p>
+        </fieldset>`;
+      })() : ""}
       ${armoryImports[state.active] ? `<p class="annotation">Armory: <strong>${escape(armoryImports[state.active].name)}</strong> · ${armoryImports[state.active].equippedCount} active equipped items · ${armoryImports[state.active].warnings.length} caveats. Raw item data is kept only for this page session; the existing exported build JSON remains skill-only. ${armoryImports[state.active].warnings.map(x=>escape(x)).join("; ")}</p>` : ""}
       <div class="sandbox-actions"><button data-page="1" aria-pressed="${state.page === 1}">Bow & Crossbow</button><button data-page="2" aria-pressed="${state.page === 2}">Passive & Magic</button><button data-page="3" aria-pressed="${state.page === 3}">Javelin & Spear</button></div>
       <div class="skill-tree" aria-label="Amazon skill tree">
@@ -140,7 +196,7 @@ export function renderAmazonSandbox() {
       <section class="sandbox-inspector">
         <h2>${escape(selected.identity.internalName)}</h2>
         ${state.selected === 365 ? `<p class="annotation"><strong>Vestigial / removed skill:</strong> Shattering Arrow was developed before PD2 Season 1 and removed before release, according to a July 28, 2023 developer Discord response shared by a player. Its definitions remain in the Season 14 data; it is retained here for historical experimentation, not as a normally selectable skill.</p>` : ""}
-        <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · effective skill level ${current[state.selected] ? current[state.selected] + effectiveBonus(selected) : 0} (+all, +tree and +skill bonuses; hard points remain capped at 20)</p>
+        <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · effective skill level ${current[state.selected] || (activeBonus().skills[state.selected] || 0) ? current[state.selected] + effectiveBonus(selected) : 0} (+all, +tree and +skill bonuses; hard points remain capped at 20)</p>
         <p class="annotation">Individual bonus levels for this skill: +${activeBonus().skills[state.selected] || 0}. Use the blue + / − controls beside its tree node to adjust.</p>
         <div class="tree-points"><button data-adjust="${state.selected}" data-delta="-1" ${current[state.selected] === 0 ? "disabled" : ""}>−</button><strong>${current[state.selected]} / ${selected.selected.maxLevel}</strong><button data-adjust="${state.selected}" data-delta="1" ${current[state.selected] >= selected.selected.maxLevel || pointsLeft() <= 0 || amazonAllocationIssues(selected,current,state.level,skills).length ? "disabled" : ""}>+</button></div>
         <p class="annotation">Formula references to other skills: ${dependencies.length ? dependencies.map(escape).join(", ") : "none detected"}. Only explicitly supported, source-guarded references are evaluated as synergies.</p>
@@ -211,18 +267,23 @@ export function renderAmazonSandbox() {
 export function mountAmazonSandbox(container) {
   if (!container) return;
   try { const saved = normalizeBuildSnapshot(JSON.parse(localStorage.getItem(STORAGE_KEY)), skills); if (saved) { Object.assign(state, saved); state.comparison = normalizeComparisonConfig(JSON.parse(localStorage.getItem(STORAGE_KEY))?.comparison,skills) || state.comparison; } } catch { /* private browsing or invalid stored data */ }
-  const persist = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify({version:1,level:state.level,budget:state.budget,bonuses:state.bonuses,builds:state.builds,comparison:state.comparison})); } catch { /* storage unavailable */ } };
+  const persist = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify({version:1,level:state.level,budget:state.budget,bonuses:state.bonuses.map((bonus,index)=>armoryImports[index]?manualBonuses[index]:bonus),builds:state.builds,comparison:state.comparison})); } catch { /* storage unavailable */ } };
   const redraw = () => { container.innerHTML = renderAmazonSandbox(); };
   const fullSnapshot = () => ({format:"obsidian-lords-amazon-comparison",version:1,level:state.level,budget:state.budget,builds:state.builds,bonuses:state.bonuses,comparison:state.comparison});
   const copyJson = value => { const text = JSON.stringify(value,null,2); if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).catch(() => window.prompt("Copy JSON:",text)); else window.prompt("Copy JSON:",text); };
   const applyArmoryPayload = payload => {
     const imported = importArmoryAmazon(payload,skills);
     const dest = state.active;
+    const initialSettings = defaultEquipmentSettings();
+    const resolved = resolveEquipmentBuild(payload,skills,emptyBonus(),initialSettings);
     state.builds[dest] = imported.build;
-    state.bonuses[dest] = imported.bonus;
+    manualBonuses[dest] = emptyBonus();
+    equipmentSettings[dest] = initialSettings;
+    state.bonuses[dest] = resolved.bonus;
     state.level = imported.level; // Existing sandbox shares level across A/B.
     state.budget = Math.max(state.budget,sum(imported.build),sum(state.builds[1-dest]));
-    armoryImports[dest] = {name:imported.name,equippedCount:payload.items.filter(i=>i.location?.zone==="Equipped" && i.location.equipment_id>=1 && i.location.equipment_id<=10).length,warnings:imported.warnings,source:payload};
+    armoryImports[dest] = {name:imported.name,equippedCount:resolved.selection.activeItems.length,warnings:imported.warnings,source:payload};
+    recomputeGear(dest);
     // Scratch combat scenarios are not gear-derived and remain unchanged.
     armoryMessage = `Imported ${imported.name} into Build ${dest?"B":"A"}. Supported skills and +skills loaded; combat inputs remain manual. Raw equipment is retained for this session only.`;
     persist(); redraw();
@@ -289,7 +350,7 @@ export function mountAmazonSandbox(container) {
     if (button.dataset.import) {
       const text = window.prompt("Paste exported build JSON:");
       if (text === null) return;
-      try { const saved = normalizeBuildSnapshot(JSON.parse(text), skills); if (!saved) throw new Error("Invalid build format"); Object.assign(state,saved); state.comparison = normalizeComparisonConfig(JSON.parse(text).comparison,skills) || state.comparison; persist(); redraw(); }
+      try { const saved = normalizeBuildSnapshot(JSON.parse(text), skills); if (!saved) throw new Error("Invalid build format"); Object.assign(state,saved); detachImportedGear(); state.comparison = normalizeComparisonConfig(JSON.parse(text).comparison,skills) || state.comparison; persist(); redraw(); }
       catch { window.alert("Invalid build JSON. No changes were made."); }
       return;
     }
@@ -302,16 +363,21 @@ export function mountAmazonSandbox(container) {
       const delta = Number(button.dataset.delta);
       const page = Number(button.dataset.treeBonus);
       if ((index === 0 || index === 1) && (delta === 1 || delta === -1)) {
-        const bonus = state.bonuses[index];
+        const bonus = editBonus(index);
         if (button.dataset.scopeBonus === "all") bonus.all = Math.max(0, Math.min(100, bonus.all + delta));
         if (button.dataset.scopeBonus === "tree" && [1,2,3].includes(page)) bonus.trees[page] = Math.max(0, Math.min(100, bonus.trees[page] + delta));
+        recomputeGear(index);
       }
       persist(); redraw(); return;
     }
     if (button.dataset.bonusAdjust !== undefined) {
       const id = Number(button.dataset.bonusAdjust);
       const delta = Number(button.dataset.delta);
-      if (byId.has(id) && (delta === 1 || delta === -1)) activeBonus().skills[id] = Math.max(0, Math.min(100, (activeBonus().skills[id] || 0) + delta));
+      if (byId.has(id) && (delta === 1 || delta === -1)) {
+        const bonus = editBonus(state.active);
+        bonus.skills[id] = Math.max(0, Math.min(100, (bonus.skills[id] || 0) + delta));
+        recomputeGear(state.active);
+      }
     }
     if (button.dataset.adjust !== undefined) {
       const id = Number(button.dataset.adjust);
@@ -324,6 +390,26 @@ export function mountAmazonSandbox(container) {
     redraw();
   });
   container.addEventListener("change", async (event) => {
+    if (event.target.matches("[data-equipment-set]")) {
+      const value = event.target.value;
+      if (!["main","switch"].includes(value) || !armoryImports[state.active]) return;
+      equipmentSettings[state.active].weaponSet = value;
+      recomputeGear(state.active);persist();redraw();return;
+    }
+    if (event.target.matches("[data-equipment-all]")) {
+      if (!armoryImports[state.active]) return;
+      equipmentSettings[state.active].includeEquipment = event.target.checked;
+      recomputeGear(state.active);persist();redraw();return;
+    }
+    if (event.target.matches("[data-equipment-item]")) {
+      if (!armoryImports[state.active]) return;
+      const id=event.target.dataset.equipmentItem;
+      const settings=equipmentSettings[state.active];
+      const excluded=new Set(settings.excludedItemIds);
+      if (event.target.checked) excluded.delete(id); else excluded.add(id);
+      settings.excludedItemIds=[...excluded];
+      recomputeGear(state.active);persist();redraw();return;
+    }
     if (event.target.matches("[data-armory-file]")) {
       const file = event.target.files?.[0]; if (!file) return;
       try { applyArmoryPayload(JSON.parse(await file.text())); armoryDraft = ""; }
@@ -332,7 +418,7 @@ export function mountAmazonSandbox(container) {
     }
     if (event.target.matches("[data-full-file]")) {
       const file = event.target.files?.[0]; if (!file) return;
-      try { const parsed = normalizeFullComparison(JSON.parse(await file.text()),skills); if (!parsed) throw Error("Invalid full comparison"); Object.assign(state,parsed); persist(); redraw(); }
+      try { const parsed = normalizeFullComparison(JSON.parse(await file.text()),skills); if (!parsed) throw Error("Invalid full comparison"); Object.assign(state,parsed); detachImportedGear(); persist(); redraw(); }
       catch { window.alert("Invalid full comparison file. No changes were made."); }
       return;
     }
