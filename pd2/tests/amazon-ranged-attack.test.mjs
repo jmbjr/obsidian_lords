@@ -101,7 +101,7 @@ test("unsupported skills, absent weapons, and unknown base codes fail transparen
   assert.equal(alt.physical.min,null);
   assert.equal(alt.skillED,null);
   assert.equal(alt.attackRating.value,null);
-  assert.equal(miss.physical.status,"partial");
+  assert.equal(miss.physical.status,"unavailable");
 });
 
 test("M6 UI is wired to selected imported A/B gear, and manual combat assumptions remain manual",()=>{
