@@ -299,7 +299,7 @@ export function renderAmazonSandbox() {
                   </details>`;
                 }).join("")}
               </div>
-            </details>
+            </details>` : ""}
             <details class="ar-calculation-breakdown" data-ar-breakdown>
               <summary>Show full AR calculation · intermediate values and sources</summary>
               ${(() => {
@@ -334,7 +334,7 @@ export function renderAmazonSandbox() {
                   </ol>
                   <p class="annotation"><strong>Exact implemented expression:</strong> <code>${escape(ar.equation)}</code></p>
                   ${ar.internalCheck?`<p class="annotation">${escape(ar.internalCheck)}</p>`:""}
-                  <p class="annotation"><strong>Unverified:</strong> passive, aura, buff and conditional AR effects; whether PD2 combines AR percentages in this exact order; possible screenshot state differences. The in-game observed 881 is not being forced into this calculation.</p>
+                  <p class="annotation"><strong>Unverified:</strong> passive, aura, buff and conditional AR effects; whether PD2 combines AR percentages in this exact order; possible screenshot state differences. No final in-game AR number is supplied by the Armory JSON.</p>
                 </div>`;
               })()}
             </details>
