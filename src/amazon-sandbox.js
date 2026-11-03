@@ -196,7 +196,7 @@ export function mountAmazonSandbox(container) {
   const fullSnapshot = () => ({format:"obsidian-lords-amazon-comparison",version:1,level:state.level,budget:state.budget,builds:state.builds,bonuses:state.bonuses,comparison:state.comparison});
   const copyJson = value => { const text = JSON.stringify(value,null,2); if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).catch(() => window.prompt("Copy JSON:",text)); else window.prompt("Copy JSON:",text); };
   redraw();
-  container.addEventListener("click", (event) => {
+  container.addEventListener("click", async (event) => {
     const button = event.target.closest("button");
     if (!button || !container.contains(button)) return;
     if (button.dataset.armoryImport) {
