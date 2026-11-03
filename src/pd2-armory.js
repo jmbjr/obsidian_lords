@@ -6,6 +6,37 @@ import { emptyBonus } from "./amazon-comparison.js";
 export const armoryCharacterUrl = name =>
   `https://api.projectdiablo2.com/game/character/${encodeURIComponent(name)}`;
 
+export const validArmoryName = name =>
+  typeof name === "string" && /^[A-Za-z][A-Za-z0-9_-]{1,23}$/.test(name);
+
+// These published snapshots are served from the same origin as GitHub Pages.
+// The base is Vite's configured BASE_URL ("/obsidian_lords/").
+export function publishedArmoryUrl(name, baseUrl) {
+  if (!validArmoryName(name)) throw new Error("Enter a valid character name (2–24 letters/numbers, hyphen or underscore)");
+  if (typeof baseUrl !== "string" || !baseUrl.startsWith("/") || !baseUrl.endsWith("/"))
+    throw new Error("Invalid published site base path");
+  return `${baseUrl}armory/${name.toLowerCase()}.json`;
+}
+
+export async function loadPublishedArmoryCharacter(name, baseUrl, fetchImpl=fetch) {
+  const url = publishedArmoryUrl(name,baseUrl);
+  // Do not rely on CDN/browser freshness; old snapshots may otherwise appear
+  // to persist after a successful GitHub Actions deployment.
+  const response = await fetchImpl(`${url}?v=${Date.now()}`,{cache:"no-store",credentials:"omit"});
+  if (!response.ok) {
+    if(response.status===404) throw new Error("No published snapshot found. Run the GitHub sync workflow for this character, then retry after Pages deployment.");
+    throw new Error(`Published snapshot HTTP ${response.status}`);
+  }
+  const payload = await response.json();
+  if (!payload?.character?.name ||
+      payload.character.name.toLowerCase() !== name.toLowerCase() ||
+      payload._obsidianLordsSync?.character?.toLowerCase() !== name.toLowerCase() ||
+      !Number.isFinite(Date.parse(payload._obsidianLordsSync?.syncedAt))) {
+    throw new Error("Published character snapshot has invalid identity or sync metadata");
+  }
+  return payload;
+}
+
 const integer=(value,min=0,max=1000000)=>Number.isInteger(value)&&value>=min&&value<=max;
 const mods=item=>(item?.modifiers||[]);
 const hasActiveEquipment=item=>item?.location?.zone==="Equipped" &&
