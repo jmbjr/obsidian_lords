@@ -5,7 +5,7 @@ import { multishotProcScenario } from "./multishot-procs.js";
 import { multipleShotTargetScenario } from "./multishot-combat.js";
 import { multipleShotBasicAttack } from "./multishot-basic-attack.js";
 import { amazonCriticalStrikeChance } from "./amazon-critical-strike.js";
-import { fetchArmoryCharacter, importArmoryAmazon } from "./pd2-armory.js";
+import { armoryCharacterUrl, importArmoryAmazon } from "./pd2-armory.js";
 import { compareMarginalEffects } from "./multishot-marginal.js";
 import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison, amazonAllocationIssues, amazonBuildIssues } from "./amazon-comparison.js";
 
@@ -18,6 +18,8 @@ const combatScenario = { hits: 1, physical: 100, crit: 0, deadly: 0, crushing: 2
 const critScenario = { useBuild: true };
 const armoryImports = [null,null];
 let armoryMessage = "";
+let armoryName = "Magizon";
+let armoryDraft = "";
 const basicScenario = { weaponMin: 100, weaponMax: 100, otherED: 0, baseAR: 1000, otherAR: 0, defense: 1000, monsterLevel: 55, targetBlock: 0, useDamage: false };
 const state = { level: 55, budget: 30, bonuses: [emptyBonus(), emptyBonus()], active: 0, page: 1, selected: 12, builds: [newBuild(), newBuild()], comparison: { skillIds: [12] } };
 const escape = (value) => String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
@@ -98,9 +100,22 @@ export function renderAmazonSandbox() {
       <div class="sandbox-summary">
         <strong>Build ${state.active === 0 ? "A" : "B"} · ${sum(current)} spent / ${state.budget} available · ${pointsLeft()} remaining</strong>
         ${buildIssues.map((issues,index) => issues.length ? `<p class="tree-warning">Build ${index ? "B" : "A"}: ${issues.length} allocation warning(s). ${escape(issues.slice(0,3).map(x=>x.skill+": "+x.message).join("; "))}${issues.length>3 ? "…" : ""}</p>` : "").join("")}
-        <div class="sandbox-actions"><button data-copy="true">Copy build JSON</button><button data-import="true">Import build JSON</button><button data-armory-import="true">Import from PD2 Armory</button><button data-build="0" aria-pressed="${state.active === 0}">Build A</button><button data-build="1" aria-pressed="${state.active === 1}">Build B</button><button data-reset="true">Clear current build</button></div>
+        <div class="sandbox-actions"><button data-copy="true">Copy build JSON</button><button data-import="true">Import build JSON</button><button data-build="0" aria-pressed="${state.active === 0}">Build A</button><button data-build="1" aria-pressed="${state.active === 1}">Build B</button><button data-reset="true">Clear current build</button></div>
       </div>
-      <div class="annotation" role="status">${escape(armoryMessage || "PD2 Armory import: type a character name to load active Build A or B. Direct API requests depend on browser CORS permission.")}</div>
+      <div class="annotation" role="group" aria-label="Import PD2 Armory character">
+        <strong>Import from PD2 Armory (Build ${state.active ? "B" : "A"})</strong>
+        <p>GitHub Pages cannot fetch the PD2 API directly because its response does not permit cross-origin browser requests. Open the official character JSON in a new tab, copy it, then paste or upload it here. No third-party proxy is used.</p>
+        <div class="sandbox-actions">
+          <label>Character name <input data-armory-name type="text" maxlength="24" value="${escape(armoryName)}" autocomplete="off"></label>
+          <button data-armory-open="true" type="button">Open official character JSON</button>
+        </div>
+        <label>Character JSON <textarea data-armory-json rows="4" placeholder="Paste complete PD2 Armory character JSON">${escape(armoryDraft)}</textarea></label>
+        <div class="sandbox-actions">
+          <button data-armory-apply="true" type="button">Import pasted JSON into Build ${state.active ? "B" : "A"}</button>
+          <label>Or upload JSON file <input data-armory-file type="file" accept=".json,application/json"></label>
+        </div>
+        <div role="status">${escape(armoryMessage)}</div>
+      </div>
       ${armoryImports[state.active] ? `<p class="annotation">Armory: <strong>${escape(armoryImports[state.active].name)}</strong> · ${armoryImports[state.active].equippedCount} active equipped items · ${armoryImports[state.active].warnings.length} caveats. Raw item data is kept only for this page session; the existing exported build JSON remains skill-only. ${armoryImports[state.active].warnings.map(x=>escape(x)).join("; ")}</p>` : ""}
       <div class="sandbox-actions"><button data-page="1" aria-pressed="${state.page === 1}">Bow & Crossbow</button><button data-page="2" aria-pressed="${state.page === 2}">Passive & Magic</button><button data-page="3" aria-pressed="${state.page === 3}">Javelin & Spear</button></div>
       <div class="skill-tree" aria-label="Amazon skill tree">
@@ -195,38 +210,39 @@ export function mountAmazonSandbox(container) {
   const redraw = () => { container.innerHTML = renderAmazonSandbox(); };
   const fullSnapshot = () => ({format:"obsidian-lords-amazon-comparison",version:1,level:state.level,budget:state.budget,builds:state.builds,bonuses:state.bonuses,comparison:state.comparison});
   const copyJson = value => { const text = JSON.stringify(value,null,2); if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).catch(() => window.prompt("Copy JSON:",text)); else window.prompt("Copy JSON:",text); };
+  const applyArmoryPayload = payload => {
+    const imported = importArmoryAmazon(payload,skills);
+    const dest = state.active;
+    state.builds[dest] = imported.build;
+    state.bonuses[dest] = imported.bonus;
+    state.level = imported.level; // Existing sandbox shares level across A/B.
+    state.budget = Math.max(state.budget,sum(imported.build),sum(state.builds[1-dest]));
+    armoryImports[dest] = {name:imported.name,equippedCount:payload.items.filter(i=>i.location?.zone==="Equipped" && i.location.equipment_id>=1 && i.location.equipment_id<=10).length,warnings:imported.warnings,source:payload};
+    // Scratch combat scenarios are not gear-derived and remain unchanged.
+    armoryMessage = `Imported ${imported.name} into Build ${dest?"B":"A"}. Supported skills and +skills loaded; combat inputs remain manual. Raw equipment is retained for this session only.`;
+    persist(); redraw();
+  };
+  container.addEventListener("input", event => {
+    if (event.target.matches("[data-armory-name]")) armoryName = event.target.value;
+    if (event.target.matches("[data-armory-json]")) armoryDraft = event.target.value;
+  });
   redraw();
   container.addEventListener("click", async (event) => {
     const button = event.target.closest("button");
     if (!button || !container.contains(button)) return;
-    if (button.dataset.armoryImport) {
-      const name = window.prompt("PD2 ladder character name (imports into the currently selected Build):", "Magizon");
-      if (name === null) return;
-      const dest = state.active;
-      const apply = payload => {
-        const imported = importArmoryAmazon(payload,skills);
-        state.builds[dest] = imported.build;
-        state.bonuses[dest] = imported.bonus;
-        state.level = imported.level; // Existing sandbox shares level across A/B.
-        state.budget = Math.max(state.budget,sum(imported.build),sum(state.builds[1-dest]));
-        armoryImports[dest] = {name:imported.name,equippedCount:payload.items.filter(i=>i.location?.zone==="Equipped" && i.location.equipment_id>=1 && i.location.equipment_id<=10).length,warnings:imported.warnings,source:payload};
-        // The scenario controls are currently global scratch inputs, not scoped
-        // to each build. Do not silently overwrite them when importing A or B.
-        armoryMessage = `Imported ${imported.name} into Build ${dest?"B":"A"}. Hard skills and supported +skills loaded. Combat scenario inputs remain manual; raw gear and mercenary are retained in memory, not yet simulated.`;
-        persist(); redraw();
-      };
-      try {
-        armoryMessage = `Loading ${name} from PD2 Armory…`; redraw();
-        apply(await fetchArmoryCharacter(name.trim()));
-      } catch (err) {
-        armoryMessage = `Direct armory lookup failed: ${err.message}. Browser CORS/network policy may prevent this request. Paste JSON via the next dialog as a fallback.`;
-        redraw();
-        const raw = window.prompt("Paste the full character JSON from the armory API (Cancel to keep current builds unchanged):");
-        if (raw !== null) {
-          try { apply(JSON.parse(raw)); }
-          catch (error) { armoryMessage = `Armory JSON import failed: ${error.message}`; redraw(); }
-        }
+    if (button.dataset.armoryOpen) {
+      const name = armoryName.trim();
+      if (!/^[A-Za-z][A-Za-z0-9_-]{1,23}$/.test(name)) {
+        armoryMessage = "Enter a valid character name (2–24 letters/numbers, hyphen or underscore).";
+        redraw(); return;
       }
+      window.open(armoryCharacterUrl(name), "_blank", "noopener,noreferrer");
+      armoryMessage = "Copy all JSON from the official PD2 Armory tab, return here, paste it, then click Import.";
+      redraw(); return;
+    }
+    if (button.dataset.armoryApply) {
+      try { applyArmoryPayload(JSON.parse(armoryDraft)); armoryDraft = ""; }
+      catch (err) { armoryMessage = `Armory JSON import failed: ${err.message}`; redraw(); }
       return;
     }
     if (button.dataset.copyConfig) { copyJson(state.comparison); return; }
@@ -288,6 +304,12 @@ export function mountAmazonSandbox(container) {
     redraw();
   });
   container.addEventListener("change", async (event) => {
+    if (event.target.matches("[data-armory-file]")) {
+      const file = event.target.files?.[0]; if (!file) return;
+      try { applyArmoryPayload(JSON.parse(await file.text())); armoryDraft = ""; }
+      catch (err) { armoryMessage = `Armory JSON import failed: ${err.message}`; redraw(); }
+      return;
+    }
     if (event.target.matches("[data-full-file]")) {
       const file = event.target.files?.[0]; if (!file) return;
       try { const parsed = normalizeFullComparison(JSON.parse(await file.text()),skills); if (!parsed) throw Error("Invalid full comparison"); Object.assign(state,parsed); persist(); redraw(); }
