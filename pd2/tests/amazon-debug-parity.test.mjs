@@ -95,6 +95,6 @@ test("Legacy screenshot evidence remains available only as a reproducible histor
   assert.equal(magizon.character.level,67);
   assert.equal(magizon._obsidianLordsSync.syncedAt,"2026-11-03T02:39:05.138Z");
   const ui=readFileSync("src/amazon-sandbox.js","utf8");
-  assert.match(ui,/buildArmoryDebugAudit\\(/);
-  assert.doesNotMatch(ui,/buildAmazonDebugComparison\\(/);
+  assert.match(ui,/buildArmoryDebugAudit\(/);
+  assert.doesNotMatch(ui,/buildAmazonDebugComparison\(/);
 });
