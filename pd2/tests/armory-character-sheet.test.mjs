@@ -53,7 +53,7 @@ test("alternate weapon set changes only hands; non-hand contributions remain",()
   assert.equal(main.attackRating.flatEquipment.value,43);
   assert.equal(alternate.attackRating.flatEquipment.value,70);
   assert.equal(main.defense.equippedItems.value,367);
-  assert.equal(alternate.defense.equippedItems.value,367+13);
+  assert.equal(alternate.defense.equippedItems.value,367);\n  assert.equal(alternate.defense.flatNonArmor.value,13);\n  assert.equal(alternate.defense.knownEquipmentContribution.value,380);
   assert.equal(main.resistances.fire.value,null);
   assert.equal(main.resistances.fire.status,"partial");
   assert.equal(main.attackRating.final.value,null);
