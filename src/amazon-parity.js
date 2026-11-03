@@ -98,6 +98,8 @@ export function buildAmazonParityObservations(payload,skills,options={}) {
   const pinned=observations.provenance.armorySnapshot;
   const isPinned=payload.character.name?.toLowerCase()===observations.provenance.observedCharacter.toLowerCase() &&
     payload._obsidianLordsSync?.syncedAt===pinned.syncedAt;
+  const baselineConfiguration=weaponSet==="main" && includeEquipment===true &&
+    excludedItemIds.length===0 && options.build===undefined && options.bonus===undefined;
   const charmCandidates=[];
   for(let i=0;i<payload.items.length;i++){
     const item=payload.items[i];
@@ -124,6 +126,7 @@ export function buildAmazonParityObservations(payload,skills,options={}) {
     const gap=eligible?calculated.value-expected:null;
     let verdict;
     if(!isPinned)verdict="snapshot-drift";
+    else if(!baselineConfiguration)verdict="configuration-drift";
     else if(expected===null)verdict="not-observed";
     else if(calculated.value===null)verdict="unavailable";
     else if(calculated.status==="partial")verdict="partial";
@@ -135,9 +138,9 @@ export function buildAmazonParityObservations(payload,skills,options={}) {
       candidateCharmEvidence:evidence,
       candidateReconciles:eligible&&evidence.length>0&&calculated.value+candidateSum===expected};
   });
-  const counts=Object.fromEntries(["match","mismatch","partial","unavailable","not-observed","snapshot-drift"]
+  const counts=Object.fromEntries(["match","mismatch","partial","unavailable","not-observed","snapshot-drift","configuration-drift"]
     .map(v=>[v,rows.filter(row=>row.verdict===v).length]));
-  return {schemaVersion:1,reference:observations.reference,pinned:isPinned,
+  return {schemaVersion:1,reference:observations.reference,pinned:isPinned,baselineConfiguration,
     expectedSnapshot:pinned.syncedAt,actualSnapshot:payload._obsidianLordsSync?.syncedAt||null,
     weaponSet,counts,rows,
     charmCandidates,unobservedSkillRows:skills.filter(s=>s.identity.internalId!==18&&s.identity.internalId!==365)
@@ -145,6 +148,7 @@ export function buildAmazonParityObservations(payload,skills,options={}) {
         screenshotValue:s.identity.internalId===12?21:null})),
     caveats:[
       "The original screenshots are transcribed, not stored in this repo and not timestamp-synchronized to the snapshot",
+      "Only the main weapon set with all original equipment included and no manual build/bonus changes is comparable to this reference",
       "A partial model's numericGap is an observational difference, not a proven calculation error",
       "Stored Inventory charms are diagnostic candidates only; activation must be verified before inclusion",
       "Derived fields cannot be declared matched solely because a partial subtotal equals a screenshot reading",
