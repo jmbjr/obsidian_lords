@@ -1,0 +1,92 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { projectArmoryCharacterSheet } from "../../src/armory-character-sheet.js";
+import { resolveAmazonLayout } from "../../src/amazon-layout.js";
+
+const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
+const skills=JSON.parse(readFileSync("pd2/generated/amazon-skills.json","utf8")).skills;
+const magizon=load("magizon");
+
+test("source-derived attributes expose separate base and equipped components",()=>{
+  const s=projectArmoryCharacterSheet(magizon);
+  assert.equal(s.character.level.value,67);
+  assert.equal(s.character.experience.value,238080481);
+  assert.equal(s.character.unspentStatPoints.value,194);
+  assert.equal(s.character.unspentSkillPoints.value,46);
+  assert.equal(s.baseAttributes.strength.value,41);
+  assert.equal(s.baseAttributes.dexterity.value,50);
+  assert.equal(s.attributes.strength.value,59);
+  assert.equal(s.attributes.strength.equipment,18);
+  assert.equal(s.attributes.dexterity.value,60);
+  assert.equal(s.resources.life.value,573);
+  assert.equal(s.resources.mana.value,181);
+  assert.equal(s.resources.stamina.value,1313);
+  assert.equal(s.attributes.strength.sources.length,4);
+  assert.ok(s.attributes.strength.sources.every(e=>e.path));
+});
+test("no equipment and individual exclusions recompute derived contributions without mutating original",()=>{
+  const original=JSON.stringify(magizon);
+  const base=projectArmoryCharacterSheet(magizon,{includeEquipment:false});
+  assert.equal(base.attributes.strength.value,41);
+  assert.equal(base.attributes.dexterity.value,50);
+  assert.equal(base.defense.equippedItems.value,0);
+  assert.equal(base.attackRating.flatEquipment.value,0);
+  assert.equal(base.weapon.physical.status,"unavailable");
+  const full=projectArmoryCharacterSheet(magizon);
+  const bow=full.selectedItemIds.find(id=>magizon.items[Number(id.match(/\d+/)[0])].name==="Harmony");
+  const excluded=projectArmoryCharacterSheet(magizon,{excludedItemIds:[bow]});
+  assert.equal(excluded.attributes.dexterity.value,50);
+  assert.equal(excluded.attributes.strength.value,59);
+  assert.equal(excluded.weapon.physical.min,null);
+  assert.equal(projectArmoryCharacterSheet(magizon).attributes.dexterity.value,60);
+  assert.equal(JSON.stringify(magizon),original);
+});
+test("alternate weapon set changes only hands; non-hand contributions remain",()=>{
+  const main=projectArmoryCharacterSheet(magizon,{weaponSet:"main"});
+  const alternate=projectArmoryCharacterSheet(magizon,{weaponSet:"switch"});
+  assert.equal(main.attributes.strength.value,alternate.attributes.strength.value);
+  assert.equal(main.weapon.name,"Harmony");
+  assert.equal(alternate.weapon.name,"Hellcast");
+  assert.deepEqual([main.weapon.physical.min,main.weapon.physical.max],[39,104]);
+  assert.deepEqual([alternate.weapon.physical.min,alternate.weapon.physical.max],[39,76]);
+  assert.equal(main.attackRating.flatEquipment.value,43);
+  assert.equal(alternate.attackRating.flatEquipment.value,70);
+  assert.equal(main.defense.equippedItems.value,367);
+  assert.equal(alternate.defense.equippedItems.value,367+13);
+  assert.equal(main.resistances.fire.value,null);
+  assert.equal(main.resistances.fire.status,"partial");
+  assert.equal(main.attackRating.final.value,null);
+  assert.equal(main.defense.final.value,null);
+});
+test("actual Magiknaab data contains one-handed resource values and selected-gear contributions",()=>{
+  const s=projectArmoryCharacterSheet(load("magiknaab"));
+  assert.equal(s.character.level.value,62);
+  assert.equal(s.baseAttributes.strength.value,69);
+  assert.equal(s.attributes.strength.value,82);
+  assert.equal(s.attributes.dexterity.value,111);
+  assert.equal(s.attackRating.percentEquipment.value,15);
+  assert.deepEqual([s.weapon.physical.min,s.weapon.physical.max],[14,35]);
+});
+test("invalid/unknown fields are unavailable rather than fabricated",()=>{
+  const s=projectArmoryCharacterSheet({character:{name:"Fixture",attributes:{strength:10}},items:[]});
+  assert.equal(s.character.level.value,null);
+  assert.equal(s.attributes.strength.value,10);
+  assert.equal(s.attributes.energy.value,null);
+  assert.equal(s.attributes.energy.status,"partial");
+  assert.equal(s.resistances.fire.value,null);
+  assert.equal(s.weapon.physical.min,null);
+});
+test("removed Avoid and Shattering Arrow are inspectable, never on playable skill tree",()=>{
+  const avoid=skills.find(s=>s.identity.internalId===18);
+  const shatter=skills.find(s=>s.identity.internalId===365);
+  assert.equal(avoid.identity.internalName,"Avoid");
+  assert.equal(resolveAmazonLayout(avoid).page,null);
+  assert.equal(resolveAmazonLayout(avoid).status,"historical");
+  assert.equal(resolveAmazonLayout(shatter).page,null);
+  assert.equal(skills.filter(s=>resolveAmazonLayout(s).page===2).some(s=>s.identity.internalId===18),false);
+  const ui=readFileSync("src/amazon-sandbox.js","utf8");
+  assert.match(ui,/Historical \/ removed source skills/);
+  assert.match(ui,/!\[18,365\]\.includes\(id\)/);
+  assert.match(ui,/Imported character sheet primitives/);
+});
