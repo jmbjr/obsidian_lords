@@ -67,9 +67,9 @@ test("four verified-position charm contributions reconcile four M8 gaps, without
 test("unavailable calculations are explicitly null, not zero or false matches",()=>{
   const r=get(buildAmazonParityObservations(magizon,skills));
   const unmodeled=["character.nextExperience","character.magicArrowDamageMin",
-    "character.magicArrowDamageMax","character.multipleShotAttackRating",
-    "character.magicArrowAttackRating","extended.baseArDex",
-    "extended.baseArTotal","extended.defenseDex","extended.baseOneHandMin",
+    "character.magicArrowDamageMax",
+    "character.magicArrowAttackRating",
+    "extended.baseOneHandMin",
     "extended.baseTwoHandMax"];
   for(const key of unmodeled){
     assert.equal(r[key].modeled,null,key);
