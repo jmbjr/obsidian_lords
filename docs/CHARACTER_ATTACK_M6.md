@@ -28,7 +28,7 @@ Magizon at the pinned published snapshot:
 - Main Harmony Bow (Edge Bow base `8sb`): resolved weapon 39–104; Dexterity 60 from M5 equipped-only projection; non-weapon +4 minimum (amulet) / +10 maximum (quiver) and +42% ED (gloves/quiver) from currently selected gear.
 - Under the **partial formula**, this yields **142–378 physical damage**, **not** the screenshot's **347–890**. The delta is tracked intentionally, not 'fixed' by fabricated buffs, item changes or a guessed multiplier. Screenshot state and exported data may not be the same moment. Both charm eligibility and additional damage/buff effects need verification.
 - Base AR remains unavailable; flat gear AR from main gear is +43. An optional measured base 270 gives a conditional preview, not the screenshot's true total AR.
-- Main gear IAS is 26%; animation timing uses WSM +5 for Edge Bow with PD2's Amazon A1 bow record. Alternate Hellcast (Heavy Crossbow `hxb`, WSM +10) has different IAS and animation, while the other gear remains shared.
+- Main gear IAS is **40% (Finesse armor +20 and Sharp Arrows quiver +20)**; animation timing uses WSM +5 for Edge Bow with PD2's Amazon A1 bow record. Alternate Hellcast (Heavy Crossbow `hxb`, WSM +10) has different IAS and animation, while the other gear remains shared.
 - User screenshot depicts IAS **46** and **10 frames** in an in-game state; M6 uses only supported selected equipment and may differ. Missing inventory charm IAS, live states and screenshot timing must be investigated before parity claims.
 
 ## Exclusions, acceptance and follow-up
