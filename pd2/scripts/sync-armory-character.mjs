@@ -21,8 +21,7 @@ export async function syncArmoryCharacter(name, { fetchImpl = fetch, now = () =>
     signal: AbortSignal.timeout(20000),
   });
   if (!response.ok) throw new Error(`PD2 API returned HTTP ${response.status}`);
-  const contentType = response.headers?.get?.("content-type") || "";
-  if (contentType && !contentType.includes("json")) throw new Error("PD2 API returned non-JSON content type");
+  // Validate the actual JSON structure; some public endpoints use generic content types.
   const body = await response.text();
   if (body.length > 2_000_000) throw new Error("PD2 payload exceeds safe publication size");
   let payload;
