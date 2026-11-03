@@ -1,0 +1,292 @@
+{
+  "schemaVersion": 1,
+  "reference": "magizon-2026-11-02-screenshots",
+  "provenance": {
+    "source": "User-submitted screenshots, documented in docs/CHARACTER_RECONSTRUCTION_INVENTORY.md; transcribed values are an observational oracle, not game-engine rules",
+    "screenshots": [
+      "Bow & Crossbow",
+      "Passive & Magic",
+      "Javelin & Spear",
+      "Character Stats",
+      "Extended Info (8)"
+    ],
+    "note": "Original screenshots remain in project conversation; this fixture transcribes only confidently legible reported values. Screenshot capture time and exact match to synced JSON are not independently proven.",
+    "observedCharacter": "Magizon",
+    "captureDate": "2026-11-02",
+    "armorySnapshot": {
+      "file": "public/armory/magizon.json",
+      "syncedAt": "2026-11-03T02:39:05.138Z",
+      "gitBlobSha": "ecc32342e4cf4b0d2420f17178443053bf08fc70",
+      "defaultWeaponSet": "main"
+    }
+  },
+  "expectations": [
+    {
+      "key": "skill.multipleShot.level",
+      "view": "Bow & Crossbow",
+      "label": "Multiple Shot effective level",
+      "observed": 21,
+      "unit": "levels"
+    },
+    {
+      "key": "skill.hardSkillCount",
+      "view": "Three skill trees",
+      "label": "Source skill records",
+      "observed": null,
+      "unit": "records",
+      "note": "31 source records, including Avoid and Shattering Arrow, are not a screenshot-visible skill-tree count"
+    },
+    {
+      "key": "character.level",
+      "view": "Character Stats",
+      "label": "Level",
+      "observed": 67
+    },
+    {
+      "key": "character.experience",
+      "view": "Character Stats",
+      "label": "Experience",
+      "observed": 238080481
+    },
+    {
+      "key": "character.nextExperience",
+      "view": "Character Stats",
+      "label": "Experience required for next level",
+      "observed": 239192444
+    },
+    {
+      "key": "character.unspentStat",
+      "view": "Character Stats",
+      "label": "Available stat points",
+      "observed": 194
+    },
+    {
+      "key": "character.unspentSkill",
+      "view": "Character Stats",
+      "label": "Available skill points",
+      "observed": 46
+    },
+    {
+      "key": "character.strength",
+      "view": "Character Stats",
+      "label": "Strength",
+      "observed": 65
+    },
+    {
+      "key": "character.dexterity",
+      "view": "Character Stats",
+      "label": "Dexterity",
+      "observed": 60
+    },
+    {
+      "key": "character.vitality",
+      "view": "Character Stats",
+      "label": "Vitality",
+      "observed": 120
+    },
+    {
+      "key": "character.energy",
+      "view": "Character Stats",
+      "label": "Energy",
+      "observed": 15
+    },
+    {
+      "key": "character.life",
+      "view": "Character Stats",
+      "label": "Life",
+      "observed": 573
+    },
+    {
+      "key": "character.mana",
+      "view": "Character Stats",
+      "label": "Mana",
+      "observed": 181
+    },
+    {
+      "key": "character.stamina",
+      "view": "Character Stats",
+      "label": "Stamina",
+      "observed": 1312
+    },
+    {
+      "key": "character.multipleShotDamageMin",
+      "view": "Character Stats",
+      "label": "Multiple Shot damage minimum",
+      "observed": 347
+    },
+    {
+      "key": "character.multipleShotDamageMax",
+      "view": "Character Stats",
+      "label": "Multiple Shot damage maximum",
+      "observed": 890
+    },
+    {
+      "key": "character.magicArrowDamageMin",
+      "view": "Character Stats",
+      "label": "Magic Arrow damage minimum",
+      "observed": 278
+    },
+    {
+      "key": "character.magicArrowDamageMax",
+      "view": "Character Stats",
+      "label": "Magic Arrow damage maximum",
+      "observed": 694
+    },
+    {
+      "key": "character.multipleShotAttackRating",
+      "view": "Character Stats",
+      "label": "Multiple Shot attack rating",
+      "observed": 881
+    },
+    {
+      "key": "character.magicArrowAttackRating",
+      "view": "Character Stats",
+      "label": "Magic Arrow attack rating",
+      "observed": 529
+    },
+    {
+      "key": "character.defense",
+      "view": "Character Stats",
+      "label": "Total defense",
+      "observed": 401
+    },
+    {
+      "key": "character.fireResist",
+      "view": "Character Stats",
+      "label": "Fire resistance",
+      "observed": 75,
+      "unit": "%"
+    },
+    {
+      "key": "character.coldResist",
+      "view": "Character Stats",
+      "label": "Cold resistance",
+      "observed": 64,
+      "unit": "%"
+    },
+    {
+      "key": "character.lightResist",
+      "view": "Character Stats",
+      "label": "Lightning resistance",
+      "observed": 62,
+      "unit": "%"
+    },
+    {
+      "key": "character.poisonResist",
+      "view": "Character Stats",
+      "label": "Poison resistance",
+      "observed": 50,
+      "unit": "%"
+    },
+    {
+      "key": "extended.baseArDex",
+      "view": "Extended Info (8)",
+      "label": "Base AR from Dexterity",
+      "observed": 270
+    },
+    {
+      "key": "extended.baseArGear",
+      "view": "Extended Info (8)",
+      "label": "Base AR from equipment",
+      "observed": 53
+    },
+    {
+      "key": "extended.baseArTotal",
+      "view": "Extended Info (8)",
+      "label": "Combined base AR",
+      "observed": 323
+    },
+    {
+      "key": "extended.defenseDex",
+      "view": "Extended Info (8)",
+      "label": "Defense from Dexterity",
+      "observed": 15
+    },
+    {
+      "key": "extended.defenseGear",
+      "view": "Extended Info (8)",
+      "label": "Defense from equipment",
+      "observed": 386
+    },
+    {
+      "key": "extended.baseOneHandMin",
+      "view": "Extended Info (8)",
+      "label": "Base 1h minimum damage",
+      "observed": 13
+    },
+    {
+      "key": "extended.baseOneHandMax",
+      "view": "Extended Info (8)",
+      "label": "Base 1h maximum damage",
+      "observed": 22
+    },
+    {
+      "key": "extended.baseTwoHandMin",
+      "view": "Extended Info (8)",
+      "label": "Base 2h minimum damage",
+      "observed": 43
+    },
+    {
+      "key": "extended.baseTwoHandMax",
+      "view": "Extended Info (8)",
+      "label": "Base 2h maximum damage",
+      "observed": 117
+    },
+    {
+      "key": "extended.ias",
+      "view": "Extended Info (8)",
+      "label": "Increased Attack Speed",
+      "observed": 46,
+      "unit": "%"
+    },
+    {
+      "key": "extended.multipleShotFrames",
+      "view": "Extended Info (8)",
+      "label": "Multiple Shot attack frames",
+      "observed": 10,
+      "unit": "frames"
+    },
+    {
+      "key": "extended.criticalStrike",
+      "view": "Extended Info (8)",
+      "label": "Critical Strike chance",
+      "observed": 23,
+      "unit": "%"
+    },
+    {
+      "key": "extended.deadlyStrike",
+      "view": "Extended Info (8)",
+      "label": "Deadly Strike chance",
+      "observed": 0,
+      "unit": "%"
+    },
+    {
+      "key": "extended.crushingBlow",
+      "view": "Extended Info (8)",
+      "label": "Crushing Blow chance",
+      "observed": 0,
+      "unit": "%"
+    },
+    {
+      "key": "extended.openWoundsChance",
+      "view": "Extended Info (8)",
+      "label": "Open Wounds chance",
+      "observed": 0,
+      "unit": "%"
+    },
+    {
+      "key": "extended.openWoundsDps",
+      "view": "Extended Info (8)",
+      "label": "Open Wounds DPS",
+      "observed": 165,
+      "unit": "DPS"
+    },
+    {
+      "key": "extended.projectilePierce",
+      "view": "Extended Info (8)",
+      "label": "Projectile Pierce chance",
+      "observed": 48,
+      "unit": "%"
+    }
+  ]
+}
