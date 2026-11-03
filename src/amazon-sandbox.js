@@ -42,11 +42,19 @@ const recomputeGear = index => {
   const resolved = resolveEquipmentBuild(record.source,skills,manualBonuses[index],equipmentSettings[index]);
   state.bonuses[index] = resolved.bonus;
   record.selection = resolved.selection;
+  record.equippedCount = resolved.selection.activeItems.length;
   record.skillSources = resolved.sources;
   record.unresolved = resolved.unresolved;
   record.equipmentBonus = resolved.equipmentBonus;
 };
 const effectiveBonus = skill => bonusForSkill(skill, activeBonus());
+const detachImportedGear = () => {
+  for(const index of [0,1]){
+    armoryImports[index]=null;
+    manualBonuses[index]=emptyBonus();
+    equipmentSettings[index]=defaultEquipmentSettings();
+  }
+};
 const skillLevelBreakdown = (skill, hard) => {
   const bonus = activeBonus();
   const individual = bonus.skills[skill.identity.internalId] || 0;
@@ -188,7 +196,7 @@ export function renderAmazonSandbox() {
       <section class="sandbox-inspector">
         <h2>${escape(selected.identity.internalName)}</h2>
         ${state.selected === 365 ? `<p class="annotation"><strong>Vestigial / removed skill:</strong> Shattering Arrow was developed before PD2 Season 1 and removed before release, according to a July 28, 2023 developer Discord response shared by a player. Its definitions remain in the Season 14 data; it is retained here for historical experimentation, not as a normally selectable skill.</p>` : ""}
-        <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · effective skill level ${current[state.selected] ? current[state.selected] + effectiveBonus(selected) : 0} (+all, +tree and +skill bonuses; hard points remain capped at 20)</p>
+        <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · effective skill level ${current[state.selected] || (activeBonus().skills[state.selected] || 0) ? current[state.selected] + effectiveBonus(selected) : 0} (+all, +tree and +skill bonuses; hard points remain capped at 20)</p>
         <p class="annotation">Individual bonus levels for this skill: +${activeBonus().skills[state.selected] || 0}. Use the blue + / − controls beside its tree node to adjust.</p>
         <div class="tree-points"><button data-adjust="${state.selected}" data-delta="-1" ${current[state.selected] === 0 ? "disabled" : ""}>−</button><strong>${current[state.selected]} / ${selected.selected.maxLevel}</strong><button data-adjust="${state.selected}" data-delta="1" ${current[state.selected] >= selected.selected.maxLevel || pointsLeft() <= 0 || amazonAllocationIssues(selected,current,state.level,skills).length ? "disabled" : ""}>+</button></div>
         <p class="annotation">Formula references to other skills: ${dependencies.length ? dependencies.map(escape).join(", ") : "none detected"}. Only explicitly supported, source-guarded references are evaluated as synergies.</p>
@@ -342,7 +350,7 @@ export function mountAmazonSandbox(container) {
     if (button.dataset.import) {
       const text = window.prompt("Paste exported build JSON:");
       if (text === null) return;
-      try { const saved = normalizeBuildSnapshot(JSON.parse(text), skills); if (!saved) throw new Error("Invalid build format"); Object.assign(state,saved); state.comparison = normalizeComparisonConfig(JSON.parse(text).comparison,skills) || state.comparison; persist(); redraw(); }
+      try { const saved = normalizeBuildSnapshot(JSON.parse(text), skills); if (!saved) throw new Error("Invalid build format"); Object.assign(state,saved); detachImportedGear(); state.comparison = normalizeComparisonConfig(JSON.parse(text).comparison,skills) || state.comparison; persist(); redraw(); }
       catch { window.alert("Invalid build JSON. No changes were made."); }
       return;
     }
@@ -410,7 +418,7 @@ export function mountAmazonSandbox(container) {
     }
     if (event.target.matches("[data-full-file]")) {
       const file = event.target.files?.[0]; if (!file) return;
-      try { const parsed = normalizeFullComparison(JSON.parse(await file.text()),skills); if (!parsed) throw Error("Invalid full comparison"); Object.assign(state,parsed); persist(); redraw(); }
+      try { const parsed = normalizeFullComparison(JSON.parse(await file.text()),skills); if (!parsed) throw Error("Invalid full comparison"); Object.assign(state,parsed); detachImportedGear(); persist(); redraw(); }
       catch { window.alert("Invalid full comparison file. No changes were made."); }
       return;
     }
