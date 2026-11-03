@@ -5,9 +5,7 @@
 export const WEAPON_HAND_SETS = Object.freeze({ main: [4, 5], switch: [11, 12] });
 const MAIN = new Set(WEAPON_HAND_SETS.main);
 const SWITCH = new Set(WEAPON_HAND_SETS.switch);
-const HANDS = new Set([...MAIN, ...SWITCH]);
 const EQUIPMENT_SLOTS = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
-const own = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
 const isObj = x => x !== null && typeof x === "object" && !Array.isArray(x);
 const assertSet = set => { if (set !== "main" && set !== "switch") throw new RangeError("Weapon set must be 'main' or 'switch'"); };
 
