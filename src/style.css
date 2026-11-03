@@ -326,3 +326,14 @@ footer {
   .extended-stat>summary { grid-template-columns:minmax(0,1fr) auto; }
   .extended-stat>summary small { grid-column:1/-1; text-align:left; }
 }
+
+/* M8: compact, horizontally scrollable observed-versus-modeled parity matrix. */
+.parity-report { margin-block:1rem; }
+.parity-report>summary { cursor:pointer; padding:.55rem 0; }
+.parity-report>details { margin:.65rem 0; }
+.parity-report>details>summary { cursor:pointer; font-weight:600; margin-bottom:.45rem; }
+.parity-scroll { width:100%; max-width:100%; overflow-x:auto; }
+.parity-table { width:100%; min-width:680px; border-collapse:collapse; font-size:.78rem; }
+.parity-table th,.parity-table td { border-bottom:1px solid #524759; padding:.45rem .5rem; text-align:left; vertical-align:top; }
+.parity-table td:nth-child(n+3),.parity-table th:nth-child(n+3) { white-space:nowrap; text-align:right; font-variant-numeric:tabular-nums; }
+.parity-table th { font-weight:700; color:#dcc99a; }
