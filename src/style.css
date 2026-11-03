@@ -300,3 +300,9 @@ footer {
 .marginal-row > span { color: #e6dace; }
 .marginal-row:first-child { font-weight: 700; font-size: .73rem; color: #d0c8bc; }
 .marginal-row > small { color: #aea7ab; }
+
+/* M5: source-derived character-sheet preview, not verified final PD2 stats. */
+.character-stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr)); gap:.8rem; margin:1rem 0; font-family:system-ui,sans-serif; }
+.character-stat-grid>div { min-width:0; padding:1rem; border:1px solid #51483b; background:#201c21; }
+.character-stat-grid p { margin:.65rem 0; color:#d7d0d6; line-height:1.35; }
+.character-stat-grid small { display:block; margin-top:.2rem; color:#a49da8; font-size:.73rem; line-height:1.45; overflow-wrap:anywhere; }

@@ -7,6 +7,7 @@ import { multipleShotBasicAttack } from "./multishot-basic-attack.js";
 import { amazonCriticalStrikeChance } from "./amazon-critical-strike.js";
 import { armoryCharacterUrl, importArmoryAmazon, loadPublishedArmoryCharacter } from "./pd2-armory.js";
 import { defaultEquipmentSettings, resolveEquipmentBuild } from "./amazon-equipment-controls.js";
+import { projectArmoryCharacterSheet } from "./armory-character-sheet.js";
 import { compareMarginalEffects } from "./multishot-marginal.js";
 import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison, amazonAllocationIssues, amazonBuildIssues } from "./amazon-comparison.js";
 
@@ -46,6 +47,7 @@ const recomputeGear = index => {
   record.skillSources = resolved.sources;
   record.unresolved = resolved.unresolved;
   record.equipmentBonus = resolved.equipmentBonus;
+  record.sheet = projectArmoryCharacterSheet(record.source,equipmentSettings[index]);
 };
 const effectiveBonus = skill => bonusForSkill(skill, activeBonus());
 const detachImportedGear = () => {
@@ -177,6 +179,41 @@ export function renderAmazonSandbox() {
           <p class="annotation">Manual blue-arrow bonuses are a separate scratch layer and persist when equipment is switched or excluded. Source snapshots are not modified. ${record.selection.unresolvedItems.length} non-equipped or scope-unverified records are excluded from player skill calculations.</p>
         </fieldset>`;
       })() : ""}
+      ${armoryImports[state.active]?.sheet ? (() => {
+        const sheet=armoryImports[state.active].sheet;
+        const attrs=[["Strength","strength"],["Dexterity","dexterity"],["Vitality","vitality"],["Energy","energy"]];
+        const resists=[["Fire","fire"],["Cold","cold"],["Lightning","lightning"],["Poison","poison"]];
+        const provenance=(sources)=>sources.map(entry=>`${escape(entry.item||entry.path)}: ${entry.amount>=0?"+":""}${entry.amount}`).join(" · ") || "No supported active equipment contribution";
+        return `<section class="sandbox-inspector" aria-label="Imported character sheet primitives">
+          <h2>Character sheet · Build ${state.active?"B":"A"}</h2>
+          <p class="annotation"><strong>Source-aware M5 preview:</strong> raw character fields, additive equipped attributes and resistance contributions, item defense, flat AR, and raw weapon damage. These are <strong>not</strong> final in-game character sheet calculations. Equipment toggles recompute supported contributions, but unavailable formulas remain explicitly unknown.</p>
+          <div class="character-stat-grid">
+            <div><strong>Raw character</strong>
+              <p>Level ${escape(sheet.character.level.value??"unknown")} · XP ${escape(sheet.character.experience.value??"unknown")}</p>
+              <p>Unspent stat points ${escape(sheet.character.unspentStatPoints.value??"unknown")} · skill points ${escape(sheet.character.unspentSkillPoints.value??"unknown")}</p>
+              <p>Life ${escape(sheet.resources.life.value??"unknown")} · Mana ${escape(sheet.resources.mana.value??"unknown")} · Stamina ${escape(sheet.resources.stamina.value??"unknown")}</p>
+              <small>Life, mana and stamina are raw API readings, not rederived from the selected gear.</small>
+            </div>
+            <div><strong>Attributes · base + supported equipment</strong>
+              ${attrs.map(([label,key])=>`<p>${label}: ${escape(sheet.attributes[key].base??"?")} + ${sheet.attributes[key].equipment} = <strong>${escape(sheet.attributes[key].value??"unknown")}</strong><small>${provenance(sheet.attributes[key].sources)}</small></p>`).join("")}
+            </div>
+            <div><strong>Resistance contributions · not final resistance</strong>
+              ${resists.map(([label,key])=>`<p>${label}: <strong>+${sheet.resistances[key].equipment}% from selected gear</strong><small>${provenance(sheet.resistances[key].sources)}</small></p>`).join("")}
+              <small>Difficulty, charms, caps, buffs and other modifiers not yet resolved.</small>
+            </div>
+            <div><strong>Defense / attack rating / weapon</strong>
+              <p>Equipped item defense: <strong>${sheet.defense.equippedItems.value}</strong><small>${provenance(sheet.defense.equippedItems.sources)}</small></p>
+              <p>Flat defense on non-armor items: <strong>+${sheet.defense.flatNonArmor.value}</strong><small>${provenance(sheet.defense.flatNonArmor.sources)}</small></p>
+              <p>Known equipment defense contribution: <strong>${sheet.defense.knownEquipmentContribution.value}</strong> (not final defense)</p>
+              <p>Flat equipment attack rating: <strong>+${sheet.attackRating.flatEquipment.value}</strong><small>${provenance(sheet.attackRating.flatEquipment.sources)}</small></p>
+              <p>Equipment AR bonus: <strong>+${sheet.attackRating.percentEquipment.value}%</strong></p>
+              <p>${escape(sheet.weapon.name||"No weapon")} · raw physical damage: <strong>${sheet.weapon.physical.min??"?"}–${sheet.weapon.physical.max??"?"}</strong></p>
+              <small>Final defense, hit chance, AR and selected-skill damage: not calculated in M5.</small>
+            </div>
+          </div>
+          <p class="annotation">${sheet.unmodeledItemCount} source items in unverified/stored/mercenary scopes; inventory charms are deliberately not applied. Recheck against in-game screenshots before claiming parity.</p>
+        </section>`;
+      })() : ""}
       ${armoryImports[state.active] ? `<p class="annotation">Armory: <strong>${escape(armoryImports[state.active].name)}</strong> · ${armoryImports[state.active].equippedCount} active equipped items · ${armoryImports[state.active].warnings.length} caveats. Raw item data is kept only for this page session; the existing exported build JSON remains skill-only. ${armoryImports[state.active].warnings.map(x=>escape(x)).join("; ")}</p>` : ""}
       <div class="sandbox-actions"><button data-page="1" aria-pressed="${state.page === 1}">Bow & Crossbow</button><button data-page="2" aria-pressed="${state.page === 2}">Passive & Magic</button><button data-page="3" aria-pressed="${state.page === 3}">Javelin & Spear</button></div>
       <div class="skill-tree" aria-label="Amazon skill tree">
@@ -187,18 +224,18 @@ export function renderAmazonSandbox() {
           const locked = reasons.length > 0;
           return `<div class="tree-node ${state.selected === id ? "chosen" : ""}" style="grid-row:${resolveAmazonLayout(skill).row};grid-column:${resolveAmazonLayout(skill).column}">
             <button class="tree-skill" data-select="${id}" aria-pressed="${state.selected === id}"><span class="tree-glyph">✦</span><span>${escape(skill.identity.internalName)}</span></button>
-            <div class="tree-points">${skillLevelBreakdown(skill, points)}<div class="tree-point-steppers"><span class="hard-point-controls"><button data-adjust="${id}" data-delta="1" aria-label="Add ${escape(skill.identity.internalName)} hard point" ${points >= skill.selected.maxLevel || pointsLeft() <= 0 || locked ? "disabled" : ""}>▲</button><button data-adjust="${id}" data-delta="-1" aria-label="Remove ${escape(skill.identity.internalName)} hard point" ${points === 0 ? "disabled" : ""}>▼</button></span><span class="skill-bonus-controls" title="Individual skill bonus levels (blue arrows)"><button class="skill-bonus-button" data-bonus-adjust="${id}" data-delta="-1" aria-label="Remove bonus level from ${escape(skill.identity.internalName)}" ${(activeBonus().skills[id] || 0) <= 0 ? "disabled" : ""}>▼</button><button class="skill-bonus-button" data-bonus-adjust="${id}" data-delta="1" aria-label="Add bonus level to ${escape(skill.identity.internalName)}" ${(activeBonus().skills[id] || 0) >= 100 ? "disabled" : ""}>▲</button></span></div></div>
+            <div class="tree-points">${skillLevelBreakdown(skill, points)}<div class="tree-point-steppers"><span class="hard-point-controls"><button data-adjust="${id}" data-delta="1" aria-label="Add ${escape(skill.identity.internalName)} hard point" ${[18,365].includes(id) || points >= skill.selected.maxLevel || pointsLeft() <= 0 || locked ? "disabled" : ""}>▲</button><button data-adjust="${id}" data-delta="-1" aria-label="Remove ${escape(skill.identity.internalName)} hard point" ${points === 0 ? "disabled" : ""}>▼</button></span><span class="skill-bonus-controls" title="Individual skill bonus levels (blue arrows)"><button class="skill-bonus-button" data-bonus-adjust="${id}" data-delta="-1" aria-label="Remove bonus level from ${escape(skill.identity.internalName)}" ${(activeBonus().skills[id] || 0) <= 0 ? "disabled" : ""}>▼</button><button class="skill-bonus-button" data-bonus-adjust="${id}" data-delta="1" aria-label="Add bonus level to ${escape(skill.identity.internalName)}" ${[18,365].includes(id) || (activeBonus().skills[id] || 0) >= 100 ? "disabled" : ""}>▲</button></span></div></div>
             ${locked ? `<small class="tree-warning">${escape(reasons.join("; "))}</small>` : ""}${resolveAmazonLayout(skill).status === "provisional" ? '<small class="tree-warning">Provisional position</small>' : ""}
           </div>`;
         }).join("")}
       </div>
-      ${unplaced.length ? `<p class="annotation">Unverified tree position (select to allocate in inspector): ${unplaced.map((s) => escape(s.identity.internalName)).join(", ")}. These records remain explorable here, but may not be player-selectable in-game.</p><div class="sandbox-actions">${unplaced.map((s) => `<button data-select="${s.identity.internalId}">${escape(s.identity.internalName)}</button>`).join("")}</div>` : ""}
+      ${unplaced.length ? `<p class="annotation">Historical / removed source skills (inspect only; not part of the playable tree): ${unplaced.map((s) => escape(s.identity.internalName)).join(", ")}. These source records remain inspectable; they are not player-selectable in the current PD2 tree.</p><div class="sandbox-actions">${unplaced.map((s) => `<button data-select="${s.identity.internalId}">${escape(s.identity.internalName)}</button>`).join("")}</div>` : ""}
       <section class="sandbox-inspector">
         <h2>${escape(selected.identity.internalName)}</h2>
-        ${state.selected === 365 ? `<p class="annotation"><strong>Vestigial / removed skill:</strong> Shattering Arrow was developed before PD2 Season 1 and removed before release, according to a July 28, 2023 developer Discord response shared by a player. Its definitions remain in the Season 14 data; it is retained here for historical experimentation, not as a normally selectable skill.</p>` : ""}
+        ${[18,365].includes(state.selected) ? `<p class="annotation"><strong>Historical / removed skill:</strong> ${state.selected===18?"Avoid is not in the current Passive & Magic skill tree; the archived SkillDesc row is 0.":"Shattering Arrow was removed before release but remains in the source table."} This is retained for inspection only; it is not a playable skill.</p>` : ""}
         <p class="annotation">Required level ${selected.selected.requiredLevel} · hard points ${current[state.selected]} · effective skill level ${current[state.selected] || (activeBonus().skills[state.selected] || 0) ? current[state.selected] + effectiveBonus(selected) : 0} (+all, +tree and +skill bonuses; hard points remain capped at 20)</p>
         <p class="annotation">Individual bonus levels for this skill: +${activeBonus().skills[state.selected] || 0}. Use the blue + / − controls beside its tree node to adjust.</p>
-        <div class="tree-points"><button data-adjust="${state.selected}" data-delta="-1" ${current[state.selected] === 0 ? "disabled" : ""}>−</button><strong>${current[state.selected]} / ${selected.selected.maxLevel}</strong><button data-adjust="${state.selected}" data-delta="1" ${current[state.selected] >= selected.selected.maxLevel || pointsLeft() <= 0 || amazonAllocationIssues(selected,current,state.level,skills).length ? "disabled" : ""}>+</button></div>
+        <div class="tree-points"><button data-adjust="${state.selected}" data-delta="-1" ${current[state.selected] === 0 ? "disabled" : ""}>−</button><strong>${current[state.selected]} / ${selected.selected.maxLevel}</strong><button data-adjust="${state.selected}" data-delta="1" ${[18,365].includes(state.selected) || current[state.selected] >= selected.selected.maxLevel || pointsLeft() <= 0 || amazonAllocationIssues(selected,current,state.level,skills).length ? "disabled" : ""}>+</button></div>
         <p class="annotation">Formula references to other skills: ${dependencies.length ? dependencies.map(escape).join(", ") : "none detected"}. Only explicitly supported, source-guarded references are evaluated as synergies.</p>
         <p class="annotation">Native S14 fields. The limited numeric previews below use explicit linear-parameter assumptions, not verified engine output or DPS. Other expressions remain uninterpreted.</p>
         ${preview.length ? `<div class="sandbox-preview">${preview.map((item) => `<div><strong>${escape(item.label)}: ${escape(item.value === null ? "Not calculated" : item.value)}</strong><small>${escape(item.expression)} · ${escape(item.assumption)}</small></div>`).join("")}</div>` : `<p class="annotation">No supported numeric preview for this skill yet.</p>`}
@@ -373,7 +410,7 @@ export function mountAmazonSandbox(container) {
     if (button.dataset.bonusAdjust !== undefined) {
       const id = Number(button.dataset.bonusAdjust);
       const delta = Number(button.dataset.delta);
-      if (byId.has(id) && (delta === 1 || delta === -1)) {
+      if (byId.has(id) && ![18,365].includes(id) && (delta === 1 || delta === -1)) {
         const bonus = editBonus(state.active);
         bonus.skills[id] = Math.max(0, Math.min(100, (bonus.skills[id] || 0) + delta));
         recomputeGear(state.active);
@@ -384,7 +421,7 @@ export function mountAmazonSandbox(container) {
       const delta = Number(button.dataset.delta);
       const skill = byId.get(id);
       const current = activeBuild()[id];
-      if (skill && ((delta === 1 && current < skill.selected.maxLevel && pointsLeft() > 0 && amazonAllocationIssues(skill,activeBuild(),state.level,skills).length === 0) || (delta === -1 && current > 0))) activeBuild()[id] += delta;
+      if (skill && ![18,365].includes(id) && ((delta === 1 && current < skill.selected.maxLevel && pointsLeft() > 0 && amazonAllocationIssues(skill,activeBuild(),state.level,skills).length === 0) || (delta === -1 && current > 0))) activeBuild()[id] += delta;
     }
     persist();
     redraw();

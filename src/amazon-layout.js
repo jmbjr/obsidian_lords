@@ -1,11 +1,11 @@
 // Presentation coordinates are intentionally separate from Skills.txt mechanics.
 // Source SkillDesc rows use 1-based grid positions except known invalid records.
-// Avoid has row 0; row 1/column 2 is a provisional visual placement.
-// Shattering Arrow has (0,0,0); keep it in a visible, allocatable unplaced tray
-// until a Season 14 in-game screenshot confirms its position.
+// Avoid and Shattering Arrow remain in the imported historical S14 table,
+// but neither belongs in the current playable tree. Keep both inspectable
+// outside the main skill-tree grid (do not fabricate coordinates).
 export const layoutOverrides = {
-  18: { page: 2, row: 1, column: 2, status: "provisional", reason: "SkillDesc row 0 is not renderable; placement requires in-game verification" },
-  365: { page: null, row: null, column: null, status: "unverified", reason: "SkillDesc has no usable tree coordinates; in-game verification required" },
+  18: { page: null, row: null, column: null, status: "historical", reason: "Avoid is not a current playable PD2 skill; native SkillDesc row 0 is not a playable tree coordinate" },
+  365: { page: null, row: null, column: null, status: "historical", reason: "Shattering Arrow is not a current playable PD2 skill" },
 };
 
 export function resolveAmazonLayout(skill) {
