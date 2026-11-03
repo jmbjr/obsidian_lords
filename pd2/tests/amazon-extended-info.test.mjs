@@ -7,8 +7,10 @@ import { importArmoryAmazon } from "../../src/pd2-armory.js";
 const skills=JSON.parse(readFileSync("pd2/generated/amazon-skills.json","utf8")).skills;
 const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
 const project=(payload,options={})=>{
-  const imported=importArmoryAmazon(payload,skills,options);
-  return projectAmazonExtendedInfo(payload,skills,imported.build,imported.bonus,options);
+  // M7 equipped-only baseline is retained for comparison to M9 charm-inclusive inputs.
+  const gear={includeCharms:false,...options};
+  const imported=importArmoryAmazon(payload,skills,gear);
+  return projectAmazonExtendedInfo(payload,skills,imported.build,imported.bonus,gear);
 };
 const slot=(payload,id)=>payload.items.find(x=>x.location?.zone==="Equipped"&&x.location?.equipment_id===id);
 
