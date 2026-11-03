@@ -266,6 +266,45 @@ export function renderAmazonSandbox() {
             <p>Equipment AR %: +${attackProjection.contributions.percentAttackRating.value}% · Multiple Shot AR %: ${attackProjection.skillAR===null?"—":"+"+attackProjection.skillAR+"%"}</p>
             <p>Estimated selected-skill AR: <strong>${attackProjection.attackRating.value??"Not calculated"}</strong></p>
             <small>Base AR source: ${escape(attackProjection.attackRating.baseSource)} (${attackProjection.attackRating.baseWithoutEquipment??"unknown"}). The selected-skill AR calculation remains a partial estimate.</small>
+            <details class="ar-calculation-breakdown" data-ar-breakdown>
+              <summary>Show full AR calculation · intermediate values and sources</summary>
+              ${(() => {
+                const ar=attackProjection.attackRating.breakdown;
+                const value=n=>n===null||n===undefined?"Unavailable":escape(n);
+                const trace=(list)=>list?.length?`<ul>${list.map(src=>`<li><strong>${escape(src.item||src.path||src.sourcePath||"Attribute source")}</strong>: ${src.amount>=0?"+":""}${escape(src.amount)} <small>(${escape(src.sourcePath||src.path||"source unavailable")})</small></li>`).join("")}</ul>`:"<p>No item modifiers currently contribute to this term.</p>";
+                return `<div class="ar-calculation-steps">
+                  <p class="annotation"><strong>Current model, not a verified final PD2 formula.</strong> All steps below are calculated from Build ${state.active?"B":"A"}'s active weapon set, equipment, charms, skill levels and any measured override.</p>
+                  <ol>
+                    <li><strong>Effective Dexterity:</strong> ${value(ar.dexterity)}
+                      <details><summary>Dexterity sources</summary>${trace(ar.dexSources)}</details>
+                    </li>
+                    <li><strong>Base AR from Dexterity:</strong> ${ar.baseSource==="dexterity-derived"?
+                      `5 × ${value(ar.dexterity)} − 30 = ${value(ar.derivedFormula)}`:
+                      `Measured base AR override = ${value(ar.baseAR)} (Dexterity-derived value replaced)`}
+                    </li>
+                    <li><strong>Flat AR from selected gear and active charms:</strong> ${value(ar.flatAR)}
+                      <details><summary>Flat AR item sources</summary>${trace(ar.flatSources)}</details>
+                    </li>
+                    <li><strong>Base AR before percentage bonuses:</strong> ${value(ar.baseAR)} + ${value(ar.flatAR)} = <strong>${value(ar.additiveBase)}</strong></li>
+                    <li><strong>Multiple Shot effective level:</strong> ${value(ar.hardPoints)} hard + ${value(ar.skillLevelBonus)} supported +skills = <strong>${value(ar.skillLevel)}</strong>.
+                      <small>Manual/equipment bonuses use the existing skill resolver; this does not convert equipment +skills to hard points.</small>
+                    </li>
+                    <li><strong>Multiple Shot AR bonus:</strong> ${ar.skillFormula===null?"Unavailable":
+                      `8 + 6 × (${value(ar.skillLevel)} − 1) = ${value(ar.skillARPercent)}%`}
+                    </li>
+                    <li><strong>Additional equipment AR percentage:</strong> ${value(ar.gearARPercent)}%
+                      <details><summary>Percentage AR item sources</summary>${trace(ar.percentSources)}</details>
+                    </li>
+                    <li><strong>Total modeled AR percentage:</strong> ${value(ar.skillARPercent)}% + ${value(ar.gearARPercent)}% = <strong>${value(ar.totalPercent)}%</strong> (multiplier ${value(ar.multiplier)})</li>
+                    <li><strong>Multiply and truncate:</strong> ${value(ar.additiveBase)} × ${value(ar.multiplier)} = ${value(ar.unrounded)} → trunc, minimum zero = <strong>${value(ar.value)}</strong></li>
+                  </ol>
+                  <p class="annotation"><strong>Exact implemented expression:</strong> <code>${escape(ar.equation)}</code></p>
+                  ${ar.internalCheck?`<p class="annotation">${escape(ar.internalCheck)}</p>`:""}
+                  <p class="annotation"><strong>Unverified:</strong> passive, aura, buff and conditional AR effects; whether PD2 combines AR percentages in this exact order; possible screenshot state differences. The in-game observed 881 is not being forced into this calculation.</p>
+                </div>`;
+              })()}
+            </details>
+
           </div>
           <div><strong>Amazon attack frames · sourced A1 model</strong>
             <p>Selected weapon: ${escape(attackProjection.weapon.name||"none")} · base code ${escape(attackProjection.weapon.baseCode||"unknown")}</p>
