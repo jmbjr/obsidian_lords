@@ -7,7 +7,8 @@ import { buildAmazonDebugComparison } from "../../src/amazon-debug-parity.js";
 
 const skills=JSON.parse(readFileSync("pd2/generated/amazon-skills.json","utf8")).skills;
 const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
-const magizon=load("magizon");
+const frozenMagizon=JSON.parse(readFileSync("pd2/fixtures/character-parity/magizon-2026-11-03-pinned.json","utf8"));
+const magizon=frozenMagizon;
 const review=(payload=magizon,settings={},edits={})=>{
   const imported=importArmoryAmazon(payload,skills,settings);
   const build=edits.build??imported.build, bonus=edits.bonus??imported.bonus;
@@ -90,13 +91,10 @@ test("different character and source timestamp never claim an official screensho
   assert.equal(drift.primary.observed,null);
 });
 
-test("Debug view exposes live per-build comparisons and per-field source drill-down",()=>{
+test("Legacy screenshot evidence remains available only as a reproducible historical fixture",()=>{
+  assert.equal(magizon.character.level,67);
+  assert.equal(magizon._obsidianLordsSync.syncedAt,"2026-11-03T02:39:05.138Z");
   const ui=readFileSync("src/amazon-sandbox.js","utf8");
-  assert.match(ui,/data-debug-parity/);
-  assert.match(ui,/data-ar-reference-summary/);
-  assert.match(ui,/Debug · compare screenshot vs calculated values/);
-  assert.match(ui,/buildAmazonDebugComparison\(/);
-  assert.match(ui,/measuredBaseAttackRating\[state\.active\]/);
-  assert.match(ui,/Show evidence:/);
-  assert.match(ui,/historical reference, not a valid parity test/);
+  assert.match(ui,/buildArmoryDebugAudit\\(/);
+  assert.doesNotMatch(ui,/buildAmazonDebugComparison\\(/);
 });
