@@ -70,7 +70,8 @@ export function projectAmazonRangedAttack(payload,skills,build,bonus,options={})
   }:{min:null,max:null,status:"unavailable",reason:"Requires available Multiple Shot and a supported equipped ranged weapon"};
   const validBase=baseAttackRatingOverride===null || (Number.isInteger(baseAttackRatingOverride)&&baseAttackRatingOverride>=0&&baseAttackRatingOverride<=100000000);
   if(!validBase)throw new RangeError("Base AR override must be a nonnegative integer or null");
-  const baseAR=baseAttackRatingOverride;
+  const baseAR=baseAttackRatingOverride??sheet.attackRating.fromDexterity.value;
+  const baseSource=baseAttackRatingOverride===null?"dexterity-derived":"measured override";
   const totalAR=baseAR!==null&&supported?
     Math.max(0,Math.trunc((baseAR+flatAR.value)*(100+skillAR+arPct.value)/100)):null;
   const frames=weapon?pd2AmazonRangedFrames({ias:ias.value,weaponCode,skillSpeed}):
@@ -84,14 +85,14 @@ export function projectAmazonRangedAttack(payload,skills,build,bonus,options={})
       percentAttackRating:arPct,ias},
     physical,
     attackRating:{value:totalAR,status:totalAR===null?"unavailable":"partial",
-      baseWithoutEquipment:baseAR,flatEquipment:flatAR.value,
+      baseWithoutEquipment:baseAR,baseSource,flatEquipment:flatAR.value,
       skillPercent:skillAR,equipmentPercent:arPct.value,
-      reason:totalAR===null?"Base AR before equipment is not source-verified. Enter a measured override to estimate selected-skill AR.":"Estimate only: missing passive AR, charm sources and PD2 engine ordering"},
+      reason:totalAR===null?"No valid Dexterity-derived base AR is available; a measured override can provide it.":"Conditional selected-skill estimate: game AR percent stacking, passive skills and runtime effects remain unverified"},
     speed:{...frames,observedIAS:ias.value,
       note:"Normal Amazon ranged A1 frames computed from pinned PD2 animation and weapon speed tables; assumes no skill-speed buffs/debuffs. Not yet verified as the in-game selected-skill breakpoint display."},
     assumptions:["Weapon damage from Armory is already resolved; weapon-local ED/min/max is not re-added",
       "Only position-verified active inventory charms are included; mercenary auras and unverified buffs excluded",
       "Only Multiple Shot physical and AR percentages are formula-supported in this M6 model",
-      "Base attack rating is not inferred from Dexterity until the PD2 rule is verified"],
+      "Amazon Dexterity-derived base AR uses sourced D2 formula, matched to the pinned PD2 screen; final skill AR stacking is still unverified"],
   };
 }

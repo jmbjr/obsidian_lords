@@ -2,6 +2,7 @@
 // Distinguishes raw snapshot readings from equipment contributions and final
 // game-display values. No invented D2/PD2 formula, charm activation or caps.
 import { normalizeArmoryEquipment, selectEquipmentSources } from "./armory-equipment.js";
+import { baseAmazonCombatStats } from "./amazon-base-combat.js";
 
 const ATTRIBUTE_KEYS = ["strength","dexterity","vitality","energy"];
 const RESIST_KEYS = {fireresist:"fire",coldresist:"cold",lightresist:"lightning",poisonresist:"poison"};
@@ -69,6 +70,11 @@ export function projectArmoryCharacterSheet(payload,options={}) {
       note:"Already-resolved weapon damage from Armory; do not reapply the weapon's own enhanced damage"}
     : {min:null,max:null,status:"unavailable",sourcePath:null};
   const flatAttackRating=arSources.reduce((n,x)=>n+x.amount,0);
+  const baseCombat=baseAmazonCombatStats(attributes.dexterity.value,flatAttackRating,equippedDefense+flatNonArmorDefense,{
+    dexteritySources:attributes.dexterity.sources,
+    attackRatingSources:arSources,
+    defenseSources:[...armorPieces,...flatDefenseSources],
+  });
   return {
     schemaVersion:1,
     character:{name:c.name??null,level:dataField("level",c.level,"character.level"),
@@ -86,14 +92,18 @@ export function projectArmoryCharacterSheet(payload,options={}) {
       equippedItems:{value:equippedDefense,status:"equipment-derived",sources:armorPieces},
       flatNonArmor:{value:flatNonArmorDefense,status:"equipment-derived",sources:flatDefenseSources},
       knownEquipmentContribution:{value:equippedDefense+flatNonArmorDefense,status:"partial",sources:[...armorPieces,...flatDefenseSources]},
+      fromDexterity:baseCombat.defenseDex,
+      unmodified:baseCombat.defense,
       final:{value:null,status:"unsupported",
-        reason:"Dexterity contribution, active buffs, and defense formula/rounding are not modeled"}},
+        reason:"Unmodified base defense is calculated, but defense percentage modifiers and runtime buffs are not modeled"}},
     attackRating:{
+      fromDexterity:baseCombat.attackRatingDex,
+      baseTotal:baseCombat.attackRating,
       flatEquipment:{value:flatAttackRating,status:"equipment-derived",sources:arSources},
       percentEquipment:{value:percentARSources.reduce((n,x)=>n+x.amount,0),
         status:"equipment-derived",sources:percentARSources},
       final:{value:null,status:"unsupported",
-        reason:"Base AR, Dexterity, passive/skill modifiers, and calculation order are not modeled"}},
+        reason:"Base AR is calculated; percentage modifiers, passives, and selected-skill AR remain separate partial formulas"}},
     weapon:{activeSet:selection.weaponSet,slot:weaponSlot,name:weapon?.name||null,
       physical:weaponPhysical},
     limitations:[
