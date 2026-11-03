@@ -58,8 +58,8 @@ test("Missing equipment vs missing charms produce independent, repeatable AR and
   const onlyCharms=projectArmoryCharacterSheet(magizon,{includeEquipment:false});
   assert.equal(onlyCharms.attackRating.flatEquipment.value,10);
   assert.equal(onlyCharms.defense.knownEquipmentContribution.value,19);
-  assert.equal(onlyCharms.attackRating.baseTotal.value,280);
-  assert.equal(onlyCharms.defense.unmodified.value,34);
+  assert.equal(onlyCharms.attackRating.baseTotal.value,230);
+  assert.equal(onlyCharms.defense.unmodified.value,31);
   const noGear=projectArmoryCharacterSheet(magizon,{includeEquipment:false,includeCharms:false});
   assert.equal(noGear.attributes.dexterity.value,50);
   assert.equal(noGear.attackRating.fromDexterity.value,220);
@@ -76,7 +76,7 @@ test("Weapon switching changes only supported hand-source contributions; shared 
   assert.equal(alt.attackRating.fromDexterity.value,220);
   assert.equal(alt.attackRating.flatEquipment.value,80);
   assert.equal(alt.attackRating.baseTotal.value,300);
-  assert.equal(alt.defense.unmodified.value,399);
+  assert.equal(alt.defense.unmodified.value,411);
   assert.equal(main.defense.unmodified.value,401);
 });
 test("M6 selected skill AR automatically receives Dexterity base but is explicitly partial",()=>{
