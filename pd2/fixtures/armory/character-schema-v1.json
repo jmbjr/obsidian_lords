@@ -1,0 +1,241 @@
+{
+  "schemaVersion": 1,
+  "provenance": {
+    "kind": "synthetic-redacted",
+    "sourceSnapshots": [
+      "magizon.json",
+      "magiknaab.json"
+    ],
+    "note": "Synthetic minimal fields preserving real Armory modifier argument shapes; names, item ids and attributes are fabricated. Do not use as measured character stats."
+  },
+  "snapshots": [
+    {
+      "file": {
+        "version": 1,
+        "updated_at": "2026-11-02T00:00:00Z"
+      },
+      "character": {
+        "name": "FixtureAmazonA",
+        "status": {
+          "is_ladder": true
+        },
+        "class": {
+          "id": 0,
+          "name": "Amazon"
+        },
+        "attributes": {
+          "strength": 65,
+          "dexterity": 60,
+          "vitality": 120,
+          "energy": 15
+        },
+        "points": {
+          "stat": 194,
+          "skill": 46
+        },
+        "level": 67,
+        "experience": 238080481,
+        "life": 573,
+        "mana": 181,
+        "stamina": 1312,
+        "skills": [
+          {
+            "id": 9,
+            "name": "Critical Strike",
+            "level": 1
+          },
+          {
+            "id": 12,
+            "name": "Multiple Shot",
+            "level": 20
+          },
+          {
+            "id": 32,
+            "name": "Valkyrie",
+            "level": 0
+          }
+        ]
+      },
+      "items": [
+        {
+          "name": "Synthetic Bow",
+          "category": "weapon",
+          "base_code": "8sb",
+          "location": {
+            "zone": "Equipped",
+            "equipment_id": 4
+          },
+          "damage": {
+            "two_handed": {
+              "minimum": 43,
+              "maximum": 117
+            }
+          },
+          "modifiers": [
+            {
+              "name": "item_singleskill",
+              "values": [
+                32,
+                6
+              ],
+              "label": "+6 to Valkyrie"
+            },
+            {
+              "name": "item_aura",
+              "values": [
+                115,
+                10
+              ]
+            }
+          ],
+          "socketed": []
+        },
+        {
+          "name": "Synthetic Charm",
+          "category": "misc",
+          "location": {
+            "zone": "Stored",
+            "storage": "Inventory",
+            "equipment_id": 0
+          },
+          "modifiers": [
+            {
+              "name": "maxhp",
+              "values": [
+                14
+              ]
+            }
+          ]
+        }
+      ],
+      "mercenary": {
+        "items": [
+          {
+            "name": "Synthetic Merc Item",
+            "location": {
+              "zone": "Equipped",
+              "equipment_id": 1
+            },
+            "modifiers": [
+              {
+                "name": "strength",
+                "values": [
+                  5
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "_obsidianLordsSync": {
+        "character": "FixtureAmazonA",
+        "syncedAt": "2026-11-02T00:00:00.000Z",
+        "source": "https://api.projectdiablo2.com/game/character/FixtureAmazonA"
+      }
+    },
+    {
+      "character": {
+        "name": "FixtureAmazonB",
+        "class": {
+          "id": 0,
+          "name": "Amazon"
+        },
+        "level": 67,
+        "skills": [
+          {
+            "id": 9,
+            "level": 1
+          },
+          {
+            "id": 12,
+            "level": 20
+          },
+          {
+            "id": 32,
+            "level": 0
+          }
+        ]
+      },
+      "items": [
+        {
+          "name": "Synthetic Helm",
+          "category": "armor",
+          "location": {
+            "zone": "Equipped",
+            "equipment_id": 1
+          },
+          "modifiers": [
+            {
+              "name": "item_nonclassskill",
+              "values": [
+                69,
+                6
+              ]
+            },
+            {
+              "name": "item_nonclassskill",
+              "values": [
+                70,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Synthetic Armor",
+          "category": "armor",
+          "location": {
+            "zone": "Equipped",
+            "equipment_id": 3
+          },
+          "modifiers": [
+            {
+              "name": "item_addclassskills",
+              "values": [
+                0,
+                1
+              ]
+            },
+            {
+              "name": "item_singleskill",
+              "values": [
+                9,
+                2
+              ]
+            },
+            {
+              "name": "extra_valk",
+              "values": [
+                1
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Synthetic Bow",
+          "category": "weapon",
+          "location": {
+            "zone": "Equipped",
+            "equipment_id": 11
+          },
+          "modifiers": [
+            {
+              "name": "item_addskill_tab",
+              "values": [
+                0,
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "mercenary": {
+        "items": []
+      },
+      "_obsidianLordsSync": {
+        "character": "FixtureAmazonB",
+        "syncedAt": "2026-11-02T00:00:00.000Z"
+      }
+    }
+  ]
+}
