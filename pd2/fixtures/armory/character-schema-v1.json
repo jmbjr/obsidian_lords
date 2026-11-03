@@ -6,7 +6,7 @@
       "magizon.json",
       "magiknaab.json"
     ],
-    "note": "Synthetic minimal fields preserving real Armory modifier argument shapes; names, item ids and attributes are fabricated. Do not use as measured character stats."
+    "note": "Synthetic minimal fields preserving real Armory modifier argument shapes; character names, most item metadata and all character/stat numbers are fabricated. Numeric tuple IDs for modifiers remain source-derived to exercise parsing shapes; never use this fixture as measured character stats."
   },
   "snapshots": [
     {
@@ -24,20 +24,20 @@
           "name": "Amazon"
         },
         "attributes": {
-          "strength": 65,
-          "dexterity": 60,
-          "vitality": 120,
-          "energy": 15
+          "strength": 44,
+          "dexterity": 58,
+          "vitality": 99,
+          "energy": 21
         },
         "points": {
-          "stat": 194,
-          "skill": 46
+          "stat": 13,
+          "skill": 7
         },
-        "level": 67,
-        "experience": 238080481,
-        "life": 573,
-        "mana": 181,
-        "stamina": 1312,
+        "level": 39,
+        "experience": 1234567,
+        "life": 222,
+        "mana": 111,
+        "stamina": 333,
         "skills": [
           {
             "id": 9,
@@ -67,8 +67,8 @@
           },
           "damage": {
             "two_handed": {
-              "minimum": 43,
-              "maximum": 117
+              "minimum": 12,
+              "maximum": 34
             }
           },
           "modifiers": [
@@ -78,7 +78,7 @@
                 32,
                 6
               ],
-              "label": "+6 to Valkyrie"
+              "label": "+6 to synthetic skill"
             },
             {
               "name": "item_aura",
