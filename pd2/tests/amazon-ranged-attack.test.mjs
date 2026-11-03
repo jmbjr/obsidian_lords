@@ -31,8 +31,10 @@ test("Magizon source-traced Multiple Shot damage excludes already-resolved bow l
   assert.equal(p.contributions.dexterity.value,60);
   assert.deepEqual([p.physical.min,p.physical.max],[142,378]);
   assert.ok(p.contributions.offWeaponED.sources.every(x=>x.slot!==4));
-  assert.equal(p.attackRating.status,"unavailable");
-  assert.equal(p.attackRating.value,null);
+  assert.equal(p.attackRating.status,"partial");
+  assert.equal(p.attackRating.baseSource,"dexterity-derived");
+  assert.equal(p.attackRating.baseWithoutEquipment,270);
+  assert.equal(p.attackRating.value,Math.trunc((270+43)*2.28));
   assert.equal(JSON.stringify(payload),baseline);
 });
 
