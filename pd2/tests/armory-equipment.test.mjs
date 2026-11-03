@@ -49,9 +49,9 @@ test("all equipment defaults included; individual exclusions and master toggle d
   assert.throws(()=>selectEquipmentSources(graph,{weaponSet:"both"}),/Weapon set/);
 });
 
-test("inventory charms and mercenary equipment remain separate unresolved scopes",()=>{
+test("inventory charms activate only in their verified scope; mercenary remains isolated",()=>{
   const chosen=selectEquipmentSources(graph);
-  assert.ok(chosen.unresolvedItems.some(x=>x.item.scope==="inventory-charm-candidate"));
+  assert.equal(chosen.activeCharms.length,23);
   assert.ok(chosen.unresolvedItems.some(x=>x.item.owner==="mercenary"));
   assert.ok(!chosen.candidateModifiers.some(x=>x.sourcePath.startsWith("mercenary.")));
   assert.ok(!chosen.candidateModifiers.some(x=>chosen.unresolvedItems.some(y=>y.item.scope==="inventory-charm-candidate" && x.itemId===y.item.id)));
