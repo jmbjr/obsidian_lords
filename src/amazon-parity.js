@@ -137,7 +137,7 @@ export function buildAmazonParityObservations(payload,skills,options={}) {
       verdict,numericGap:gap,evidence:calculated.sources,explanation:calculated.note,
       candidateCharmEvidence:evidence,
       candidateReconciles:eligible&&evidence.length>0&&calculated.value===expected&&
-        evidence.some(c=>calculated.sources.some(source=>source.path===c.sourcePath))};
+        evidence.some(c=>calculated.sources.some(source=>(source.path||source.sourcePath)===c.sourcePath))};
   });
   const counts=Object.fromEntries(["match","mismatch","partial","unavailable","not-observed","snapshot-drift","configuration-drift"]
     .map(v=>[v,rows.filter(row=>row.verdict===v).length]));
