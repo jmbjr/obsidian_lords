@@ -8,7 +8,9 @@ import { resolveEquipmentBuild } from "../../src/amazon-equipment-controls.js";
 const skills=JSON.parse(readFileSync("pd2/generated/amazon-skills.json","utf8")).skills;
 const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
 const projected=(payload,options={})=>{
-  const {baseAttackRatingOverride=null,...gear}=options;
+  const {baseAttackRatingOverride=null,...rest}=options;
+  // M6 historical equipped-only fixtures; M9 tests active charms separately.
+  const gear={includeCharms:false,...rest};
   const imported=importArmoryAmazon(payload,skills,gear);
   const effective=resolveEquipmentBuild(payload,skills,undefined,gear);
   return projectAmazonRangedAttack(payload,skills,imported.build,effective.bonus,{...gear,baseAttackRatingOverride});
