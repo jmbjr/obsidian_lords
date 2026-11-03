@@ -29,7 +29,7 @@ export function projectArmoryCharacterSheet(payload,options={}) {
   const graph=normalizeArmoryEquipment(payload);
   const selection=selectEquipmentSources(graph,options);
   const c=payload.character;
-  const active=selection.activeItems;
+  const active=selection.activeSources;
   const baseAttributes={},attributes={};
   for(const key of ATTRIBUTE_KEYS){
     const raw=numberOrNull(c.attributes?.[key]);
@@ -97,11 +97,11 @@ export function projectArmoryCharacterSheet(payload,options={}) {
     weapon:{activeSet:selection.weaponSet,slot:weaponSlot,name:weapon?.name||null,
       physical:weaponPhysical},
     limitations:[
-      "Inventory charms and mercenary gear are not applied to player stats",
+      "Only fully contained bottom-half inventory charms are active; mercenary gear is not applied to player stats",
       "Item equipment requirements and active buffs have not been verified",
       "Final resistances need difficulty, caps and other effects",
       "Resources are raw Armory snapshot readings; they do not dynamically recompute when equipment changes",
-      "Full damage/AR and attack cadence are deferred to M6",
+      "Selected-skill damage and attack cadence are partial M6 estimates, not final verified game-screen values",
     ],
     selectedItemIds:active.map(x=>x.id),
     unmodeledItemCount:selection.unresolvedItems.length,
