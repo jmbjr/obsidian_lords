@@ -337,3 +337,16 @@ footer {
 .parity-table th,.parity-table td { border-bottom:1px solid #524759; padding:.45rem .5rem; text-align:left; vertical-align:top; }
 .parity-table td:nth-child(n+3),.parity-table th:nth-child(n+3) { white-space:nowrap; text-align:right; font-variant-numeric:tabular-nums; }
 .parity-table th { font-weight:700; color:#dcc99a; }
+
+/* M9c: progressive disclosure for the currently implemented AR formula. */
+.ar-calculation-breakdown { margin:.75rem 0; padding:.65rem .75rem; border:1px solid #60523e; border-radius:.35rem; background:#211e23; font-size:.82rem; }
+.ar-calculation-breakdown>summary { cursor:pointer; color:#e4d7bd; font-weight:650; }
+.ar-calculation-steps { margin-top:.75rem; }
+.ar-calculation-steps ol { padding-left:1.25rem; margin:.5rem 0; }
+.ar-calculation-steps ol>li { padding:.4rem 0; border-bottom:1px solid #403941; overflow-wrap:anywhere; }
+.ar-calculation-steps ol>li:last-child { border-bottom:0; }
+.ar-calculation-steps details { margin:.3rem .2rem; }
+.ar-calculation-steps details>summary { cursor:pointer; color:#c6bcae; font-size:.78rem; }
+.ar-calculation-steps ul { margin:.35rem 0 .5rem; padding-left:1rem; }
+.ar-calculation-steps li small { display:block; color:#a99fab; font-size:.74rem; }
+.ar-calculation-steps code { white-space:normal; overflow-wrap:anywhere; }
