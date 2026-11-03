@@ -1,7 +1,7 @@
 // M8: screenshot-to-source parity evidence, not a substitute for PD2 formulas.
 // The screenshot fixture is observational; numerical differences for partial
 // projections are diagnostic gaps, NOT evidence of proven final formulas.
-import observations from "../pd2/fixtures/character-parity/magizon-screen-observations.json";
+import observations from "../pd2/fixtures/character-parity/magizon-screen-observations.json" with { type: "json" };
 import { importArmoryAmazon } from "./pd2-armory.js";
 import { projectArmoryCharacterSheet } from "./armory-character-sheet.js";
 import { projectAmazonRangedAttack } from "./amazon-ranged-attack.js";
