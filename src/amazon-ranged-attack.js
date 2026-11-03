@@ -30,15 +30,16 @@ export function pd2AmazonRangedFrames({ias,weaponCode,skillSpeed=0}={}) {
 }
 
 export function projectAmazonRangedAttack(payload,skills,build,bonus,options={}) {
-  const {weaponSet="main",includeEquipment=true,excludedItemIds=[],baseAttackRatingOverride=null,skillId=12,skillSpeed=0}=options;
+  const {weaponSet="main",includeEquipment=true,excludedItemIds=[],includeCharms=true,excludedCharmIds=[],baseAttackRatingOverride=null,skillId=12,skillSpeed=0}=options;
   const graph=normalizeArmoryEquipment(payload);
-  const selection=selectEquipmentSources(graph,{weaponSet,includeEquipment,excludedItemIds});
-  const sheet=projectArmoryCharacterSheet(payload,{weaponSet,includeEquipment,excludedItemIds});
+  const selected={weaponSet,includeEquipment,excludedItemIds,includeCharms,excludedCharmIds};
+  const selection=selectEquipmentSources(graph,selected);
+  const sheet=projectArmoryCharacterSheet(payload,selected);
   const skill=skills.find(x=>x.identity.internalId===skillId)||null;
   const hard=Number(build?.[skillId]||0),direct=Number(bonus?.skills?.[skillId]||0);
   const effective=skill && (hard>0||direct>0)?hard+bonusForSkill(skill,bonus):0;
   const supported=skillId===12&&effective>0;
-  const items=selection.activeItems;
+  const items=selection.activeSources;
   const rightHand=selection.weaponSet==="main"?4:11;
   const weapon=items.find(x=>x.slot===rightHand&&x.category==="weapon")||null;
   const weaponCode=weapon?.raw?.base_code||weapon?.raw?.base?.id||null;
@@ -89,7 +90,7 @@ export function projectAmazonRangedAttack(payload,skills,build,bonus,options={})
     speed:{...frames,observedIAS:ias.value,
       note:"Normal Amazon ranged A1 frames computed from pinned PD2 animation and weapon speed tables; assumes no skill-speed buffs/debuffs. Not yet verified as the in-game selected-skill breakpoint display."},
     assumptions:["Weapon damage from Armory is already resolved; weapon-local ED/min/max is not re-added",
-      "Inventory charms, mercenary auras, on-attack effects and unverified buffs are excluded",
+      "Only position-verified active inventory charms are included; mercenary auras and unverified buffs excluded",
       "Only Multiple Shot physical and AR percentages are formula-supported in this M6 model",
       "Base attack rating is not inferred from Dexterity until the PD2 rule is verified"],
   };

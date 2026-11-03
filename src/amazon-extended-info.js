@@ -116,8 +116,8 @@ function unsupported(category,id,label,reason) {
 export function projectAmazonExtendedInfo(payload,skills,build,bonus,options={}) {
   const graph=normalizeArmoryEquipment(payload);
   const selection=selectEquipmentSources(graph,options);
-  const rows=METRICS.map(config=>additiveMetric(selection.activeItems,config));
-  rows.push(...ELEMENTS.map(config=>elementalMetric(selection.activeItems,config)));
+  const rows=METRICS.map(config=>additiveMetric(selection.activeSources,config));
+  rows.push(...ELEMENTS.map(config=>elementalMetric(selection.activeSources,config)));
   const ranged=projectAmazonRangedAttack(payload,skills,build,bonus,options);
   const critical=amazonCriticalStrikeChance(skills.find(s=>s.identity.internalId===9),build,bonus);
   rows.push({
@@ -149,11 +149,11 @@ export function projectAmazonExtendedInfo(payload,skills,build,bonus,options={})
   return {
     schemaVersion:1,
     characterName:payload.character.name,
-    weaponSet:selection.weaponSet,selectedItemIds:selection.activeItems.map(i=>i.id),
+    weaponSet:selection.weaponSet,selectedItemIds:selection.activeSources.map(i=>i.id),
     categories:EXTENDED_INFO_CATEGORIES,
     rows,byId:Object.fromEntries(rows.map(r=>[r.id,r])),
     unmappedScopeCount:selection.unresolvedItems.length,
-    warning:"Equipment contributions, not full in-game Extra Info (8) totals. Final caps, passive skills, charms, difficulty and buffs remain unresolved.",
+    warning:"Equipped gear and position-verified active charms, not full in-game Extra Info (8) totals. Final caps, passives, difficulty and buffs remain unresolved.",
     source:{syncedAt:graph.source.syncedAt,characterName:graph.source.characterName},
   };
 }

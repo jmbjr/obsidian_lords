@@ -19,7 +19,7 @@ export function resolveAmazonEquipmentSkills(payload, skills, options={}) {
   const index = new Map(skills.map(s=>[s.identity.internalId,s]));
   const bonus = emptyBonus(), sources = [], unresolved = [];
   const pushUnresolved=(mod,item,reason)=>unresolved.push({sourcePath:mod.sourcePath,itemId:item.id,modifier:mod.name,values:mod.values,reason});
-  for(const item of selection.activeItems){
+  for(const item of selection.activeSources){
     for(const mod of item.modifiers){
       const values=mod.values;
       if(!["item_addclassskills","item_addskill_tab","item_singleskill","item_nonclassskill"].includes(mod.name))continue;

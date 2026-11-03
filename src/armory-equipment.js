@@ -6,8 +6,23 @@ export const WEAPON_HAND_SETS = Object.freeze({ main: [4, 5], switch: [11, 12] }
 const MAIN = new Set(WEAPON_HAND_SETS.main);
 const SWITCH = new Set(WEAPON_HAND_SETS.switch);
 const EQUIPMENT_SLOTS = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+export const PD2_CHARM_GRID = Object.freeze({columns:10,firstActiveRow:4,rows:8,heights:Object.freeze({scha:1,mcha:2,lcha:3})});
 const isObj = x => x !== null && typeof x === "object" && !Array.isArray(x);
 const assertSet = set => { if (set !== "main" && set !== "switch") throw new RangeError("Weapon set must be 'main' or 'switch'"); };
+
+// PD2's lower four 10-column inventory rows activate fully-contained charms.
+// Position is a top-left zero-based grid coordinate. Overlaps are rejected
+// rather than double-counted if Armory data is malformed or out of sync.
+export function pd2CharmCells(item) {
+  if(item.scope!=="inventory-charm-candidate")return {status:"not-charm",cells:[]};
+  const h=PD2_CHARM_GRID.heights[item.baseType],p=item.position;
+  if(!h||!Number.isInteger(p?.row)||!Number.isInteger(p?.column))
+    return {status:"unverified-position",cells:[]};
+  if(p.row<PD2_CHARM_GRID.firstActiveRow||p.row+h>PD2_CHARM_GRID.rows||
+    p.column<0||p.column>=PD2_CHARM_GRID.columns)
+    return {status:"inactive-position",cells:[]};
+  return {status:"active-position",cells:Array.from({length:h},(_,n)=>`${p.column},${p.row+n}`)};
+}
 
 export function classifyArmoryItem(item, owner) {
   if (owner === "mercenary") return "mercenary";
@@ -84,19 +99,40 @@ export function normalizeArmoryEquipment(payload) {
   return { schemaVersion:1, source, characterItems, mercenaryItems, items: allItems, warnings };
 }
 
-export function selectEquipmentSources(graph,{weaponSet="main",includeEquipment=true,excludedItemIds=[]}={}) {
+export function selectEquipmentSources(graph,{weaponSet="main",includeEquipment=true,excludedItemIds=[],includeCharms=true,excludedCharmIds=[]}={}) {
   assertSet(weaponSet);
   if (typeof includeEquipment !== "boolean") throw new TypeError("includeEquipment must be boolean");
   if (!Array.isArray(excludedItemIds)) throw new TypeError("excludedItemIds must be an array");
+  if (typeof includeCharms!=="boolean"||!Array.isArray(excludedCharmIds)) throw new TypeError("includeCharms must be boolean and excludedCharmIds an array");
   const known = new Set(graph.items.map(x => x.id));
   const excluded = new Set(excludedItemIds);
+  const excludedCharms = new Set(excludedCharmIds);
   for (const id of excluded) if (!known.has(id)) throw new RangeError(`Unknown item ID ${id}`);
+  for(const id of excludedCharms)if(!graph.items.some(x=>x.id===id&&x.scope==="inventory-charm-candidate"))
+    throw new RangeError(`Unknown charm ID ${id}`);
   const active = [], inactive = [], unresolved = [];
+  const activeCharms=[],inactiveCharms=[],occupied=new Map();
   for (const item of graph.items) {
-    // Mercenary and inventory charms are not character equipped sources.
-    // Charm eligibility requires inventory-region validation in a future PR.
-    if (item.owner === "mercenary" || item.scope === "inventory-charm-candidate") {
-      unresolved.push({item,reason:item.owner === "mercenary" ? "independent mercenary actor" : "inventory charm position/eligibility unverified"});
+    if(item.scope==="inventory-charm-candidate"){
+      const result=pd2CharmCells(item);
+      if(result.status!=="active-position"){
+        unresolved.push({item,reason:result.status});
+        inactiveCharms.push({item,reason:result.status});
+        continue;
+      }
+      const collision=result.cells.find(cell=>occupied.has(cell));
+      if(collision){
+        unresolved.push({item,reason:`inventory overlap at ${collision} with ${occupied.get(collision)}`});
+        inactiveCharms.push({item,reason:"overlapping charm location"});
+        continue;
+      }
+      for(const cell of result.cells)occupied.set(cell,item.id);
+      if(includeCharms && !excludedCharms.has(item.id))activeCharms.push(item);
+      else inactiveCharms.push({item,reason:!includeCharms?"charms disabled":"charm excluded"});
+      continue;
+    }
+    if(item.owner==="mercenary"){
+      unresolved.push({item,reason:"independent mercenary actor"});
       continue;
     }
     const eligible = item.scope === "shared-equipped" ||
@@ -107,12 +143,14 @@ export function selectEquipmentSources(graph,{weaponSet="main",includeEquipment=
   }
   return {
     weaponSet, includeEquipment, excludedItemIds:[...excluded],
+    includeCharms,excludedCharmIds:[...excludedCharms],activeCharms,inactiveCharms,
+    activeSources:[...active,...activeCharms],
     activeItems:active,
     inactiveItems:inactive,
     unresolvedItems:unresolved,
     // Only top-level resolved modifiers become candidates; no computed stats
     // or inferred engine behavior are claimed.
-    candidateModifiers:active.flatMap(item=>item.modifiers.map(mod=>({...mod,itemId:item.id,itemScope:item.scope}))),
+    candidateModifiers:[...active,...activeCharms].flatMap(item=>item.modifiers.map(mod=>({...mod,itemId:item.id,itemScope:item.scope}))),
   };
 }
 

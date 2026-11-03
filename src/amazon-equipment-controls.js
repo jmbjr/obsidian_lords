@@ -6,6 +6,7 @@ import { resolveAmazonEquipmentSkills } from "./amazon-equipment-skills.js";
 
 export const defaultEquipmentSettings = () => ({
   weaponSet: "main", includeEquipment: true, excludedItemIds: [],
+  includeCharms: true, excludedCharmIds: [],
 });
 
 export function combineSkillBonuses(manual, equipment, skills) {

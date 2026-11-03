@@ -36,13 +36,13 @@ test("matched sourced measurements do not grant unsupported parity credit",()=>{
   assert.equal(r["character.stamina"].verdict,"mismatch");
 });
 
-test("four inventory charm candidates reconcile known gaps without applying those charms",()=>{
+test("four verified-position charm contributions reconcile four M8 gaps, without upgrading partial status",()=>{
   const r=get(buildAmazonParityObservations(magizon,skills));
   const cases=[
-    ["character.strength",59,65,6],
-    ["extended.ias",40,46,6],
-    ["extended.baseArGear",43,53,10],
-    ["extended.defenseGear",367,386,19],
+    ["character.strength",65,65,6],
+    ["extended.ias",46,46,6],
+    ["extended.baseArGear",53,53,10],
+    ["extended.defenseGear",386,386,19],
   ];
   for(const [key,modeled,observed,charmSum] of cases){
     const row=r[key];
@@ -52,9 +52,9 @@ test("four inventory charm candidates reconcile known gaps without applying thos
     assert.equal(row.numericGap,modeled-observed,key);
     assert.equal(row.candidateCharmEvidence.reduce((s,c)=>s+c.amount,0),charmSum,key);
     assert.equal(row.candidateReconciles,true,key);
-    assert.ok(row.candidateCharmEvidence.every(c=>c.status==="unverified-charm-activation"));
+    assert.ok(row.candidateCharmEvidence.every(c=>c.status==="active-position-charm-source"));
   }
-  assert.equal(r["extended.multipleShotFrames"].modeled,11);
+  assert.equal(r["extended.multipleShotFrames"].modeled,10);
   assert.equal(r["extended.multipleShotFrames"].observed,10);
   assert.equal(r["extended.multipleShotFrames"].verdict,"partial");
   assert.equal(r["extended.projectilePierce"].modeled,26);
@@ -103,8 +103,11 @@ test("snapshot drift fails closed, switches never rewrite screenshot observation
   assert.equal(swapped.pinned,true);
   assert.equal(swapped.baselineConfiguration,false);
   assert.equal(swapped.counts["configuration-drift"],42);
-  assert.equal(get(base)["extended.ias"].modeled,40);
-  assert.equal(get(swapped)["extended.ias"].modeled,100);
+  assert.equal(get(base)["extended.ias"].modeled,46);
+  const noCharms=buildAmazonParityObservations(magizon,skills,{...defaultEquipmentSettings(),includeCharms:false});
+  assert.equal(noCharms.baselineConfiguration,false);
+  assert.equal(noCharms.counts["configuration-drift"],42);
+  assert.equal(get(swapped)["extended.ias"].modeled,106);
   assert.equal(get(base)["extended.ias"].observed,get(swapped)["extended.ias"].observed);
   assert.equal(JSON.stringify(magizon),original);
 });
@@ -113,9 +116,9 @@ test("parity framework does not promote candidates or forecasts into validated g
   const p=buildAmazonParityObservations(magizon,skills);
   const r=get(p);
   assert.equal(r["character.multipleShotDamageMin"].modeled,142);
-  assert.equal(r["character.multipleShotDamageMax"].modeled,378);
+  assert.equal(r["character.multipleShotDamageMax"].modeled,388);
   assert.equal(r["character.multipleShotDamageMin"].verdict,"partial");
   assert.equal(r["character.multipleShotDamageMax"].verdict,"partial");
-  assert.equal(r["character.multipleShotDamageMax"].numericGap,378-890);
+  assert.equal(r["character.multipleShotDamageMax"].numericGap,388-890);
   assert.ok(p.caveats.some(x=>x.includes("not a proven calculation error")));
 });

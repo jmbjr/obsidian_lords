@@ -165,7 +165,7 @@ export function renderAmazonSandbox() {
           .sort((a,b)=>(a.slot??0)-(b.slot??0));
         return `<fieldset class="sandbox-inspector" aria-label="Build ${state.active?"B":"A"} equipment selection">
           <legend>Build ${state.active?"B":"A"} equipment · ${escape(record.name)}</legend>
-          <p class="annotation">Two weapon sets switch <strong>only the hand slots</strong> (4/5 versus 11/12). Armor, jewelry and all other equipment remain shared. Equipment contributes supported +skills; character damage, defenses, and other equipment-derived stats are not yet connected.</p>
+          <p class="annotation">Two weapon sets switch <strong>only the hand slots</strong> (4/5 versus 11/12). Armor, jewelry and all other equipment remain shared. Gear and eligible charms contribute supported skills and stat projections; some final PD2 game-screen formulas remain incomplete.</p>
           <div class="sandbox-actions">
             <label>Weapon set
               <select data-equipment-set>
@@ -187,18 +187,37 @@ export function renderAmazonSandbox() {
               </label>`;
             }).join("")}
           </div>
-          <p class="annotation">Equipment skill bonuses: +${record.equipmentBonus.all} Amazon, Bow +${record.equipmentBonus.trees[1]}, Passive +${record.equipmentBonus.trees[2]}, Javelin +${record.equipmentBonus.trees[3]}; direct: ${Object.entries(record.equipmentBonus.skills).map(([id,n])=>escape(byId.get(Number(id))?.identity.internalName||id)+" +"+n).join(", ")||"none"}. ${record.unresolved.length} unsupported active skill modifier(s) preserved.</p>
-          <p class="annotation">Manual blue-arrow bonuses are a separate scratch layer and persist when equipment is switched or excluded. Source snapshots are not modified. ${record.selection.unresolvedItems.length} non-equipped or scope-unverified records are excluded from player skill calculations.</p>
+          <fieldset aria-label="Active PD2 inventory charms">
+            <legend>Active charms · bottom four inventory rows</legend>
+            <p class="annotation">Only charms fully within rows 4–7 (zero-based) are active. Main and alternate weapon sets share the same charms. Charm effects are separate from the master equipped-gear toggle.</p>
+            <label><input type="checkbox" data-charms-all ${settings.includeCharms?"checked":""}> Include eligible inventory charms (default on)</label>
+            <p class="annotation">${selected.activeCharms.length} active · ${selected.inactiveCharms.length} inactive/excluded. Charms are retained by source position; malformed, overlapping or upper-half charms never activate.</p>
+            <div class="comparison-skill-picker">
+              ${[...selected.activeCharms,...selected.inactiveCharms.map(x=>x.item)]
+                .filter(x=>x.scope==="inventory-charm-candidate")
+                .sort((a,b)=>(a.position?.row??99)-(b.position?.row??99) || (a.position?.column??99)-(b.position?.column??99))
+                .map(item=>{
+                  const excluded=settings.excludedCharmIds.includes(item.id);
+                  const invalid=selected.unresolvedItems.some(x=>x.item.id===item.id);
+                  return `<label title="${escape(item.sourcePath)}">
+                    <input type="checkbox" data-charm-item="${escape(item.id)}" ${excluded?"":"checked"} ${invalid?"disabled":""}>
+                    ${escape(item.name||"Unnamed charm")} <small>(column ${item.position?.column??"?"}, row ${item.position?.row??"?"})${invalid?" inactive position":excluded?" excluded":!settings.includeCharms?" charm master off":""}</small>
+                  </label>`;
+                }).join("")}
+            </div>
+          </fieldset>
+          <p class="annotation">Selected gear/charm skill bonuses: +${record.equipmentBonus.all} Amazon, Bow +${record.equipmentBonus.trees[1]}, Passive +${record.equipmentBonus.trees[2]}, Javelin +${record.equipmentBonus.trees[3]}; direct: ${Object.entries(record.equipmentBonus.skills).map(([id,n])=>escape(byId.get(Number(id))?.identity.internalName||id)+" +"+n).join(", ")||"none"}. ${record.unresolved.length} unsupported active skill modifier(s) preserved.</p>
+          <p class="annotation">Manual blue-arrow bonuses are a separate scratch layer and persist when equipment is switched or excluded. Source snapshots are not modified. ${record.selection.unresolvedItems.length} unresolved, stashed, or mercenary records remain excluded from player skill calculations.</p>
         </fieldset>`;
       })() : ""}
       ${armoryImports[state.active]?.sheet ? (() => {
         const sheet=armoryImports[state.active].sheet;
         const attrs=[["Strength","strength"],["Dexterity","dexterity"],["Vitality","vitality"],["Energy","energy"]];
         const resists=[["Fire","fire"],["Cold","cold"],["Lightning","lightning"],["Poison","poison"]];
-        const provenance=(sources)=>sources.map(entry=>`${escape(entry.item||entry.path)}: ${entry.amount>=0?"+":""}${entry.amount}`).join(" · ") || "No supported active equipment contribution";
+        const provenance=(sources)=>sources.map(entry=>`${escape(entry.item||entry.path)}: ${entry.amount>=0?"+":""}${entry.amount}`).join(" · ") || "No supported active item or charm contribution";
         return `<section class="sandbox-inspector" aria-label="Imported character sheet primitives">
           <h2>Character sheet · Build ${state.active?"B":"A"}</h2>
-          <p class="annotation"><strong>Source-aware M5 preview:</strong> raw character fields, additive equipped attributes and resistance contributions, item defense, flat AR, and raw weapon damage. These are <strong>not</strong> final in-game character sheet calculations. Equipment toggles recompute supported contributions, but unavailable formulas remain explicitly unknown.</p>
+          <p class="annotation"><strong>Source-aware M5 preview:</strong> raw character fields, additive equipped and active-charm attributes and resistance contributions, item defense, flat AR, and raw weapon damage. These are <strong>not</strong> final in-game character sheet calculations. Equipment toggles recompute supported contributions, but unavailable formulas remain explicitly unknown.</p>
           <div class="character-stat-grid">
             <div><strong>Raw character</strong>
               <p>Level ${escape(sheet.character.level.value??"unknown")} · XP ${escape(sheet.character.experience.value??"unknown")}</p>
@@ -248,7 +267,7 @@ export function renderAmazonSandbox() {
           </div>
           <div><strong>Amazon attack frames · sourced A1 model</strong>
             <p>Selected weapon: ${escape(attackProjection.weapon.name||"none")} · base code ${escape(attackProjection.weapon.baseCode||"unknown")}</p>
-            <p>Equipped IAS: <strong>${attackProjection.contributions.ias.value}%</strong></p>
+            <p>Selected gear + charm IAS: <strong>${attackProjection.contributions.ias.value}%</strong></p>
             <p>WSM ${attackProjection.speed.wsm??"?"} · EIAS ${attackProjection.speed.eias??"?"}</p>
             <p>Frames per attack: <strong>${attackProjection.speed.frames??"Unknown"}</strong>${attackProjection.speed.frames!==null?" (25 FPS / "+(25/attackProjection.speed.frames).toFixed(2)+" attacks/s)":""}</p>
             <small>PD2 A1 animation; assumes zero aura/skill speed and no slows. Compare against in-game breakpoint display; may differ in runtime.</small>
@@ -292,8 +311,8 @@ export function renderAmazonSandbox() {
         ${parityReport.pinned?`
           <p class="annotation">Direct/source-preview matches: <strong>${parityReport.counts.match}</strong> · Partially modeled: <strong>${parityReport.counts.partial}</strong> · Unsupported: <strong>${parityReport.counts.unavailable}</strong> · Direct mismatches: <strong>${parityReport.counts.mismatch}</strong> · Not observed: <strong>${parityReport.counts["not-observed"]}</strong>.</p>
           <details><summary>Evidence-backed inventory charm candidates</summary>
-            <p class="annotation">The source items below are stored in Inventory, but their activation has not been independently verified; they are not silently added to game stats.</p>
-            ${parityReport.rows.filter(r=>r.candidateCharmEvidence.length).map(row=>`<p class="annotation"><strong>${escape(row.label)}</strong>: modeled ${escape(row.modeled)}, screenshot ${escape(row.observed)}, candidate ${row.candidateCharmEvidence.map(s=>`${escape(s.item)} (+${s.amount})`).join(", ")}. ${row.candidateReconciles?"Reconciles numerically; not yet applied.":"Still differs."}</p>`).join("")}
+            <p class="annotation">The source items below occupy verified active charm rows. They contribute to the updated model; individual inclusion is controlled in the charm section.</p>
+            ${parityReport.rows.filter(r=>r.candidateCharmEvidence.length).map(row=>`<p class="annotation"><strong>${escape(row.label)}</strong>: modeled ${escape(row.modeled)}, screenshot ${escape(row.observed)}, candidate ${row.candidateCharmEvidence.map(s=>`${escape(s.item)} (+${s.amount})`).join(", ")}. ${row.candidateReconciles?"Reconciles with selected active charms.":"Still differs."}</p>`).join("")}
           </details>
           <details><summary>Full screenshot-to-model matrix · ${parityReport.rows.length} observations</summary>
             <div class="parity-scroll"><table class="parity-table"><thead><tr><th>Screen</th><th>Metric</th><th>Observed</th><th>Modeled</th><th>Gap</th><th>Assessment</th></tr></thead>
@@ -523,6 +542,20 @@ export function mountAmazonSandbox(container) {
       if (value!=="" && (!/^\\d+$/.test(value) || Number(value)>100000000)) return;
       measuredBaseAttackRating[state.active] = value===""?null:Number(value);
       redraw();return;
+    }
+    if (event.target.matches("[data-charms-all]")) {
+      if (!armoryImports[state.active]) return;
+      equipmentSettings[state.active].includeCharms = event.target.checked;
+      recomputeGear(state.active);persist();redraw();return;
+    }
+    if (event.target.matches("[data-charm-item]")) {
+      if (!armoryImports[state.active]) return;
+      const id=event.target.dataset.charmItem;
+      const settings=equipmentSettings[state.active];
+      const excluded=new Set(settings.excludedCharmIds);
+      if(event.target.checked)excluded.delete(id);else excluded.add(id);
+      settings.excludedCharmIds=[...excluded];
+      recomputeGear(state.active);persist();redraw();return;
     }
     if (event.target.matches("[data-equipment-set]")) {
       const value = event.target.value;
