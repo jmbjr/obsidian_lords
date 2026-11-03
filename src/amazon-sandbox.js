@@ -203,6 +203,8 @@ export function renderAmazonSandbox() {
             </div>
             <div><strong>Defense / attack rating / weapon</strong>
               <p>Equipped item defense: <strong>${sheet.defense.equippedItems.value}</strong><small>${provenance(sheet.defense.equippedItems.sources)}</small></p>
+              <p>Flat defense on non-armor items: <strong>+${sheet.defense.flatNonArmor.value}</strong><small>${provenance(sheet.defense.flatNonArmor.sources)}</small></p>
+              <p>Known equipment defense contribution: <strong>${sheet.defense.knownEquipmentContribution.value}</strong> (not final defense)</p>
               <p>Flat equipment attack rating: <strong>+${sheet.attackRating.flatEquipment.value}</strong><small>${provenance(sheet.attackRating.flatEquipment.sources)}</small></p>
               <p>Equipment AR bonus: <strong>+${sheet.attackRating.percentEquipment.value}%</strong></p>
               <p>${escape(sheet.weapon.name||"No weapon")} · raw physical damage: <strong>${sheet.weapon.physical.min??"?"}–${sheet.weapon.physical.max??"?"}</strong></p>
