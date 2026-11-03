@@ -62,7 +62,8 @@ test("inventory charms and mercenary equipment remain separate unresolved scopes
 
 test("both real snapshots maintain separated gear sets",()=>{
   for(const name of ["magizon","magiknaab"]){
-    const payload=load(name);\n    const d=normalizeArmoryEquipment(payload);
+    const payload=load(name);
+    const d=normalizeArmoryEquipment(payload);
     for(const set of ["main","switch"]){
       const selection=selectEquipmentSources(d,{weaponSet:set});
       assert.ok(selection.activeItems.every(x=>x.scope==="shared-equipped" || x.scope===`hand-${set}`));
