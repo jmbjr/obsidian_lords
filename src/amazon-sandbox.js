@@ -235,14 +235,16 @@ export function renderAmazonSandbox() {
             <div><strong>Defense / attack rating / weapon</strong>
               <p>Equipped item defense: <strong>${sheet.defense.equippedItems.value}</strong><small>${provenance(sheet.defense.equippedItems.sources)}</small></p>
               <p>Flat defense on non-armor items: <strong>+${sheet.defense.flatNonArmor.value}</strong><small>${provenance(sheet.defense.flatNonArmor.sources)}</small></p>
-              <p>Known equipment defense contribution: <strong>${sheet.defense.knownEquipmentContribution.value}</strong> (not final defense)</p>
-              <p>Flat equipment attack rating: <strong>+${sheet.attackRating.flatEquipment.value}</strong><small>${provenance(sheet.attackRating.flatEquipment.sources)}</small></p>
+              <p>Known equipment + charm defense: <strong>${sheet.defense.knownEquipmentContribution.value}</strong></p>
+              <p>Dexterity defense: <strong>${sheet.defense.fromDexterity.value??"Unknown"}</strong> · unmodified total: <strong>${sheet.defense.unmodified.value??"Unknown"}</strong></p>
+              <p>Dexterity base AR: <strong>${sheet.attackRating.fromDexterity.value??"Unknown"}</strong> · flat gear + charms: <strong>+${sheet.attackRating.flatEquipment.value}</strong></p>
+              <p>Unmodified base AR: <strong>${sheet.attackRating.baseTotal.value??"Unknown"}</strong><small>${provenance(sheet.attackRating.flatEquipment.sources)}</small></p>
               <p>Equipment AR bonus: <strong>+${sheet.attackRating.percentEquipment.value}%</strong></p>
               <p>${escape(sheet.weapon.name||"No weapon")} · raw physical damage: <strong>${sheet.weapon.physical.min??"?"}–${sheet.weapon.physical.max??"?"}</strong></p>
-              <small>Final defense, hit chance, AR and selected-skill damage: not calculated in M5.</small>
+              <small>These are base/unmodified components; final defense buffs, skill AR and damage need further verified rules.</small>
             </div>
           </div>
-          <p class="annotation">${sheet.unmodeledItemCount} source items in unverified/stored/mercenary scopes; inventory charms are deliberately not applied. Recheck against in-game screenshots before claiming parity.</p>
+          <p class="annotation">${sheet.unmodeledItemCount} source items remain unverified/stashed/mercenary and excluded. Eligible lower-inventory charms are included when enabled. Recheck runtime effects before claiming final parity.</p>
         </section>`;
       })() : ""}
       ${attackProjection ? `<section class="sandbox-inspector" aria-label="M6 imported attack projection">
@@ -257,13 +259,13 @@ export function renderAmazonSandbox() {
             <p>Estimated range: <strong>${attackProjection.physical.min??"—"}–${attackProjection.physical.max??"—"}</strong></p>
           </div>
           <div><strong>Attack rating · conditional</strong>
-            <label>Measured base AR before equipment (optional)
+            <label>Override Dexterity-derived base AR with a measured value (optional)
               <input data-armory-base-ar type="number" min="0" max="100000000" placeholder="Unknown" value="${measuredBaseAttackRating[state.active]??""}">
             </label>
             <p>Flat equipment AR: +${attackProjection.contributions.flatAttackRating.value}</p>
             <p>Equipment AR %: +${attackProjection.contributions.percentAttackRating.value}% · Multiple Shot AR %: ${attackProjection.skillAR===null?"—":"+"+attackProjection.skillAR+"%"}</p>
             <p>Estimated selected-skill AR: <strong>${attackProjection.attackRating.value??"Not calculated"}</strong></p>
-            <small>Enter only an independently measured base AR; the calculator does not invent one from Dexterity. This remains an estimate.</small>
+            <small>Base AR source: ${escape(attackProjection.attackRating.baseSource)} (${attackProjection.attackRating.baseWithoutEquipment??"unknown"}). The selected-skill AR calculation remains a partial estimate.</small>
           </div>
           <div><strong>Amazon attack frames · sourced A1 model</strong>
             <p>Selected weapon: ${escape(attackProjection.weapon.name||"none")} · base code ${escape(attackProjection.weapon.baseCode||"unknown")}</p>
