@@ -5,6 +5,7 @@ import { normalizeArmoryEquipment, selectEquipmentSources } from "./armory-equip
 import { projectArmoryCharacterSheet } from "./armory-character-sheet.js";
 import { bonusForSkill } from "./amazon-comparison.js";
 import { pd2RangedWeaponSpeed, PD2_AMAZON_RANGED_ANIM } from "./pd2-ranged-animations.js";
+import { explainAmazonAttackRating } from "./amazon-ar-explainer.js";
 
 const finite=x=>typeof x==="number" && Number.isFinite(x);
 const single=m=>Array.isArray(m.values)&&m.values.length===1&&finite(m.values[0])?m.values[0]:null;
@@ -72,8 +73,14 @@ export function projectAmazonRangedAttack(payload,skills,build,bonus,options={})
   if(!validBase)throw new RangeError("Base AR override must be a nonnegative integer or null");
   const baseAR=baseAttackRatingOverride??sheet.attackRating.fromDexterity.value;
   const baseSource=baseAttackRatingOverride===null?"dexterity-derived":"measured override";
-  const totalAR=baseAR!==null&&supported?
-    Math.max(0,Math.trunc((baseAR+flatAR.value)*(100+skillAR+arPct.value)/100)):null;
+  const arBreakdown=explainAmazonAttackRating({
+    dexterity:dex,baseAR,baseSource,flatAR:flatAR.value,
+    gearARPercent:arPct.value,skillARPercent:skillAR,
+    skillLevel:effective,hardPoints:hard,skillLevelBonus:effective-hard,
+    skillId,flatSources:flatAR.sources,percentSources:arPct.sources,
+    dexSources:sheet.attributes.dexterity.sources,
+  });
+  const totalAR=arBreakdown.value;
   const frames=weapon?pd2AmazonRangedFrames({ias:ias.value,weaponCode,skillSpeed}):
     {status:"unavailable",frames:null,reason:"No equipped ranged weapon"};
   return {
@@ -85,6 +92,7 @@ export function projectAmazonRangedAttack(payload,skills,build,bonus,options={})
       percentAttackRating:arPct,ias},
     physical,
     attackRating:{value:totalAR,status:totalAR===null?"unavailable":"partial",
+      breakdown:arBreakdown,
       baseWithoutEquipment:baseAR,baseSource,flatEquipment:flatAR.value,
       skillPercent:skillAR,equipmentPercent:arPct.value,
       reason:totalAR===null?"No valid Dexterity-derived base AR is available; a measured override can provide it.":"Conditional selected-skill estimate: game AR percent stacking, passive skills and runtime effects remain unverified"},
