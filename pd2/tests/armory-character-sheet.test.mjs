@@ -1,7 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { projectArmoryCharacterSheet } from "../../src/armory-character-sheet.js";
+import { projectArmoryCharacterSheet as projectSheet } from "../../src/armory-character-sheet.js";
+// Preserve M5 equipped-only regression baseline; M9 separately tests charms on.
+const projectArmoryCharacterSheet=(payload,options={})=>projectSheet(payload,{includeCharms:false,...options});
 import { resolveAmazonLayout } from "../../src/amazon-layout.js";
 
 const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
