@@ -6,7 +6,8 @@ import { defaultEquipmentSettings } from "../../src/amazon-equipment-controls.js
 
 const skills=JSON.parse(readFileSync("pd2/generated/amazon-skills.json","utf8")).skills;
 const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
-const magizon=load("magizon"),get=report=>Object.fromEntries(report.rows.map(row=>[row.key,row]));
+const frozenMagizon=JSON.parse(readFileSync("pd2/fixtures/character-parity/magizon-2026-11-03-pinned.json","utf8"));
+const magizon=frozenMagizon,get=report=>Object.fromEntries(report.rows.map(row=>[row.key,row]));
 
 test("original screenshot expectations stay frozen and source snapshot identity is pinned",()=>{
   const p=buildAmazonParityObservations(magizon,skills);
