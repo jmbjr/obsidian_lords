@@ -268,7 +268,6 @@ export function mountAmazonSandbox(container) {
     const dest = state.active;
     const initialSettings = defaultEquipmentSettings();
     const resolved = resolveEquipmentBuild(payload,skills,emptyBonus(),initialSettings);
-    const dest = state.active;
     state.builds[dest] = imported.build;
     manualBonuses[dest] = emptyBonus();
     equipmentSettings[dest] = initialSettings;
