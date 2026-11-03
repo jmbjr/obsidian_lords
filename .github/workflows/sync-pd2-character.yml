@@ -1,0 +1,71 @@
+name: Sync PD2 character
+
+on:
+  workflow_dispatch:
+    inputs:
+      character:
+        description: 'PD2 character name to publish (e.g. Magizon)'
+        required: true
+        type: string
+
+# This workflow is intentionally restricted to the repository owner.
+# GitHub UI authenticates the dispatcher. No website credentials or tokens.
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Synchronize deployments with the existing Pages workflow. A commit made by
+# GITHUB_TOKEN does not trigger pages.yml's push event, so deploy explicitly.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: ${{ github.actor == 'jmbjr' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Fetch official PD2 Armory JSON
+        env:
+          ARMORY_CHARACTER: ${{ inputs.character }}
+        run: node pd2/scripts/sync-armory-character.mjs
+      - name: Commit published snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- public/armory/
+          git commit -m "data: sync PD2 Armory character" -- public/armory/
+          git push origin HEAD:main
+
+  deploy:
+    needs: sync
+    if: ${{ github.actor == 'jmbjr' }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+      - run: npm run check
+      - run: npm run build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - name: Deploy updated snapshot to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
