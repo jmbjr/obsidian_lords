@@ -12,11 +12,11 @@ const ids = new Set(data.skills.map((skill) => skill.identity.internalId));
 assert.equal(ids.size, data.skills.length);
 assert.equal(data.skills.length, 31);
 assert.ok(validateAmazonLayout(data.skills));
-assert.deepEqual([resolveAmazonLayout(data.skills.find(s => s.identity.internalId === 18)).page, resolveAmazonLayout(data.skills.find(s => s.identity.internalId === 18)).row], [2, 1]);
-assert.equal(resolveAmazonLayout(data.skills.find(s => s.identity.internalId === 18)).status, "provisional");
+assert.deepEqual([resolveAmazonLayout(data.skills.find(s => s.identity.internalId === 18)).page, resolveAmazonLayout(data.skills.find(s => s.identity.internalId === 18)).row], [null, null]);
+assert.equal(resolveAmazonLayout(data.skills.find(s => s.identity.internalId === 18)).status, "historical");
 assert.equal(resolveAmazonLayout(data.skills.find(s => s.identity.internalId === 365)).page, null);
-assert.equal(data.skills.filter(s => resolveAmazonLayout(s).page === null).length, 1);
-assert.equal(data.skills.filter(s => resolveAmazonLayout(s).page !== null).length, 30);
+assert.equal(data.skills.filter(s => resolveAmazonLayout(s).page === null).length, 2);
+assert.equal(data.skills.filter(s => resolveAmazonLayout(s).page !== null).length, 29);
 for (const skill of data.skills) {
   assert.ok(Number.isInteger(skill.selected.requiredLevel));
   assert.ok(Number.isInteger(skill.selected.maxLevel));
