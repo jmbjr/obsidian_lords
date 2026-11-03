@@ -363,3 +363,22 @@ footer {
 .ar-debug-row-source>summary { cursor:pointer; font-size:.76rem; color:#c6bcae; }
 .ar-debug-row-source ul { padding-left:1.2rem; margin:.35rem 0; overflow-wrap:anywhere; }
 @media(max-width:520px) { .ar-reference-values { grid-template-columns:1fr 1fr; } .ar-reference-values>span:last-child { grid-column:1/-1; } }
+
+/* Current Armory JSON Debug audit: readable on narrow portrait screens. */
+.armory-debug-group { margin:.7rem 0; padding:.45rem .55rem; border:1px solid #4d454e; border-radius:.35rem; }
+.armory-debug-group>summary { cursor:pointer; font-weight:700; padding:.4rem; }
+.armory-debug-rows { display:grid; gap:.55rem; margin:.45rem 0; }
+.armory-debug-row { min-width:0; padding:.8rem; border:1px solid #4a424a; border-radius:.25rem; background:#211d23; }
+.armory-debug-row>strong { display:block; margin-bottom:.45rem; line-height:1.3; }
+.armory-debug-row>small { display:block; color:#b3aab8; line-height:1.45; margin-top:.4rem; }
+.armory-debug-values { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.5rem; }
+.armory-debug-values>span { min-width:0; }
+.armory-debug-values small { display:block; color:#a9a0ab; font-size:.72rem; line-height:1.35; }
+.armory-debug-values b { display:block; color:#efdfb7; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+.armory-debug-row-source { margin-top:.45rem; }
+.armory-debug-row-source>summary { cursor:pointer; font-size:.78rem; }
+.armory-debug-row-source ul { padding-left:1.2rem; overflow-wrap:anywhere; font-size:.75rem; }
+@media(max-width:520px) {
+  .armory-debug-values { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .armory-debug-values>span:last-child { grid-column:1/-1; }
+}
