@@ -350,3 +350,16 @@ footer {
 .ar-calculation-steps ul { margin:.35rem 0 .5rem; padding-left:1rem; }
 .ar-calculation-steps li small { display:block; color:#a99fab; font-size:.74rem; }
 .ar-calculation-steps code { white-space:normal; overflow-wrap:anywhere; }
+
+/* Diagnostic comparison: captured screen references are not live game reads. */
+.ar-reference-summary { padding:.8rem; margin:.7rem 0; border:1px solid #726044; border-radius:.35rem; background:#252028; }
+.ar-reference-summary>small { display:block; color:#b9aeb9; font-size:.75rem; }
+.ar-reference-values { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.5rem; padding:.55rem 0; }
+.ar-reference-values>span { font-size:.78rem; min-width:0; }
+.ar-reference-values strong { display:block; font-size:1.2rem; color:#efdfb7; font-variant-numeric:tabular-nums; }
+.ar-debug-parity { margin:.6rem 0; border:1px solid #5d5247; padding:.75rem; border-radius:.4rem; }
+.ar-debug-parity>summary { font-weight:650; cursor:pointer; color:#e4d7bd; }
+.ar-debug-content { margin-top:.75rem; }
+.ar-debug-row-source>summary { cursor:pointer; font-size:.76rem; color:#c6bcae; }
+.ar-debug-row-source ul { padding-left:1.2rem; margin:.35rem 0; overflow-wrap:anywhere; }
+@media(max-width:520px) { .ar-reference-values { grid-template-columns:1fr 1fr; } .ar-reference-values>span:last-child { grid-column:1/-1; } }

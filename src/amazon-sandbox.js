@@ -11,6 +11,7 @@ import { projectArmoryCharacterSheet } from "./armory-character-sheet.js";
 import { projectAmazonRangedAttack } from "./amazon-ranged-attack.js";
 import { projectAmazonExtendedInfo } from "./amazon-extended-info.js";
 import { buildAmazonParityObservations } from "./amazon-parity.js";
+import { buildAmazonDebugComparison } from "./amazon-debug-parity.js";
 import { compareMarginalEffects } from "./multishot-marginal.js";
 import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison, amazonAllocationIssues, amazonBuildIssues } from "./amazon-comparison.js";
 
@@ -90,6 +91,9 @@ export function renderAmazonSandbox() {
   const attackProjection = armoryImports[state.active] ? projectAmazonRangedAttack(
     armoryImports[state.active].source,skills,current,activeBonus(),
     {...equipmentSettings[state.active],baseAttackRatingOverride:measuredBaseAttackRating[state.active]}) : null;
+  const debugReport = armoryImports[state.active] ? buildAmazonDebugComparison(
+    armoryImports[state.active].source,skills,current,activeBonus(),
+    equipmentSettings[state.active],attackProjection) : null;
   const comparisons = compareAmazonBuilds(skills, state.builds, state.bonuses, state.comparison);
   const dependencies = findAmazonDependencies(selected, skills);
   const buildIssues = state.builds.map(build => amazonBuildIssues(build,state.level,skills));
@@ -266,6 +270,38 @@ export function renderAmazonSandbox() {
             <p>Equipment AR %: +${attackProjection.contributions.percentAttackRating.value}% · Multiple Shot AR %: ${attackProjection.skillAR===null?"—":"+"+attackProjection.skillAR+"%"}</p>
             <p>Estimated selected-skill AR: <strong>${attackProjection.attackRating.value??"Not calculated"}</strong></p>
             <small>Base AR source: ${escape(attackProjection.attackRating.baseSource)} (${attackProjection.attackRating.baseWithoutEquipment??"unknown"}). The selected-skill AR calculation remains a partial estimate.</small>
+            ${debugReport?.referenceAvailable ? `<div class="ar-reference-summary" data-ar-reference-summary>
+              <small>Previously captured in-game Multiple Shot AR · not live</small>
+              <div class="ar-reference-values">
+                <span>Screenshot <strong>${escape(debugReport.primary.observed)}</strong></span>
+                <span>Calculated <strong>${escape(debugReport.primary.computed??"Unavailable")}</strong></span>
+                <span>Δ modeled − observed <strong>${debugReport.primary.delta===null?"—":escape((debugReport.primary.delta>0?"+":"")+debugReport.primary.delta)}</strong></span>
+              </div>
+              <small>${debugReport.comparable?"Pinned baseline":"Modified build / loadout: historical reference, not a valid parity test"} · ${escape(debugReport.primary.status)} model</small>
+            </div>` : ""}
+            ${debugReport ? `<details class="ar-debug-parity" data-debug-parity>
+              <summary>Debug · compare screenshot vs calculated values</summary>
+              <div class="ar-debug-content">
+                <p class="annotation">${escape(debugReport.warning)} ${escape(debugReport.screenshotCapture)}.</p>
+                ${debugReport.reasons.length?`<p class="annotation">Comparison limitations: ${debugReport.reasons.map(escape).join("; ")}.</p>`:""}
+                <div class="parity-scroll"><table class="parity-table" aria-label="Debug observed vs computed data">
+                  <thead><tr><th>Metric</th><th>Screenshot</th><th>Calculated</th><th>Δ</th><th>Meaning</th></tr></thead>
+                  <tbody>${debugReport.rows.map(row=>`<tr>
+                    <td>${escape(row.label)}</td>
+                    <td>${row.observed===null?"—":escape(row.observed)}</td>
+                    <td>${row.computed===null?"Unavailable":escape(row.computed)}</td>
+                    <td>${row.delta===null?"—":escape((row.delta>0?"+":"")+row.delta)}</td>
+                    <td>${escape(row.verdict)} · ${escape(row.status)}</td>
+                  </tr>
+                  <tr><td colspan="5"><details class="ar-debug-row-source">
+                    <summary>Show evidence: ${escape(row.label)}</summary>
+                    <p>${escape(row.note)}</p>
+                    ${row.sources.length?`<ul>${row.sources.map(src=>`<li>${escape(src.item||src.path||src.sourcePath||"Source")}: ${escape(src.amount??"—")} (${escape(src.sourcePath||src.path||"source path unavailable")})</li>`).join("")}</ul>`:"<p>No independently supported source contribution recorded.</p>"}
+                  </details></td></tr>`).join("")}</tbody></table></div>
+                <p class="annotation">A zero equipment-only subtotal does not establish a zero final game stat. A matching partial number is not proof the full PD2 formula has been reconstructed.</p>
+              </div>
+            </details>` : ""}
+
             <details class="ar-calculation-breakdown" data-ar-breakdown>
               <summary>Show full AR calculation · intermediate values and sources</summary>
               ${(() => {
