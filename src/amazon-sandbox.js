@@ -9,6 +9,7 @@ import { armoryCharacterUrl, importArmoryAmazon, loadPublishedArmoryCharacter } 
 import { defaultEquipmentSettings, resolveEquipmentBuild } from "./amazon-equipment-controls.js";
 import { projectArmoryCharacterSheet } from "./armory-character-sheet.js";
 import { projectAmazonRangedAttack } from "./amazon-ranged-attack.js";
+import { projectAmazonExtendedInfo } from "./amazon-extended-info.js";
 import { compareMarginalEffects } from "./multishot-marginal.js";
 import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison, amazonAllocationIssues, amazonBuildIssues } from "./amazon-comparison.js";
 
@@ -81,6 +82,8 @@ export function renderAmazonSandbox() {
   const cards = skills.filter((skill) => resolveAmazonLayout(skill).page === state.page);
   const unplaced = skills.filter((skill) => resolveAmazonLayout(skill).page === null);
   const preview = previewAmazonSkill(selected, current[state.selected], effectiveBonus(selected), current, (activeBonus().skills[selected.identity.internalId] || 0) > 0);
+  const extendedInfo = armoryImports[state.active] ? projectAmazonExtendedInfo(
+    armoryImports[state.active].source,skills,current,activeBonus(),equipmentSettings[state.active]) : null;
   const attackProjection = armoryImports[state.active] ? projectAmazonRangedAttack(
     armoryImports[state.active].source,skills,current,activeBonus(),
     {...equipmentSettings[state.active],baseAttackRatingOverride:measuredBaseAttackRating[state.active]}) : null;
@@ -249,6 +252,36 @@ export function renderAmazonSandbox() {
           </div>
         </div>
         <p class="annotation">These projections are based on the active ${escape(equipmentSettings[state.active].weaponSet)} hand set, and change with item toggles. The combat sandbox's separate manual target inputs are intentionally unchanged.</p>
+      </section>` : ""}
+      ${extendedInfo ? `<section class="sandbox-inspector" aria-label="M7 Extended Info 8">
+        <h2>Extended Info (8) · Build ${state.active?"B":"A"}</h2>
+        <p class="annotation">Source-aware equipment contributions, not a claim of final in-game totals. Values recalculate for this build's <strong>${escape(extendedInfo.weaponSet)}</strong> weapon set and individual gear toggles. Unsupported final values remain unavailable, not zero. The catalog is divided into source groups; expand a stat to see its item provenance.</p>
+        <div class="extended-info-catalog">
+          ${extendedInfo.categories.map((category,i) => {
+            const rows=extendedInfo.rows.filter(row=>row.category===category);
+            return `<details class="extended-category" ${i===0||category==="Critical & procs"||category==="Speed"?"open":""}>
+              <summary>${escape(category)} <small>${rows.length} fields</small></summary>
+              <div class="extended-stat-list">
+              ${rows.map(row=>{
+                const measured=row.status==="skill-preview"||row.status==="source-derived";
+                const value=measured?row.finalValue:row.equipmentValue;
+                const shown=value===null?"Not calculated":typeof value==="object"?
+                  `${value.min}–${value.max}${row.unit}`:
+                  `${value>=0&&row.unit!=="flags"?"+":""}${value}${row.unit||""}`;
+                const suffix=measured?"skill/animation preview":row.status==="equipment-only"?"equipment only":"unsupported";
+                return `<details class="extended-stat" data-extended-id="${escape(row.id)}">
+                  <summary><span>${escape(row.label)}</span><strong>${escape(shown)}</strong><small>${escape(suffix)}</small></summary>
+                  <div class="annotation"><p>${escape(row.note)}</p>
+                  ${row.sources.length?`<ul>${row.sources.map(src=>`<li>${escape(src.item||"Skill source")} · ${escape(src.sourcePath)}: ${escape(src.min===undefined?src.amount:`${src.min}–${src.max}${src.duration===null?"":` (duration ${src.duration})`}`)}</li>`).join("")}</ul>`:"<p>No supported active item source for this field.</p>"}
+                  ${row.unresolved.length?`<p>${row.unresolved.length} unsupported matching tuple(s) retained for review.</p>`:""}
+                  </div>
+                </details>`;
+              }).join("")}
+              </div>
+            </details>`;
+          }).join("")}
+        </div>
+        <p class="annotation">${extendedInfo.unmappedScopeCount} stored/charm/mercenary records remain outside verified player gear scope. Crushing Blow, Deadly Strike, Open Wounds chance, and Open Wounds DPS are distinct statistics. Critical Strike comes from the skill resolver and does not combine additively with Deadly Strike here.</p>
       </section>` : ""}
       ${armoryImports[state.active] ? `<p class="annotation">Armory: <strong>${escape(armoryImports[state.active].name)}</strong> · ${armoryImports[state.active].equippedCount} active equipped items · ${armoryImports[state.active].warnings.length} caveats. Raw item data is kept only for this page session; the existing exported build JSON remains skill-only. ${armoryImports[state.active].warnings.map(x=>escape(x)).join("; ")}</p>` : ""}
       <div class="sandbox-actions"><button data-page="1" aria-pressed="${state.page === 1}">Bow & Crossbow</button><button data-page="2" aria-pressed="${state.page === 2}">Passive & Magic</button><button data-page="3" aria-pressed="${state.page === 3}">Javelin & Spear</button></div>

@@ -306,3 +306,23 @@ footer {
 .character-stat-grid>div { min-width:0; padding:1rem; border:1px solid #51483b; background:#201c21; }
 .character-stat-grid p { margin:.65rem 0; color:#d7d0d6; line-height:1.35; }
 .character-stat-grid small { display:block; margin-top:.2rem; color:#a49da8; font-size:.73rem; line-height:1.45; overflow-wrap:anywhere; }
+
+/* PD2 Extended Info (8) — collapsible, source-annotated equipment contributions. */
+.extended-info-catalog { display:grid; gap:.65rem; margin:1rem 0; font-family:system-ui,sans-serif; }
+.extended-category { border:1px solid #51483b; background:#211c20; min-width:0; }
+.extended-category>summary { padding:.8rem 1rem; cursor:pointer; font-weight:700; color:#e4d7bd; }
+.extended-category>summary small { margin-left:.4rem; font-size:.7rem; font-weight:400; color:#aba0a9; }
+.extended-stat-list { border-top:1px solid #51483b; }
+.extended-stat { border-top:1px solid #3b333b; min-width:0; }
+.extended-stat:first-child { border-top:0; }
+.extended-stat>summary { display:grid; grid-template-columns:minmax(0,1fr) minmax(90px,auto) minmax(100px,auto); gap:.6rem;
+  align-items:center; cursor:pointer; padding:.65rem .85rem; font-size:.85rem; list-style:revert; }
+.extended-stat>summary strong { color:#efdfb7; text-align:right; overflow-wrap:anywhere; }
+.extended-stat>summary small { font-size:.7rem; color:#afa3af; text-align:right; }
+.extended-stat>.annotation { padding:.2rem 1.1rem .85rem; font-size:.78rem; max-width:100%; }
+.extended-stat>.annotation p { margin:.25rem 0; }
+.extended-stat>.annotation ul { margin:.35rem 0; padding-left:1.1rem; overflow-wrap:anywhere; }
+@media(max-width:560px) {
+  .extended-stat>summary { grid-template-columns:minmax(0,1fr) auto; }
+  .extended-stat>summary small { grid-column:1/-1; text-align:left; }
+}
