@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { projectAmazonRangedAttack, pd2AmazonRangedFrames } from "../../src/amazon-ranged-attack.js";
 import { importArmoryAmazon } from "../../src/pd2-armory.js";
-import { defaultEquipmentSettings, resolveEquipmentBuild } from "../../src/amazon-equipment-controls.js";
+import { resolveEquipmentBuild } from "../../src/amazon-equipment-controls.js";
 
 const skills=JSON.parse(readFileSync("pd2/generated/amazon-skills.json","utf8")).skills;
 const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
