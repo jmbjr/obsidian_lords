@@ -13,7 +13,7 @@ export const publicArmoryPath = value => {
   return join("public", "armory", `${value.toLowerCase()}.json`);
 };
 
-export async function syncArmoryCharacter(name, { fetchImpl = fetch, now = () => new Date().toISOString(), save = writeFile } = {}) {
+export async function syncArmoryCharacter(name, { fetchImpl = fetch, now = () => new Date().toISOString(), save = writeFile, makeDirectory = mkdir } = {}) {
   const path = publicArmoryPath(name);
   const response = await fetchImpl(armoryCharacterUrl(name), {
     method: "GET",
@@ -41,7 +41,7 @@ export async function syncArmoryCharacter(name, { fetchImpl = fetch, now = () =>
       source: armoryCharacterUrl(name),
     },
   };
-  await mkdir(join("public", "armory"), { recursive: true });
+  await makeDirectory(join("public", "armory"), { recursive: true });
   await save(path, JSON.stringify(saved, null, 2) + "\n", "utf8");
   return { path, syncedAt: saved._obsidianLordsSync.syncedAt };
 }
