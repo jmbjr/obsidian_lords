@@ -1,0 +1,6327 @@
+{
+  "file": {
+    "header": 2857740885,
+    "version": 96,
+    "filesize": 4514,
+    "checksum": 2900360048,
+    "updated_at": 1793607740
+  },
+  "character": {
+    "name": "Magizon",
+    "status": {
+      "is_hardcore": false,
+      "is_dead": true,
+      "is_expansion": true,
+      "is_ladder": true
+    },
+    "class": {
+      "id": 0,
+      "name": "Amazon"
+    },
+    "attributes": {
+      "strength": 41,
+      "dexterity": 50,
+      "vitality": 120,
+      "energy": 15
+    },
+    "gold": {
+      "character": 5566,
+      "stash": 0,
+      "total": 5566
+    },
+    "points": {
+      "stat": 194,
+      "skill": 46
+    },
+    "life": 573,
+    "mana": 181,
+    "stamina": 1313,
+    "experience": 238080481,
+    "level": 67,
+    "skills": [
+      {
+        "id": 6,
+        "name": "Magic Arrow",
+        "level": 1
+      },
+      {
+        "id": 7,
+        "name": "Fire Arrow",
+        "level": 0
+      },
+      {
+        "id": 8,
+        "name": "Inner Sight",
+        "level": 1
+      },
+      {
+        "id": 9,
+        "name": "Critical Strike",
+        "level": 1
+      },
+      {
+        "id": 10,
+        "name": "Jab",
+        "level": 0
+      },
+      {
+        "id": 11,
+        "name": "Cold Arrow",
+        "level": 0
+      },
+      {
+        "id": 12,
+        "name": "Multiple Shot",
+        "level": 20
+      },
+      {
+        "id": 13,
+        "name": "Dodge",
+        "level": 1
+      },
+      {
+        "id": 14,
+        "name": "Power Strike",
+        "level": 0
+      },
+      {
+        "id": 15,
+        "name": "Poison Javelin",
+        "level": 0
+      },
+      {
+        "id": 16,
+        "name": "Exploding Arrow",
+        "level": 0
+      },
+      {
+        "id": 17,
+        "name": "Slow Movement",
+        "level": 1
+      },
+      {
+        "id": 18,
+        "name": "Avoid",
+        "level": 0
+      },
+      {
+        "id": 19,
+        "name": "Javelin and Spear Mastery",
+        "level": 0
+      },
+      {
+        "id": 20,
+        "name": "Lightning Bolt",
+        "level": 0
+      },
+      {
+        "id": 21,
+        "name": "Ice Arrow",
+        "level": 0
+      },
+      {
+        "id": 22,
+        "name": "Guided Arrow",
+        "level": 0
+      },
+      {
+        "id": 23,
+        "name": "Penetrate",
+        "level": 1
+      },
+      {
+        "id": 24,
+        "name": "Charged Strike",
+        "level": 0
+      },
+      {
+        "id": 25,
+        "name": "Plague Javelin",
+        "level": 0
+      },
+      {
+        "id": 26,
+        "name": "Strafe",
+        "level": 0
+      },
+      {
+        "id": 27,
+        "name": "Immolation Arrow",
+        "level": 0
+      },
+      {
+        "id": 28,
+        "name": "Decoy",
+        "level": 0
+      },
+      {
+        "id": 29,
+        "name": "Evade",
+        "level": 1
+      },
+      {
+        "id": 30,
+        "name": "Fend",
+        "level": 0
+      },
+      {
+        "id": 31,
+        "name": "Freezing Arrow",
+        "level": 0
+      },
+      {
+        "id": 32,
+        "name": "Valkyrie",
+        "level": 0
+      },
+      {
+        "id": 33,
+        "name": "Pierce",
+        "level": 1
+      },
+      {
+        "id": 34,
+        "name": "Lightning Strike",
+        "level": 0
+      },
+      {
+        "id": 35,
+        "name": "Lightning Fury",
+        "level": 0
+      },
+      {
+        "id": 365,
+        "name": "Shattering Arrow",
+        "level": 0
+      }
+    ]
+  },
+  "mercenary": {
+    "id": 1370965424,
+    "name_id": 9,
+    "type": 8,
+    "experience": 33593892,
+    "description": "Offensive Auras",
+    "items": [
+      {
+        "is_identified": true,
+        "is_socketed": false,
+        "is_new": false,
+        "is_ear": false,
+        "is_starter": false,
+        "is_simple": false,
+        "is_ethereal": false,
+        "is_personalized": false,
+        "is_runeword": false,
+        "format_version": 105,
+        "base": {
+          "id": "ghm",
+          "category": "armor",
+          "codes": {
+            "normal": "ghm",
+            "exceptional": "xhm",
+            "elite": "uhm"
+          },
+          "name": "Great Helm",
+          "stackable": false,
+          "type": "Helm",
+          "type_code": "helm",
+          "size": {
+            "height": 2,
+            "width": 2
+          },
+          "requirements": {
+            "strength": 63
+          }
+        },
+        "socketed_count": 0,
+        "id": 13149101311153,
+        "item_level": 48,
+        "quality": {
+          "id": 7,
+          "name": "Unique"
+        },
+        "graphic_id": false,
+        "class_specifics": false,
+        "defense": {
+          "base": 36,
+          "total": 64
+        },
+        "durability": {
+          "maximum": 40,
+          "current": 27
+        },
+        "socket_count": 0,
+        "modifiers": [
+          {
+            "name": "item_skillonhit",
+            "values": [
+              5,
+              130,
+              10
+            ],
+            "label": "10% Chance to cast level 5 Howl on striking",
+            "priority": 160
+          },
+          {
+            "name": "item_fasterattackrate",
+            "values": [
+              20
+            ],
+            "label": "20% Increased Attack Speed",
+            "priority": 145
+          },
+          {
+            "name": "item_armor_percent",
+            "values": [
+              80
+            ],
+            "label": "80% Enhanced Defense",
+            "priority": 74
+          },
+          {
+            "name": "magic_damage_reduction",
+            "values": [
+              2
+            ],
+            "label": "Magic Damage Taken Reduced by 2",
+            "priority": 21
+          },
+          {
+            "name": "item_attackertakesdamage",
+            "values": [
+              30
+            ],
+            "label": "Attacker Takes Damage of 30",
+            "priority": 13
+          },
+          {
+            "name": "item_damagetomana",
+            "values": [
+              35
+            ],
+            "label": "35% Damage Taken Gained as Mana when Hit",
+            "priority": 11
+          }
+        ],
+        "name": "Howltusk",
+        "location": {
+          "storage_id": 0,
+          "equipment_id": 1,
+          "zone_id": 1,
+          "zone": "Equipped",
+          "storage": "Unknown",
+          "equipment": "Helm"
+        },
+        "position": {
+          "column": 1,
+          "row": 0
+        },
+        "category": "armor",
+        "base_code": "ghm",
+        "requirements": {
+          "level": 25,
+          "strength": 63,
+          "dexterity": 0
+        },
+        "corrupted": false,
+        "desecrated": false,
+        "properties": [
+          "10% Chance to cast level 5 Howl on striking",
+          "20% Increased Attack Speed",
+          "80% Enhanced Defense",
+          "Magic Damage Taken Reduced by 2",
+          "Attacker Takes Damage of 30",
+          "35% Damage Taken Gained as Mana when Hit"
+        ],
+        "hash": "7860e9ff7a460762b5edebc1f09305e8bda9d9eb"
+      },
+      {
+        "is_identified": true,
+        "is_socketed": false,
+        "is_new": false,
+        "is_ear": false,
+        "is_starter": false,
+        "is_simple": false,
+        "is_ethereal": false,
+        "is_personalized": false,
+        "is_runeword": false,
+        "format_version": 105,
+        "base": {
+          "id": "hbl",
+          "category": "armor",
+          "codes": {
+            "normal": "hbl",
+            "exceptional": "zhb",
+            "elite": "uhc"
+          },
+          "name": "Plated Belt",
+          "stackable": false,
+          "type": "Belt",
+          "type_code": "belt",
+          "size": {
+            "height": 1,
+            "width": 2
+          },
+          "requirements": {
+            "strength": 60
+          }
+        },
+        "socketed_count": 0,
+        "id": 1293184910,
+        "item_level": 60,
+        "quality": {
+          "id": 6,
+          "name": "Rare"
+        },
+        "graphic_id": false,
+        "class_specifics": false,
+        "defense": {
+          "base": 12,
+          "total": 17
+        },
+        "durability": {
+          "maximum": 24,
+          "current": 18
+        },
+        "socket_count": 0,
+        "modifiers": [
+          {
+            "name": "item_armor_percent",
+            "values": [
+              43
+            ],
+            "label": "43% Enhanced Defense",
+            "priority": 74,
+            "min": 41,
+            "max": 50
+          },
+          {
+            "name": "maxhp",
+            "values": [
+              76
+            ],
+            "label": "+76 to Life",
+            "priority": 59,
+            "min": 61,
+            "max": 80
+          },
+          {
+            "name": "coldresist",
+            "values": [
+              17
+            ],
+            "label": "Cold Resist 17%",
+            "priority": 40,
+            "min": 11,
+            "max": 20
+          },
+          {
+            "name": "poisonresist",
+            "values": [
+              18
+            ],
+            "label": "Poison Resist 18%",
+            "priority": 34,
+            "min": 11,
+            "max": 20
+          }
+        ],
+        "location": {
+          "storage_id": 0,
+          "equipment_id": 8,
+          "zone_id": 1,
+          "zone": "Equipped",
+          "storage": "Unknown",
+          "equipment": "Belt"
+        },
+        "position": {
+          "column": 8,
+          "row": 0
+        },
+        "category": "armor",
+        "base_code": "hbl",
+        "name": "Plated Belt",
+        "requirements": {
+          "level": 30,
+          "strength": 60,
+          "dexterity": 0
+        },
+        "corrupted": false,
+        "desecrated": false,
+        "properties": [
+          "43% Enhanced Defense",
+          "+76 to Life",
+          "Cold Resist 17%",
+          "Poison Resist 18%"
+        ],
+        "hash": "c7588834c63e1295606f58a630f5b941df3a68bf"
+      },
+      {
+        "is_identified": true,
+        "is_socketed": false,
+        "is_new": false,
+        "is_ear": false,
+        "is_starter": false,
+        "is_simple": false,
+        "is_ethereal": false,
+        "is_personalized": false,
+        "is_runeword": false,
+        "format_version": 105,
+        "base": {
+          "id": "hgl",
+          "category": "armor",
+          "codes": {
+            "normal": "hgl",
+            "exceptional": "xhg",
+            "elite": "uhg"
+          },
+          "name": "Gauntlets",
+          "stackable": false,
+          "type": "Gloves",
+          "type_code": "glov",
+          "size": {
+            "height": 2,
+            "width": 2
+          },
+          "requirements": {
+            "strength": 60
+          }
+        },
+        "socketed_count": 0,
+        "id": 747109111215,
+        "item_level": 55,
+        "quality": {
+          "id": 6,
+          "name": "Rare"
+        },
+        "graphic_id": false,
+        "class_specifics": false,
+        "defense": {
+          "base": 16,
+          "total": 22
+        },
+        "durability": {
+          "maximum": 24,
+          "current": 24
+        },
+        "socket_count": 0,
+        "modifiers": [
+          {
+            "name": "toblock",
+            "values": [
+              8
+            ],
+            "label": "8% Increased Chance of Blocking",
+            "priority": 134,
+            "min": 6,
+            "max": 12
+          },
+          {
+            "name": "item_armor_percent",
+            "values": [
+              38
+            ],
+            "label": "38% Enhanced Defense",
+            "priority": 74,
+            "min": 31,
+            "max": 40
+          },
+          {
+            "name": "lightresist",
+            "values": [
+              5
+            ],
+            "label": "Lightning Resist 5%",
+            "priority": 38,
+            "min": 5,
+            "max": 10
+          },
+          {
+            "name": "fireresist",
+            "values": [
+              18
+            ],
+            "label": "Fire Resist 18%",
+            "priority": 36,
+            "min": 11,
+            "max": 20
+          },
+          {
+            "name": "item_magicbonus",
+            "values": [
+              24
+            ],
+            "label": "24% Better Chance of Getting Magic Items",
+            "priority": 8,
+            "min": 16,
+            "max": 25
+          },
+          {
+            "name": "item_replenish_durability",
+            "values": [
+              5
+            ],
+            "label": "Repairs 1 Durability in 0.05 Seconds",
+            "priority": 1
+          }
+        ],
+        "location": {
+          "storage_id": 0,
+          "equipment_id": 10,
+          "zone_id": 1,
+          "zone": "Equipped",
+          "storage": "Unknown",
+          "equipment": "Gloves"
+        },
+        "position": {
+          "column": 10,
+          "row": 0
+        },
+        "category": "armor",
+        "base_code": "hgl",
+        "name": "Gauntlets",
+        "requirements": {
+          "level": 19,
+          "strength": 60,
+          "dexterity": 0
+        },
+        "corrupted": false,
+        "desecrated": false,
+        "properties": [
+          "8% Increased Chance of Blocking",
+          "38% Enhanced Defense",
+          "Lightning Resist 5%",
+          "Fire Resist 18%",
+          "24% Better Chance of Getting Magic Items",
+          "Repairs 1 Durability in 0.05 Seconds"
+        ],
+        "hash": "e3b9078e7021a3676b134eb2b2823f4cfac1ffcb"
+      },
+      {
+        "is_identified": true,
+        "is_socketed": false,
+        "is_new": false,
+        "is_ear": false,
+        "is_starter": false,
+        "is_simple": false,
+        "is_ethereal": false,
+        "is_personalized": false,
+        "is_runeword": false,
+        "format_version": 105,
+        "base": {
+          "id": "rng",
+          "category": "armor",
+          "codes": {
+            "normal": "rng",
+            "exceptional": "xng",
+            "elite": "ung"
+          },
+          "name": "Ring Mail",
+          "stackable": false,
+          "type": "Armor",
+          "type_code": "tors",
+          "size": {
+            "height": 3,
+            "width": 2
+          },
+          "requirements": {
+            "strength": 36
+          }
+        },
+        "socketed_count": 0,
+        "id": 5451580015,
+        "item_level": 28,
+        "quality": {
+          "id": 7,
+          "name": "Unique"
+        },
+        "graphic_id": false,
+        "class_specifics": false,
+        "defense": {
+          "base": 52,
+          "total": 88
+        },
+        "durability": {
+          "maximum": 26,
+          "current": 26
+        },
+        "socket_count": 0,
+        "modifiers": [
+          {
+            "name": "tohit",
+            "values": [
+              89
+            ],
+            "label": "+89 to Attack Rating",
+            "priority": 115,
+            "min": 60,
+            "max": 120
+          },
+          {
+            "name": "item_armor_percent",
+            "values": [
+              71
+            ],
+            "label": "71% Enhanced Defense",
+            "priority": 74,
+            "min": 70,
+            "max": 100
+          },
+          {
+            "name": "armorclass_vs_hth",
+            "values": [
+              50
+            ],
+            "label": "+50 Defense vs. Melee",
+            "priority": 70
+          },
+          {
+            "name": "maxpoisonresist",
+            "values": [
+              3
+            ],
+            "label": "3% to Maximum Poison Resist",
+            "priority": 45
+          },
+          {
+            "name": "maxcoldresist",
+            "values": [
+              3
+            ],
+            "label": "3% to Maximum Cold Resist",
+            "priority": 44
+          },
+          {
+            "name": "maxlightresist",
+            "values": [
+              3
+            ],
+            "label": "3% to Maximum Lightning Resist",
+            "priority": 43
+          },
+          {
+            "name": "maxfireresist",
+            "values": [
+              3
+            ],
+            "label": "3% to Maximum Fire Resist",
+            "priority": 42,
+            "min": 2,
+            "max": 5
+          },
+          {
+            "name": "all_resist",
+            "values": [
+              15
+            ],
+            "label": "All Resistances +15%",
+            "priority": 36,
+            "min": 10,
+            "max": 15
+          },
+          {
+            "name": "item_lightradius",
+            "values": [
+              3
+            ],
+            "label": "+3 to Light Radius",
+            "priority": 6
+          }
+        ],
+        "name": "Darkglow",
+        "location": {
+          "storage_id": 0,
+          "equipment_id": 3,
+          "zone_id": 1,
+          "zone": "Equipped",
+          "storage": "Unknown",
+          "equipment": "Armor"
+        },
+        "position": {
+          "column": 3,
+          "row": 0
+        },
+        "category": "armor",
+        "base_code": "rng",
+        "requirements": {
+          "level": 14,
+          "strength": 36,
+          "dexterity": 0
+        },
+        "corrupted": false,
+        "desecrated": false,
+        "properties": [
+          "+89 to Attack Rating",
+          "71% Enhanced Defense",
+          "+50 Defense vs. Melee",
+          "3% to Maximum Poison Resist",
+          "3% to Maximum Cold Resist",
+          "3% to Maximum Lightning Resist",
+          "3% to Maximum Fire Resist",
+          "All Resistances +15%",
+          "+3 to Light Radius"
+        ],
+        "hash": "f1331a043386036daa0dae1abcf9fe022ef4494b"
+      },
+      {
+        "is_identified": true,
+        "is_socketed": false,
+        "is_new": false,
+        "is_ear": false,
+        "is_starter": false,
+        "is_simple": false,
+        "is_ethereal": false,
+        "is_personalized": false,
+        "is_runeword": false,
+        "format_version": 105,
+        "base": {
+          "id": "xhb",
+          "category": "armor",
+          "codes": {
+            "normal": "hbt",
+            "exceptional": "xhb",
+            "elite": "uhb"
+          },
+          "name": "War Boots",
+          "stackable": false,
+          "type": "Boots",
+          "type_code": "boot",
+          "size": {
+            "height": 2,
+            "width": 2
+          },
+          "requirements": {
+            "level": 25,
+            "strength": 125
+          }
+        },
+        "socketed_count": 0,
+        "id": 5561311013,
+        "item_level": 64,
+        "quality": {
+          "id": 7,
+          "name": "Unique"
+        },
+        "graphic_id": false,
+        "class_specifics": false,
+        "defense": {
+          "base": 54,
+          "total": 156
+        },
+        "durability": {
+          "maximum": 24,
+          "current": 19
+        },
+        "socket_count": 0,
+        "modifiers": [
+          {
+            "name": "item_fastermovevelocity",
+            "values": [
+              30
+            ],
+            "label": "30% Faster Run/Walk",
+            "priority": 148
+          },
+          {
+            "name": "item_crushingblow",
+            "values": [
+              15
+            ],
+            "label": "15% Chance of Crushing Blow",
+            "priority": 87
+          },
+          {
+            "name": "item_deadlystrike",
+            "values": [
+              15
+            ],
+            "label": "15% Chance of Deadly Strike",
+            "priority": 85,
+            "min": 15,
+            "max": 20
+          },
+          {
+            "name": "item_openwounds",
+            "values": [
+              10
+            ],
+            "label": "10% Chance of Open Wounds",
+            "priority": 83
+          },
+          {
+            "name": "deep_wounds",
+            "values": [
+              155
+            ],
+            "label": "+155 Open Wounds Damage Per Second",
+            "priority": 82,
+            "min": 140,
+            "max": 200
+          },
+          {
+            "name": "item_armor_percent",
+            "values": [
+              190
+            ],
+            "label": "190% Enhanced Defense",
+            "priority": 74,
+            "min": 160,
+            "max": 200
+          },
+          {
+            "name": "maxdurability",
+            "values": [
+              10
+            ],
+            "label": "+10 Durability",
+            "priority": 0
+          },
+          {
+            "name": "item_req_percent",
+            "values": [
+              -25
+            ],
+            "label": "Requirements -25%",
+            "priority": 0
+          }
+        ],
+        "name": "Gore Rider",
+        "location": {
+          "storage_id": 0,
+          "equipment_id": 9,
+          "zone_id": 1,
+          "zone": "Equipped",
+          "storage": "Unknown",
+          "equipment": "Boots"
+        },
+        "position": {
+          "column": 9,
+          "row": 0
+        },
+        "category": "armor",
+        "base_code": "xhb",
+        "requirements": {
+          "level": 47,
+          "strength": 125,
+          "dexterity": 0
+        },
+        "corrupted": false,
+        "desecrated": false,
+        "properties": [
+          "30% Faster Run/Walk",
+          "15% Chance of Crushing Blow",
+          "15% Chance of Deadly Strike",
+          "10% Chance of Open Wounds",
+          "+155 Open Wounds Damage Per Second",
+          "190% Enhanced Defense",
+          "+10 Durability",
+          "Requirements -25%"
+        ],
+        "hash": "5f7854a466b95e3d654f63a09f0f7fe016116bcb"
+      },
+      {
+        "is_identified": true,
+        "is_socketed": true,
+        "is_new": false,
+        "is_ear": false,
+        "is_starter": false,
+        "is_simple": false,
+        "is_ethereal": false,
+        "is_personalized": false,
+        "is_runeword": true,
+        "format_version": 105,
+        "base": {
+          "id": "9s8",
+          "category": "weapon",
+          "codes": {
+            "normal": "scy",
+            "exceptional": "9s8",
+            "elite": "7s8"
+          },
+          "name": "Battle Scythe",
+          "stackable": false,
+          "type": "Scythe Type",
+          "type_code": "sc9",
+          "size": {
+            "height": 4,
+            "width": 2
+          },
+          "class": {
+            "base_code": "stf",
+            "2hd_code": "stf",
+            "base": "Staff",
+            "2hd": "Staff"
+          },
+          "requirements": {
+            "level": 25,
+            "strength": 82,
+            "dexterity": 82
+          },
+          "damage": {
+            "one_handed": {},
+            "two_handed": {
+              "minimum": 25,
+              "maximum": 64
+            },
+            "missile": {}
+          }
+        },
+        "socketed_count": 3,
+        "id": 9613132151014,
+        "item_level": 58,
+        "quality": {
+          "id": 2,
+          "name": "Normal"
+        },
+        "graphic_id": false,
+        "class_specifics": 39,
+        "runeword": {
+          "key": "Purity",
+          "name": "Purity",
+          "modifiers": [
+            {
+              "name": "item_demon_tohit",
+              "encoding": 0,
+              "description": {
+                "function": 1,
+                "priority": 110,
+                "value": 1,
+                "label": {
+                  "positive_code": "ModStr4j",
+                  "negative_code": "ModStr4j",
+                  "group": {},
+                  "positive": "to Attack Rating against Demons",
+                  "negative": "to Attack Rating against Demons"
+                }
+              }
+            },
+            {
+              "name": "item_fasterattackrate",
+              "encoding": 0,
+              "description": {
+                "function": 4,
+                "priority": 145,
+                "value": 1,
+                "label": {
+                  "positive_code": "ModStr4m",
+                  "negative_code": "ModStr4m",
+                  "group": {},
+                  "positive": "Increased Attack Speed",
+                  "negative": "Increased Attack Speed"
+                }
+              }
+            },
+            {
+              "name": "item_aura",
+              "encoding": 0,
+              "description": {
+                "function": 16,
+                "priority": 159,
+                "value": 0,
+                "label": {
+                  "positive_code": "ModitemAura",
+                  "negative_code": "ModitemAura",
+                  "group": {},
+                  "positive": "Level %d %s Aura When Equipped",
+                  "negative": "Level %d %s Aura When Equipped"
+                }
+              }
+            },
+            {
+              "name": "curse_resistance",
+              "encoding": 0,
+              "description": {
+                "function": 2,
+                "priority": 100,
+                "value": 1,
+                "label": {
+                  "positive_code": "ModReduceCurseDuration",
+                  "negative_code": "ModReduceCurseDuration",
+                  "group": {},
+                  "positive": "Reduced Curse Duration",
+                  "negative": "Reduced Curse Duration"
+                }
+              }
+            },
+            {
+              "name": "item_demondamage_percent",
+              "encoding": 0,
+              "description": {
+                "function": 4,
+                "priority": 112,
+                "value": 1,
+                "label": {
+                  "positive_code": "ModStr4e",
+                  "negative_code": "ModStr4e",
+                  "group": {},
+                  "positive": "Damage to Demons",
+                  "negative": "Damage to Demons"
+                }
+              }
+            }
+          ],
+          "runes": [
+            "r11",
+            "r05",
+            "r10"
+          ]
+        },
+        "durability": {
+          "maximum": 130,
+          "current": 103
+        },
+        "socket_count": 3,
+        "modifiers": [
+          {
+            "name": "item_splashonhit",
+            "values": [
+              1,
+              358,
+              100
+            ],
+            "label": "Melee Attacks Deal Splash Damage",
+            "priority": 245
+          },
+          {
+            "name": "item_aura",
+            "values": [
+              99,
+              12
+            ],
+            "label": "Level 12 Prayer Aura When Equipped",
+            "priority": 159
+          },
+          {
+            "name": "item_fasterattackrate",
+            "values": [
+              45
+            ],
+            "label": "45% Increased Attack Speed",
+            "priority": 145
+          },
+          {
+            "name": "maxdamage_percent",
+            "values": [
+              112,
+              112
+            ],
+            "label": "+112% Enhanced Damage",
+            "priority": 120,
+            "min": 110,
+            "max": 145
+          },
+          {
+            "name": "item_fractionaltargetac",
+            "values": [
+              25
+            ],
+            "label": "-25% Target Defense",
+            "priority": 118
+          },
+          {
+            "name": "item_demondamage_percent",
+            "values": [
+              118
+            ],
+            "label": "118% Damage to Demons",
+            "priority": 112,
+            "min": 80,
+            "max": 120
+          },
+          {
+            "name": "item_demon_tohit",
+            "values": [
+              200
+            ],
+            "label": "+200 to Attack Rating against Demons",
+            "priority": 110
+          },
+          {
+            "name": "curse_resistance",
+            "values": [
+              30
+            ],
+            "label": "30% Reduced Curse Duration",
+            "priority": 100
+          },
+          {
+            "name": "colddam",
+            "values": [
+              3,
+              14,
+              75
+            ],
+            "label": "Adds 3-14 Cold Damage",
+            "priority": 96
+          },
+          {
+            "name": "lifedrainmindam",
+            "values": [
+              7
+            ],
+            "label": "7% Life stolen per hit",
+            "priority": 88
+          }
+        ],
+        "socketed": [
+          {
+            "is_identified": true,
+            "is_socketed": false,
+            "is_new": false,
+            "is_ear": false,
+            "is_starter": false,
+            "is_simple": true,
+            "is_ethereal": false,
+            "is_personalized": false,
+            "is_runeword": false,
+            "format_version": 105,
+            "base": {
+              "id": "r11",
+              "category": "misc",
+              "codes": {
+                "normal": "r11",
+                "exceptional": "",
+                "elite": ""
+              },
+              "name": "Amn Rune",
+              "stackable": true,
+              "type": "Rune",
+              "type_code": "rune",
+              "size": {
+                "height": 1,
+                "width": 1
+              },
+              "requirements": {
+                "level": 25
+              }
+            },
+            "modifiers": [
+              {
+                "name": "lifedrainmindam",
+                "values": [
+                  7
+                ],
+                "label": "7% Life stolen per hit",
+                "priority": 88
+              }
+            ],
+            "location": {
+              "storage_id": 0,
+              "equipment_id": 0,
+              "zone_id": 6,
+              "zone": "Socketed",
+              "storage": "Unknown"
+            },
+            "position": {
+              "column": 0,
+              "row": 0
+            },
+            "category": "misc",
+            "base_code": "r11",
+            "name": "Amn Rune",
+            "requirements": {
+              "level": 25,
+              "strength": 0,
+              "dexterity": 0
+            },
+            "corrupted": false,
+            "desecrated": false,
+            "properties": [
+              null
+            ],
+            "hash": "35e3a7322967709ad61a7bb830ae38a64749d52a"
+          },
+          {
+            "is_identified": true,
+            "is_socketed": false,
+            "is_new": false,
+            "is_ear": false,
+            "is_starter": false,
+            "is_simple": true,
+            "is_ethereal": false,
+            "is_personalized": false,
+            "is_runeword": false,
+            "format_version": 105,
+            "base": {
+              "id": "r05",
+              "category": "misc",
+              "codes": {
+                "normal": "r05",
+                "exceptional": "",
+                "elite": ""
+              },
+              "name": "Eth Rune",
+              "stackable": true,
+              "type": "Rune",
+              "type_code": "rune",
+              "size": {
+                "height": 1,
+                "width": 1
+              },
+              "requirements": {
+                "level": 15
+              }
+            },
+            "modifiers": [
+              {
+                "name": "item_fractionaltargetac",
+                "values": [
+                  25
+                ],
+                "label": "-25% Target Defense",
+                "priority": 118
+              }
+            ],
+            "location": {
+              "storage_id": 0,
+              "equipment_id": 0,
+              "zone_id": 6,
+              "zone": "Socketed",
+              "storage": "Unknown"
+            },
+            "position": {
+              "column": 1,
+              "row": 0
+            },
+            "category": "misc",
+            "base_code": "r05",
+            "name": "Eth Rune",
+            "requirements": {
+              "level": 15,
+              "strength": 0,
+              "dexterity": 0
+            },
+            "corrupted": false,
+            "desecrated": false,
+            "properties": [
+              null
+            ],
+            "hash": "905865ce099529d2ffc3a192263d840f83ded5a7"
+          },
+          {
+            "is_identified": true,
+            "is_socketed": false,
+            "is_new": false,
+            "is_ear": false,
+            "is_starter": false,
+            "is_simple": true,
+            "is_ethereal": false,
+            "is_personalized": false,
+            "is_runeword": false,
+            "format_version": 105,
+            "base": {
+              "id": "r10",
+              "category": "misc",
+              "codes": {
+                "normal": "r10",
+                "exceptional": "",
+                "elite": ""
+              },
+              "name": "Thul Rune",
+              "stackable": true,
+              "type": "Rune",
+              "type_code": "rune",
+              "size": {
+                "height": 1,
+                "width": 1
+              },
+              "requirements": {
+                "level": 23
+              }
+            },
+            "modifiers": [
+              {
+                "name": "colddam",
+                "values": [
+                  3,
+                  14,
+                  75
+                ],
+                "label": "Adds 3-14 Cold Damage",
+                "priority": 96
+              }
+            ],
+            "location": {
+              "storage_id": 0,
+              "equipment_id": 0,
+              "zone_id": 6,
+              "zone": "Socketed",
+              "storage": "Unknown"
+            },
+            "position": {
+              "column": 2,
+              "row": 0
+            },
+            "category": "misc",
+            "base_code": "r10",
+            "name": "Thul Rune",
+            "requirements": {
+              "level": 23,
+              "strength": 0,
+              "dexterity": 0
+            },
+            "corrupted": false,
+            "desecrated": false,
+            "properties": [
+              null,
+              null,
+              null
+            ],
+            "hash": "944fc8a8aefaa23a2ed11b7bd819526b35fea553"
+          }
+        ],
+        "location": {
+          "storage_id": 0,
+          "equipment_id": 4,
+          "zone_id": 1,
+          "zone": "Equipped",
+          "storage": "Unknown",
+          "equipment": "Right Hand"
+        },
+        "position": {
+          "column": 4,
+          "row": 0
+        },
+        "category": "weapon",
+        "base_code": "9s8",
+        "name": "Purity",
+        "requirements": {
+          "level": 25,
+          "strength": 82,
+          "dexterity": 82
+        },
+        "corrupted": false,
+        "desecrated": false,
+        "properties": [
+          "Melee Attacks Deal Splash Damage",
+          "Level 12 Prayer Aura When Equipped",
+          "45% Increased Attack Speed",
+          "+112% Enhanced Damage",
+          "-25% Target Defense",
+          "118% Damage to Demons",
+          "+200 to Attack Rating against Demons",
+          "30% Reduced Curse Duration",
+          "Adds 3-14 Cold Damage",
+          "7% Life stolen per hit"
+        ],
+        "damage": {
+          "two_handed": {
+            "minimum": 53,
+            "maximum": 135
+          }
+        },
+        "hash": "fd44b9aa6996228fd536373b1cbc684c977f69fd"
+      }
+    ]
+  },
+  "failed_items": [],
+  "items": [
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm1",
+        "category": "misc",
+        "codes": {
+          "normal": "cm1",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Small Charm",
+        "stackable": false,
+        "type": "Small Charm",
+        "type_code": "scha",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 15121015010140,
+      "item_level": 48,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 2,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "maxhp",
+          "values": [
+            14
+          ],
+          "label": "+14 to Life",
+          "priority": 59,
+          "min": 11,
+          "max": 15
+        },
+        {
+          "name": "lightresist",
+          "values": [
+            3
+          ],
+          "label": "Lightning Resist 3%",
+          "priority": 38,
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "name": "Tangerine Small Charm of Substinence",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 7,
+        "row": 4
+      },
+      "category": "misc",
+      "base_code": "cm1",
+      "requirements": {
+        "level": 17,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "+14 to Life",
+        "Lightning Resist 3%"
+      ],
+      "hash": "106120d5b2e855c90a8629674899ad53a64c957d"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm3",
+        "category": "misc",
+        "codes": {
+          "normal": "cm3",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Grand Charm",
+        "stackable": false,
+        "type": "Large Charm",
+        "type_code": "lcha",
+        "size": {
+          "height": 3,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 413150341410,
+      "item_level": 43,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 1,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "strength",
+          "values": [
+            6
+          ],
+          "label": "+6 to Strength",
+          "priority": 67,
+          "min": 5,
+          "max": 6
+        }
+      ],
+      "name": "Grand Charm of Strength",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 0,
+        "row": 5
+      },
+      "category": "misc",
+      "base_code": "cm3",
+      "requirements": {
+        "level": 10,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "+6 to Strength"
+      ],
+      "hash": "1d551561ed4f45ce0a2dcd32d1363cf74d91f4da"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm3",
+        "category": "misc",
+        "codes": {
+          "normal": "cm3",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Grand Charm",
+        "stackable": false,
+        "type": "Large Charm",
+        "type_code": "lcha",
+        "size": {
+          "height": 3,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 58614133113,
+      "item_level": 6,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 1,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "item_fastergethitrate",
+          "values": [
+            12
+          ],
+          "label": "12% Faster Hit Recovery",
+          "priority": 139
+        }
+      ],
+      "name": "Grand Charm of Balance",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 1,
+        "row": 5
+      },
+      "category": "misc",
+      "base_code": "cm3",
+      "requirements": {
+        "level": 1,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "12% Faster Hit Recovery"
+      ],
+      "hash": "fa1bc28b4d1f52123688d1f817bc0262f50b8a33"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm3",
+        "category": "misc",
+        "codes": {
+          "normal": "cm3",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Grand Charm",
+        "stackable": false,
+        "type": "Large Charm",
+        "type_code": "lcha",
+        "size": {
+          "height": 3,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 1261147136,
+      "item_level": 22,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 1,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "fireresist",
+          "values": [
+            14
+          ],
+          "label": "Fire Resist 14%",
+          "priority": 36,
+          "min": 7,
+          "max": 15
+        }
+      ],
+      "name": "Crimson Grand Charm",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 2,
+        "row": 5
+      },
+      "category": "misc",
+      "base_code": "cm3",
+      "requirements": {
+        "level": 1,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "Fire Resist 14%"
+      ],
+      "hash": "a8d4bf274af1fa67b9dbd58a8f74a097cbee0119"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm3",
+        "category": "misc",
+        "codes": {
+          "normal": "cm3",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Grand Charm",
+        "stackable": false,
+        "type": "Large Charm",
+        "type_code": "lcha",
+        "size": {
+          "height": 3,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 6412196115,
+      "item_level": 22,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 1,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "firedam",
+          "values": [
+            5,
+            9
+          ],
+          "label": "Adds 5-9 Fire Damage",
+          "priority": 101
+        },
+        {
+          "name": "fireresist",
+          "values": [
+            23
+          ],
+          "label": "Fire Resist 23%",
+          "priority": 36,
+          "min": 21,
+          "max": 25
+        }
+      ],
+      "name": "Garnet Grand Charm of Fire",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 3,
+        "row": 5
+      },
+      "category": "misc",
+      "base_code": "cm3",
+      "requirements": {
+        "level": 15,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "Adds 5-9 Fire Damage",
+        "Fire Resist 23%"
+      ],
+      "hash": "32b91f07b7bb72e14825f262873116ec050dac34"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm3",
+        "category": "misc",
+        "codes": {
+          "normal": "cm3",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Grand Charm",
+        "stackable": false,
+        "type": "Large Charm",
+        "type_code": "lcha",
+        "size": {
+          "height": 3,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 713509813,
+      "item_level": 17,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 0,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "item_fastergethitrate",
+          "values": [
+            12
+          ],
+          "label": "12% Faster Hit Recovery",
+          "priority": 139
+        },
+        {
+          "name": "max_damage",
+          "values": [
+            3
+          ],
+          "label": "+3 to Maximum Damage",
+          "priority": 126,
+          "min": 1,
+          "max": 3
+        },
+        {
+          "name": "tohit",
+          "values": [
+            10
+          ],
+          "label": "+10 to Attack Rating",
+          "priority": 115,
+          "min": 10,
+          "max": 20
+        }
+      ],
+      "name": "Fine Grand Charm of Balance",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 5,
+        "row": 5
+      },
+      "category": "misc",
+      "base_code": "cm3",
+      "requirements": {
+        "level": 11,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "12% Faster Hit Recovery",
+        "+3 to Maximum Damage",
+        "+10 to Attack Rating"
+      ],
+      "hash": "4cb16c42a2ec181a3287cdd591ecc9d0a10990e6"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm3",
+        "category": "misc",
+        "codes": {
+          "normal": "cm3",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Grand Charm",
+        "stackable": false,
+        "type": "Large Charm",
+        "type_code": "lcha",
+        "size": {
+          "height": 3,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 12115152812,
+      "item_level": 28,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 1,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "lightresist",
+          "values": [
+            13
+          ],
+          "label": "Lightning Resist 13%",
+          "priority": 38,
+          "min": 7,
+          "max": 15
+        }
+      ],
+      "name": "Tangerine Grand Charm",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 6,
+        "row": 5
+      },
+      "category": "misc",
+      "base_code": "cm3",
+      "requirements": {
+        "level": 1,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "Lightning Resist 13%"
+      ],
+      "hash": "05a74dee32e5c34ab94be8cb20c24f05d8ebfee5"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm2",
+        "category": "misc",
+        "codes": {
+          "normal": "cm2",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Large Charm",
+        "stackable": false,
+        "type": "Medium Charm",
+        "type_code": "mcha",
+        "size": {
+          "height": 2,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 106511123113,
+      "item_level": 5,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 1,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "poisonresist",
+          "values": [
+            5
+          ],
+          "label": "Poison Resist 5%",
+          "priority": 34,
+          "min": 4,
+          "max": 7
+        }
+      ],
+      "name": "Beryl Large Charm",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 9,
+        "row": 4
+      },
+      "category": "misc",
+      "base_code": "cm2",
+      "requirements": {
+        "level": 1,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "Poison Resist 5%"
+      ],
+      "hash": "6cb318936d5cdee082e06b13537fca2148a80732"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm1",
+        "category": "misc",
+        "codes": {
+          "normal": "cm1",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Small Charm",
+        "stackable": false,
+        "type": "Small Charm",
+        "type_code": "scha",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 9121115512112,
+      "item_level": 28,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 0,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "poisonresist",
+          "values": [
+            3
+          ],
+          "label": "Poison Resist 3%",
+          "priority": 34,
+          "min": 3,
+          "max": 5
+        },
+        {
+          "name": "item_goldbonus",
+          "values": [
+            8
+          ],
+          "label": "8% Extra Gold from Monsters",
+          "priority": 10,
+          "min": 5,
+          "max": 10
+        }
+      ],
+      "name": "Beryl Small Charm of Greed",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 9,
+        "row": 6
+      },
+      "category": "misc",
+      "base_code": "cm1",
+      "requirements": {
+        "level": 15,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "Poison Resist 3%",
+        "8% Extra Gold from Monsters"
+      ],
+      "hash": "add5f48b691dbc74c3858416e421116f41a9622e"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm1",
+        "category": "misc",
+        "codes": {
+          "normal": "cm1",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Small Charm",
+        "stackable": false,
+        "type": "Small Charm",
+        "type_code": "scha",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 411025514,
+      "item_level": 19,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 0,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "lightresist",
+          "values": [
+            6
+          ],
+          "label": "Lightning Resist 6%",
+          "priority": 38,
+          "min": 6,
+          "max": 7
+        }
+      ],
+      "name": "Ocher Small Charm",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 9,
+        "row": 7
+      },
+      "category": "misc",
+      "base_code": "cm1",
+      "requirements": {
+        "level": 10,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "Lightning Resist 6%"
+      ],
+      "hash": "eb6a178fba9624c7000a85524ed443ce927d2d19"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm1",
+        "category": "misc",
+        "codes": {
+          "normal": "cm1",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Small Charm",
+        "stackable": false,
+        "type": "Small Charm",
+        "type_code": "scha",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 31474831114,
+      "item_level": 28,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 2,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "lightresist",
+          "values": [
+            5
+          ],
+          "label": "Lightning Resist 5%",
+          "priority": 38,
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "name": "Tangerine Small Charm",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 4,
+        "row": 4
+      },
+      "category": "misc",
+      "base_code": "cm1",
+      "requirements": {
+        "level": 1,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "Lightning Resist 5%"
+      ],
+      "hash": "3d28cc527bf38c91bdb81fbc1d15b98ba97d0c1b"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm1",
+        "category": "misc",
+        "codes": {
+          "normal": "cm1",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Small Charm",
+        "stackable": false,
+        "type": "Small Charm",
+        "type_code": "scha",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 292751530,
+      "item_level": 22,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 2,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "maxhp",
+          "values": [
+            9
+          ],
+          "label": "+9 to Life",
+          "priority": 59,
+          "min": 5,
+          "max": 10
+        },
+        {
+          "name": "coldresist",
+          "values": [
+            7
+          ],
+          "label": "Cold Resist 7%",
+          "priority": 40,
+          "min": 6,
+          "max": 7
+        }
+      ],
+      "name": "Lapis Small Charm of Life",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 1,
+        "row": 4
+      },
+      "category": "misc",
+      "base_code": "cm1",
+      "requirements": {
+        "level": 14,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "+9 to Life",
+        "Cold Resist 7%"
+      ],
+      "hash": "07f19e673333958135b0db6b6044c6d193d8020a"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm1",
+        "category": "misc",
+        "codes": {
+          "normal": "cm1",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Small Charm",
+        "stackable": false,
+        "type": "Small Charm",
+        "type_code": "scha",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 81501015845,
+      "item_level": 28,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 2,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "coldresist",
+          "values": [
+            4
+          ],
+          "label": "Cold Resist 4%",
+          "priority": 40,
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "name": "Azure Small Charm",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 2,
+        "row": 4
+      },
+      "category": "misc",
+      "base_code": "cm1",
+      "requirements": {
+        "level": 1,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "Cold Resist 4%"
+      ],
+      "hash": "30d53d641039eff3f4e5c84a85ad01c01c31fcd7"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm1",
+        "category": "misc",
+        "codes": {
+          "normal": "cm1",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Small Charm",
+        "stackable": false,
+        "type": "Small Charm",
+        "type_code": "scha",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 13156415278,
+      "item_level": 7,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 1,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "poisondam",
+          "values": [
+            7,
+            7,
+            2
+          ],
+          "label": "+7 Poison Damage over 2 Seconds",
+          "priority": 92
+        },
+        {
+          "name": "lightresist",
+          "values": [
+            5
+          ],
+          "label": "Lightning Resist 5%",
+          "priority": 38,
+          "min": 3,
+          "max": 5
+        }
+      ],
+      "name": "Tangerine Small Charm of Venom",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 6,
+        "row": 4
+      },
+      "category": "misc",
+      "base_code": "cm1",
+      "requirements": {
+        "level": 4,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "+7 Poison Damage over 2 Seconds",
+        "Lightning Resist 5%"
+      ],
+      "hash": "81c09e70eee7e4379ed8b8c423687de379287f77"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm1",
+        "category": "misc",
+        "codes": {
+          "normal": "cm1",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Small Charm",
+        "stackable": false,
+        "type": "Small Charm",
+        "type_code": "scha",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 1411101114113,
+      "item_level": 38,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 1,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "poisondam",
+          "values": [
+            21,
+            21,
+            2
+          ],
+          "label": "+21 Poison Damage over 2 Seconds",
+          "priority": 92
+        },
+        {
+          "name": "armorclass",
+          "values": [
+            1
+          ],
+          "label": "+1 Defense",
+          "priority": 71
+        }
+      ],
+      "name": "Stout Small Charm of Anthrax",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 8,
+        "row": 4
+      },
+      "category": "misc",
+      "base_code": "cm1",
+      "requirements": {
+        "level": 15,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "+21 Poison Damage over 2 Seconds",
+        "+1 Defense"
+      ],
+      "hash": "436ddf81a327492934fc058d6d1abb9e1377d831"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm1",
+        "category": "misc",
+        "codes": {
+          "normal": "cm1",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Small Charm",
+        "stackable": false,
+        "type": "Small Charm",
+        "type_code": "scha",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 121311114450,
+      "item_level": 28,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 1,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "poisondam",
+          "values": [
+            13,
+            13,
+            2
+          ],
+          "label": "+13 Poison Damage over 2 Seconds",
+          "priority": 92
+        }
+      ],
+      "name": "Envenomed Small Charm",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 8,
+        "row": 5
+      },
+      "category": "misc",
+      "base_code": "cm1",
+      "requirements": {
+        "level": 9,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "+13 Poison Damage over 2 Seconds"
+      ],
+      "hash": "c705f8ba53f24df7cc4b6535ae63a6aa291dc9a2"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm2",
+        "category": "misc",
+        "codes": {
+          "normal": "cm2",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Large Charm",
+        "stackable": false,
+        "type": "Medium Charm",
+        "type_code": "mcha",
+        "size": {
+          "height": 2,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 61431061345,
+      "item_level": 56,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 1,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "item_fasterattackrate",
+          "values": [
+            6
+          ],
+          "label": "6% Increased Attack Speed",
+          "priority": 145,
+          "min": 6,
+          "max": 7
+        },
+        {
+          "name": "poisondam",
+          "values": [
+            8,
+            8,
+            2
+          ],
+          "label": "+8 Poison Damage over 2 Seconds",
+          "priority": 92
+        }
+      ],
+      "name": "Quick Large Charm of Blight",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 7,
+        "row": 6
+      },
+      "category": "misc",
+      "base_code": "cm2",
+      "requirements": {
+        "level": 42,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "6% Increased Attack Speed",
+        "+8 Poison Damage over 2 Seconds"
+      ],
+      "hash": "085daef9c07e09cc67798ce551be315eb8fdbdbd"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm1",
+        "category": "misc",
+        "codes": {
+          "normal": "cm1",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Small Charm",
+        "stackable": false,
+        "type": "Small Charm",
+        "type_code": "scha",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 10794481011,
+      "item_level": 56,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 1,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "item_fastergethitrate",
+          "values": [
+            5
+          ],
+          "label": "5% Faster Hit Recovery",
+          "priority": 139
+        },
+        {
+          "name": "armorclass",
+          "values": [
+            18
+          ],
+          "label": "+18 Defense",
+          "priority": 71,
+          "min": 15,
+          "max": 20
+        }
+      ],
+      "name": "Burly Small Charm of Balance",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 7,
+        "row": 5
+      },
+      "category": "misc",
+      "base_code": "cm1",
+      "requirements": {
+        "level": 29,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "5% Faster Hit Recovery",
+        "+18 Defense"
+      ],
+      "hash": "a9f736ab44fe5fa3ed94bc578e0c9be77b2a718b"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm3",
+        "category": "misc",
+        "codes": {
+          "normal": "cm3",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Grand Charm",
+        "stackable": false,
+        "type": "Large Charm",
+        "type_code": "lcha",
+        "size": {
+          "height": 3,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 11129961473,
+      "item_level": 33,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 0,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "item_fastergethitrate",
+          "values": [
+            12
+          ],
+          "label": "12% Faster Hit Recovery",
+          "priority": 139
+        }
+      ],
+      "name": "Grand Charm of Balance",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 4,
+        "row": 5
+      },
+      "category": "misc",
+      "base_code": "cm3",
+      "requirements": {
+        "level": 1,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "12% Faster Hit Recovery"
+      ],
+      "hash": "42a0ae8dd22da4c808081db49b60fd2f6c6c8765"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm1",
+        "category": "misc",
+        "codes": {
+          "normal": "cm1",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Small Charm",
+        "stackable": false,
+        "type": "Small Charm",
+        "type_code": "scha",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 12731186122,
+      "item_level": 59,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 2,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "lightresist",
+          "values": [
+            7
+          ],
+          "label": "Lightning Resist 7%",
+          "priority": 38,
+          "min": 6,
+          "max": 7
+        }
+      ],
+      "name": "Ocher Small Charm",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 5,
+        "row": 4
+      },
+      "category": "misc",
+      "base_code": "cm1",
+      "requirements": {
+        "level": 10,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "Lightning Resist 7%"
+      ],
+      "hash": "80581938cb26013d7fcfb64289b2d1e2825a9ee7"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": true,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": true,
+      "format_version": 105,
+      "base": {
+        "id": "bhm",
+        "category": "armor",
+        "codes": {
+          "normal": "bhm",
+          "exceptional": "xh9",
+          "elite": "uh9"
+        },
+        "name": "Bone Helm",
+        "stackable": false,
+        "type": "Helm",
+        "type_code": "helm",
+        "size": {
+          "height": 2,
+          "width": 2
+        },
+        "requirements": {
+          "strength": 25
+        }
+      },
+      "socketed_count": 2,
+      "id": 146212113412,
+      "item_level": 24,
+      "quality": {
+        "id": 2,
+        "name": "Normal"
+      },
+      "graphic_id": false,
+      "class_specifics": false,
+      "runeword": {
+        "key": "Runeword88",
+        "name": "Nadir",
+        "modifiers": [
+          {
+            "name": "item_armor_percent",
+            "encoding": 0,
+            "description": {
+              "function": 4,
+              "priority": 74,
+              "value": 1,
+              "label": {
+                "positive_code": "Modstr2v",
+                "negative_code": "Modstr2v",
+                "group": {},
+                "positive": "Enhanced Defense",
+                "negative": "Enhanced Defense"
+              }
+            }
+          },
+          {
+            "name": "armorclass",
+            "encoding": 0,
+            "description": {
+              "function": 1,
+              "priority": 71,
+              "value": 1,
+              "label": {
+                "positive_code": "ModStr1i",
+                "negative_code": "ModStr1i",
+                "group": {},
+                "positive": "Defense",
+                "negative": "Defense"
+              }
+            }
+          },
+          {
+            "name": "item_lightradius",
+            "encoding": 0,
+            "description": {
+              "function": 1,
+              "priority": 6,
+              "value": 1,
+              "label": {
+                "positive_code": "ModStr3f",
+                "negative_code": "ModStr3f",
+                "group": {},
+                "positive": "to Light Radius",
+                "negative": "to Light Radius"
+              }
+            }
+          },
+          {
+            "name": "item_charged_skill",
+            "encoding": 3,
+            "description": {
+              "function": 24,
+              "priority": 1,
+              "value": 0,
+              "label": {
+                "positive_code": "ModStre10d",
+                "negative_code": "ModStre10d",
+                "group": {},
+                "positive": "(%d/%d Charges)",
+                "negative": "(%d/%d Charges)"
+              }
+            }
+          },
+          {
+            "name": "item_goldbonus",
+            "encoding": 0,
+            "description": {
+              "function": 2,
+              "priority": 10,
+              "value": 1,
+              "label": {
+                "positive_code": "ModStr1w",
+                "negative_code": "ModStr1w",
+                "group": {},
+                "positive": "Extra Gold from Monsters",
+                "negative": "Extra Gold from Monsters"
+              }
+            }
+          },
+          {
+            "name": "strength",
+            "encoding": 0,
+            "description": {
+              "function": 1,
+              "priority": 67,
+              "value": 1,
+              "label": {
+                "positive_code": "ModStr1a",
+                "negative_code": "ModStr1a",
+                "group": {
+                  "positive_code": "Moditem2allattrib",
+                  "negative_code": "Moditem2allattrib",
+                  "positive": "to all Attributes",
+                  "negative": "to all Attributes"
+                },
+                "positive": "to Strength",
+                "negative": "to Strength"
+              }
+            }
+          },
+          {
+            "name": "item_manaafterkill",
+            "encoding": 0,
+            "description": {
+              "function": 1,
+              "priority": 16,
+              "value": 1,
+              "label": {
+                "positive_code": "ModStr5f",
+                "negative_code": "ModStr5f",
+                "group": {},
+                "positive": "to Mana after each Kill",
+                "negative": "to Mana after each Kill"
+              }
+            }
+          }
+        ],
+        "runes": [
+          "r04",
+          "r03"
+        ]
+      },
+      "defense": {
+        "base": 36,
+        "total": 64
+      },
+      "durability": {
+        "maximum": 40,
+        "current": 40
+      },
+      "socket_count": 2,
+      "modifiers": [
+        {
+          "name": "item_armor_percent",
+          "values": [
+            50
+          ],
+          "label": "50% Enhanced Defense",
+          "priority": 74
+        },
+        {
+          "name": "armorclass",
+          "values": [
+            10
+          ],
+          "label": "+10 Defense",
+          "priority": 71
+        },
+        {
+          "name": "armorclass_vs_missile",
+          "values": [
+            30
+          ],
+          "label": "+30 Defense vs. Missile",
+          "priority": 69
+        },
+        {
+          "name": "strength",
+          "values": [
+            5
+          ],
+          "label": "+5 to Strength",
+          "priority": 67
+        },
+        {
+          "name": "item_manaafterkill",
+          "values": [
+            6
+          ],
+          "label": "+6 to Mana after each Kill",
+          "priority": 16,
+          "min": 2,
+          "max": 4
+        },
+        {
+          "name": "item_goldbonus",
+          "values": [
+            -33
+          ],
+          "label": "-33% Extra Gold from Monsters",
+          "priority": 10
+        },
+        {
+          "name": "item_lightradius",
+          "values": [
+            -3
+          ],
+          "label": "-3 to Light Radius",
+          "priority": 6
+        },
+        {
+          "name": "item_charged_skill",
+          "values": [
+            13,
+            264,
+            9,
+            9
+          ],
+          "label": "Level 13 Cloak of Shadows (9/9 Charges)",
+          "priority": 1
+        }
+      ],
+      "socketed": [
+        {
+          "is_identified": true,
+          "is_socketed": false,
+          "is_new": false,
+          "is_ear": false,
+          "is_starter": false,
+          "is_simple": true,
+          "is_ethereal": false,
+          "is_personalized": false,
+          "is_runeword": false,
+          "format_version": 105,
+          "base": {
+            "id": "r04",
+            "category": "misc",
+            "codes": {
+              "normal": "r04",
+              "exceptional": "",
+              "elite": ""
+            },
+            "name": "Nef Rune",
+            "stackable": true,
+            "type": "Rune",
+            "type_code": "rune",
+            "size": {
+              "height": 1,
+              "width": 1
+            },
+            "requirements": {
+              "level": 13
+            }
+          },
+          "modifiers": [
+            {
+              "name": "armorclass_vs_missile",
+              "values": [
+                30
+              ],
+              "label": "+30 Defense vs. Missile",
+              "priority": 69
+            }
+          ],
+          "location": {
+            "storage_id": 0,
+            "equipment_id": 0,
+            "zone_id": 6,
+            "zone": "Socketed",
+            "storage": "Unknown"
+          },
+          "position": {
+            "column": 0,
+            "row": 0
+          },
+          "category": "misc",
+          "base_code": "r04",
+          "name": "Nef Rune",
+          "requirements": {
+            "level": 13,
+            "strength": 0,
+            "dexterity": 0
+          },
+          "corrupted": false,
+          "desecrated": false,
+          "properties": [
+            null
+          ],
+          "hash": "7c34cfaf1b587ecd59bdca2135c293df1b9410ce"
+        },
+        {
+          "is_identified": true,
+          "is_socketed": false,
+          "is_new": false,
+          "is_ear": false,
+          "is_starter": false,
+          "is_simple": true,
+          "is_ethereal": false,
+          "is_personalized": false,
+          "is_runeword": false,
+          "format_version": 105,
+          "base": {
+            "id": "r03",
+            "category": "misc",
+            "codes": {
+              "normal": "r03",
+              "exceptional": "",
+              "elite": ""
+            },
+            "name": "Tir Rune",
+            "stackable": true,
+            "type": "Rune",
+            "type_code": "rune",
+            "size": {
+              "height": 1,
+              "width": 1
+            },
+            "requirements": {
+              "level": 13
+            }
+          },
+          "modifiers": [
+            {
+              "name": "item_manaafterkill",
+              "values": [
+                2
+              ],
+              "label": "+2 to Mana after each Kill",
+              "priority": 16
+            }
+          ],
+          "location": {
+            "storage_id": 0,
+            "equipment_id": 0,
+            "zone_id": 6,
+            "zone": "Socketed",
+            "storage": "Unknown"
+          },
+          "position": {
+            "column": 1,
+            "row": 0
+          },
+          "category": "misc",
+          "base_code": "r03",
+          "name": "Tir Rune",
+          "requirements": {
+            "level": 13,
+            "strength": 0,
+            "dexterity": 0
+          },
+          "corrupted": false,
+          "desecrated": false,
+          "properties": [
+            null
+          ],
+          "hash": "c94ddadfb10e87781115a5e226ee8e41a445d07c"
+        }
+      ],
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 1,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Helm"
+      },
+      "position": {
+        "column": 1,
+        "row": 0
+      },
+      "category": "armor",
+      "base_code": "bhm",
+      "name": "Nadir",
+      "requirements": {
+        "level": 13,
+        "strength": 25,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "50% Enhanced Defense",
+        "+10 Defense",
+        "+30 Defense vs. Missile",
+        "+5 to Strength",
+        "+6 to Mana after each Kill",
+        "-33% Extra Gold from Monsters",
+        "-3 to Light Radius",
+        "Level 13 Cloak of Shadows (9/9 Charges)"
+      ],
+      "hash": "d79c9a88d0c09fc4d83f49c3009ae2d7685e7534"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": true,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": true,
+      "format_version": 105,
+      "base": {
+        "id": "xea",
+        "category": "armor",
+        "codes": {
+          "normal": "lea",
+          "exceptional": "xea",
+          "elite": "uea"
+        },
+        "name": "Serpentskin Armor",
+        "stackable": false,
+        "type": "Armor",
+        "type_code": "tors",
+        "size": {
+          "height": 3,
+          "width": 2
+        },
+        "requirements": {
+          "level": 24,
+          "strength": 43
+        }
+      },
+      "socketed_count": 3,
+      "id": 41221251585,
+      "item_level": 28,
+      "quality": {
+        "id": 3,
+        "name": "Superior",
+        "sub_id": 7
+      },
+      "graphic_id": false,
+      "class_specifics": false,
+      "runeword": {
+        "key": "Finesse",
+        "name": "Finesse",
+        "modifiers": [
+          {
+            "name": "item_armor_percent",
+            "encoding": 0,
+            "description": {
+              "function": 4,
+              "priority": 74,
+              "value": 1,
+              "label": {
+                "positive_code": "Modstr2v",
+                "negative_code": "Modstr2v",
+                "group": {},
+                "positive": "Enhanced Defense",
+                "negative": "Enhanced Defense"
+              }
+            }
+          },
+          {
+            "name": "item_pierce",
+            "encoding": 0,
+            "description": {
+              "function": 4,
+              "priority": 132,
+              "value": 1,
+              "label": {
+                "positive_code": "ModPierceChance",
+                "negative_code": "ModPierceChance",
+                "group": {},
+                "positive": "Chance to Pierce",
+                "negative": "Chance to Pierce"
+              }
+            }
+          },
+          {
+            "name": "item_fasterattackrate",
+            "encoding": 0,
+            "description": {
+              "function": 4,
+              "priority": 145,
+              "value": 1,
+              "label": {
+                "positive_code": "ModStr4m",
+                "negative_code": "ModStr4m",
+                "group": {},
+                "positive": "Increased Attack Speed",
+                "negative": "Increased Attack Speed"
+              }
+            }
+          },
+          {
+            "name": "item_goldbonus",
+            "encoding": 0,
+            "description": {
+              "function": 2,
+              "priority": 10,
+              "value": 1,
+              "label": {
+                "positive_code": "ModStr1w",
+                "negative_code": "ModStr1w",
+                "group": {},
+                "positive": "Extra Gold from Monsters",
+                "negative": "Extra Gold from Monsters"
+              }
+            }
+          }
+        ],
+        "runes": [
+          "r04",
+          "r08",
+          "r14"
+        ]
+      },
+      "defense": {
+        "base": 123,
+        "total": 248
+      },
+      "durability": {
+        "maximum": 24,
+        "current": 28
+      },
+      "socket_count": 3,
+      "modifiers": [
+        {
+          "name": "item_fasterattackrate",
+          "values": [
+            20
+          ],
+          "label": "20% Increased Attack Speed",
+          "priority": 145
+        },
+        {
+          "name": "item_pierce",
+          "values": [
+            26
+          ],
+          "label": "26% Chance to Pierce",
+          "priority": 132,
+          "min": 25,
+          "max": 35
+        },
+        {
+          "name": "item_armor_percent",
+          "values": [
+            102
+          ],
+          "label": "102% Enhanced Defense",
+          "priority": 74,
+          "min": 50,
+          "max": 100
+        },
+        {
+          "name": "armorclass_vs_missile",
+          "values": [
+            30
+          ],
+          "label": "+30 Defense vs. Missile",
+          "priority": 69
+        },
+        {
+          "name": "hpregen",
+          "values": [
+            20
+          ],
+          "label": "Replenish Life +20",
+          "priority": 56
+        },
+        {
+          "name": "fireresist",
+          "values": [
+            30
+          ],
+          "label": "Fire Resist 30%",
+          "priority": 36
+        },
+        {
+          "name": "item_goldbonus",
+          "values": [
+            45
+          ],
+          "label": "45% Extra Gold from Monsters",
+          "priority": 10
+        },
+        {
+          "name": "item_maxdurability_percent",
+          "values": [
+            17
+          ],
+          "label": "Increase Maximum Durability 17%",
+          "priority": 3
+        }
+      ],
+      "socketed": [
+        {
+          "is_identified": true,
+          "is_socketed": false,
+          "is_new": false,
+          "is_ear": false,
+          "is_starter": false,
+          "is_simple": true,
+          "is_ethereal": false,
+          "is_personalized": false,
+          "is_runeword": false,
+          "format_version": 105,
+          "base": {
+            "id": "r04",
+            "category": "misc",
+            "codes": {
+              "normal": "r04",
+              "exceptional": "",
+              "elite": ""
+            },
+            "name": "Nef Rune",
+            "stackable": true,
+            "type": "Rune",
+            "type_code": "rune",
+            "size": {
+              "height": 1,
+              "width": 1
+            },
+            "requirements": {
+              "level": 13
+            }
+          },
+          "modifiers": [
+            {
+              "name": "armorclass_vs_missile",
+              "values": [
+                30
+              ],
+              "label": "+30 Defense vs. Missile",
+              "priority": 69
+            }
+          ],
+          "location": {
+            "storage_id": 0,
+            "equipment_id": 0,
+            "zone_id": 6,
+            "zone": "Socketed",
+            "storage": "Unknown"
+          },
+          "position": {
+            "column": 0,
+            "row": 0
+          },
+          "category": "misc",
+          "base_code": "r04",
+          "name": "Nef Rune",
+          "requirements": {
+            "level": 13,
+            "strength": 0,
+            "dexterity": 0
+          },
+          "corrupted": false,
+          "desecrated": false,
+          "properties": [
+            null
+          ],
+          "hash": "7c34cfaf1b587ecd59bdca2135c293df1b9410ce"
+        },
+        {
+          "is_identified": true,
+          "is_socketed": false,
+          "is_new": false,
+          "is_ear": false,
+          "is_starter": false,
+          "is_simple": true,
+          "is_ethereal": false,
+          "is_personalized": false,
+          "is_runeword": false,
+          "format_version": 105,
+          "base": {
+            "id": "r08",
+            "category": "misc",
+            "codes": {
+              "normal": "r08",
+              "exceptional": "",
+              "elite": ""
+            },
+            "name": "Ral Rune",
+            "stackable": true,
+            "type": "Rune",
+            "type_code": "rune",
+            "size": {
+              "height": 1,
+              "width": 1
+            },
+            "requirements": {
+              "level": 19
+            }
+          },
+          "modifiers": [
+            {
+              "name": "fireresist",
+              "values": [
+                30
+              ],
+              "label": "Fire Resist 30%",
+              "priority": 36
+            }
+          ],
+          "location": {
+            "storage_id": 0,
+            "equipment_id": 0,
+            "zone_id": 6,
+            "zone": "Socketed",
+            "storage": "Unknown"
+          },
+          "position": {
+            "column": 1,
+            "row": 0
+          },
+          "category": "misc",
+          "base_code": "r08",
+          "name": "Ral Rune",
+          "requirements": {
+            "level": 19,
+            "strength": 0,
+            "dexterity": 0
+          },
+          "corrupted": false,
+          "desecrated": false,
+          "properties": [
+            null
+          ],
+          "hash": "656e292f9a977ea808eeec83ff3e1a71ee128449"
+        },
+        {
+          "is_identified": true,
+          "is_socketed": false,
+          "is_new": false,
+          "is_ear": false,
+          "is_starter": false,
+          "is_simple": true,
+          "is_ethereal": false,
+          "is_personalized": false,
+          "is_runeword": false,
+          "format_version": 105,
+          "base": {
+            "id": "r14",
+            "category": "misc",
+            "codes": {
+              "normal": "r14",
+              "exceptional": "",
+              "elite": ""
+            },
+            "name": "Dol Rune",
+            "stackable": true,
+            "type": "Rune",
+            "type_code": "rune",
+            "size": {
+              "height": 1,
+              "width": 1
+            },
+            "requirements": {
+              "level": 31
+            }
+          },
+          "modifiers": [
+            {
+              "name": "hpregen",
+              "values": [
+                20
+              ],
+              "label": "Replenish Life +20",
+              "priority": 56
+            }
+          ],
+          "location": {
+            "storage_id": 0,
+            "equipment_id": 0,
+            "zone_id": 6,
+            "zone": "Socketed",
+            "storage": "Unknown"
+          },
+          "position": {
+            "column": 2,
+            "row": 0
+          },
+          "category": "misc",
+          "base_code": "r14",
+          "name": "Dol Rune",
+          "requirements": {
+            "level": 31,
+            "strength": 0,
+            "dexterity": 0
+          },
+          "corrupted": false,
+          "desecrated": false,
+          "properties": [
+            null
+          ],
+          "hash": "a6b3041fd427ad0bbccca0c5fe0ddf6b602b755d"
+        }
+      ],
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 3,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Armor"
+      },
+      "position": {
+        "column": 3,
+        "row": 0
+      },
+      "category": "armor",
+      "base_code": "xea",
+      "name": "Finesse",
+      "requirements": {
+        "level": 31,
+        "strength": 43,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "20% Increased Attack Speed",
+        "26% Chance to Pierce",
+        "102% Enhanced Defense",
+        "+30 Defense vs. Missile",
+        "Replenish Life +20",
+        "Fire Resist 30%",
+        "45% Extra Gold from Monsters",
+        "Increase Maximum Durability 17%"
+      ],
+      "hash": "b7d3372da2cb7de90eeb7bb1dc98028a3075ac55"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "rin",
+        "category": "misc",
+        "codes": {
+          "normal": "rin",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Ring",
+        "stackable": false,
+        "type": "Ring",
+        "type_code": "ring",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 98128990,
+      "item_level": 28,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 3,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "lifedrainmindam",
+          "values": [
+            4
+          ],
+          "label": "4% Life stolen per hit",
+          "priority": 88,
+          "min": 3,
+          "max": 4
+        },
+        {
+          "name": "lightresist",
+          "values": [
+            29
+          ],
+          "label": "Lightning Resist 29%",
+          "priority": 38,
+          "min": 21,
+          "max": 30
+        }
+      ],
+      "name": "Coral Ring of the Leech",
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 6,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Right Ring"
+      },
+      "position": {
+        "column": 6,
+        "row": 0
+      },
+      "category": "misc",
+      "base_code": "rin",
+      "requirements": {
+        "level": 13,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "4% Life stolen per hit",
+        "Lightning Resist 29%"
+      ],
+      "hash": "ec1933832c070942314a9f9c3521a8b0be46acda"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "zlb",
+        "category": "armor",
+        "codes": {
+          "normal": "lbl",
+          "exceptional": "zlb",
+          "elite": "ulc"
+        },
+        "name": "Demonhide Sash",
+        "stackable": false,
+        "type": "Belt",
+        "type_code": "belt",
+        "size": {
+          "height": 1,
+          "width": 2
+        },
+        "requirements": {
+          "level": 24,
+          "strength": 20
+        }
+      },
+      "socketed_count": 0,
+      "id": 1551341411712,
+      "item_level": 28,
+      "quality": {
+        "id": 6,
+        "name": "Rare"
+      },
+      "graphic_id": false,
+      "class_specifics": false,
+      "defense": {
+        "base": 29,
+        "total": 29
+      },
+      "durability": {
+        "maximum": 12,
+        "current": 12
+      },
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "item_skillongethit",
+          "values": [
+            3,
+            38,
+            10
+          ],
+          "label": "10% Chance to cast level 3 Charged Bolt when struck",
+          "priority": 160
+        },
+        {
+          "name": "maxhp",
+          "values": [
+            15
+          ],
+          "label": "+15 to Life",
+          "priority": 59,
+          "min": 11,
+          "max": 20
+        },
+        {
+          "name": "hpregen",
+          "values": [
+            7
+          ],
+          "label": "Replenish Life +7",
+          "priority": 56,
+          "min": 6,
+          "max": 10
+        },
+        {
+          "name": "coldresist",
+          "values": [
+            17
+          ],
+          "label": "Cold Resist 17%",
+          "priority": 40,
+          "min": 11,
+          "max": 20
+        },
+        {
+          "name": "fireresist",
+          "values": [
+            6
+          ],
+          "label": "Fire Resist 6%",
+          "priority": 36,
+          "min": 5,
+          "max": 10
+        },
+        {
+          "name": "item_lightradius",
+          "values": [
+            2
+          ],
+          "label": "+2 to Light Radius",
+          "priority": 6
+        }
+      ],
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 8,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Belt"
+      },
+      "position": {
+        "column": 8,
+        "row": 0
+      },
+      "category": "armor",
+      "base_code": "zlb",
+      "name": "Demonhide Sash",
+      "requirements": {
+        "level": 24,
+        "strength": 20,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "10% Chance to cast level 3 Charged Bolt when struck",
+        "+15 to Life",
+        "Replenish Life +7",
+        "Cold Resist 17%",
+        "Fire Resist 6%",
+        "+2 to Light Radius"
+      ],
+      "hash": "2c3721a97ca0bd13e0c99fd668330407718cc9ff"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "mbt",
+        "category": "armor",
+        "codes": {
+          "normal": "mbt",
+          "exceptional": "xmb",
+          "elite": "umb"
+        },
+        "name": "Chain Boots",
+        "stackable": false,
+        "type": "Boots",
+        "type_code": "boot",
+        "size": {
+          "height": 2,
+          "width": 2
+        },
+        "requirements": {
+          "strength": 30
+        }
+      },
+      "socketed_count": 0,
+      "id": 201315127212,
+      "item_level": 32,
+      "quality": {
+        "id": 6,
+        "name": "Rare"
+      },
+      "graphic_id": false,
+      "class_specifics": false,
+      "defense": {
+        "base": 10,
+        "total": 12
+      },
+      "durability": {
+        "maximum": 16,
+        "current": 16
+      },
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "item_skillongethit",
+          "values": [
+            3,
+            38,
+            10
+          ],
+          "label": "10% Chance to cast level 3 Charged Bolt when struck",
+          "priority": 160
+        },
+        {
+          "name": "item_fastermovevelocity",
+          "values": [
+            10
+          ],
+          "label": "10% Faster Run/Walk",
+          "priority": 148
+        },
+        {
+          "name": "item_armor_percent",
+          "values": [
+            28
+          ],
+          "label": "28% Enhanced Defense",
+          "priority": 74,
+          "min": 21,
+          "max": 30
+        },
+        {
+          "name": "coldresist",
+          "values": [
+            36
+          ],
+          "label": "Cold Resist 36%",
+          "priority": 40,
+          "min": 31,
+          "max": 40
+        },
+        {
+          "name": "fireresist",
+          "values": [
+            29
+          ],
+          "label": "Fire Resist 29%",
+          "priority": 36,
+          "min": 21,
+          "max": 30
+        },
+        {
+          "name": "item_magicbonus",
+          "values": [
+            12
+          ],
+          "label": "12% Better Chance of Getting Magic Items",
+          "priority": 8,
+          "min": 5,
+          "max": 15
+        }
+      ],
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 9,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Boots"
+      },
+      "position": {
+        "column": 9,
+        "row": 0
+      },
+      "category": "armor",
+      "base_code": "mbt",
+      "name": "Chain Boots",
+      "requirements": {
+        "level": 18,
+        "strength": 30,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "10% Chance to cast level 3 Charged Bolt when struck",
+        "10% Faster Run/Walk",
+        "28% Enhanced Defense",
+        "Cold Resist 36%",
+        "Fire Resist 29%",
+        "12% Better Chance of Getting Magic Items"
+      ],
+      "hash": "28f6c93bc7c22cdd73b5a55ca46238baff998f1a"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "lgl",
+        "category": "armor",
+        "codes": {
+          "normal": "lgl",
+          "exceptional": "xlg",
+          "elite": "ulg"
+        },
+        "name": "Leather Gloves",
+        "stackable": false,
+        "type": "Gloves",
+        "type_code": "glov",
+        "size": {
+          "height": 2,
+          "width": 2
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 15142152586,
+      "item_level": 40,
+      "quality": {
+        "id": 7,
+        "name": "Unique"
+      },
+      "graphic_id": false,
+      "class_specifics": false,
+      "defense": {
+        "base": 4,
+        "total": 14
+      },
+      "durability": {
+        "maximum": 12,
+        "current": 12
+      },
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "item_splashonhit",
+          "values": [
+            1,
+            358,
+            100
+          ],
+          "label": "Melee Attacks Deal Splash Damage",
+          "priority": 245
+        },
+        {
+          "name": "maxdamage_percent",
+          "values": [
+            23,
+            23
+          ],
+          "label": "+23% Enhanced Damage",
+          "priority": 120,
+          "min": 20,
+          "max": 30
+        },
+        {
+          "name": "manadrainmindam",
+          "values": [
+            3
+          ],
+          "label": "3% Mana stolen per hit",
+          "priority": 89
+        },
+        {
+          "name": "lifedrainmindam",
+          "values": [
+            3
+          ],
+          "label": "3% Life stolen per hit",
+          "priority": 88
+        },
+        {
+          "name": "item_armor_percent",
+          "values": [
+            18
+          ],
+          "label": "18% Enhanced Defense",
+          "priority": 74,
+          "min": 10,
+          "max": 20
+        },
+        {
+          "name": "armorclass",
+          "values": [
+            10
+          ],
+          "label": "+10 Defense",
+          "priority": 71
+        },
+        {
+          "name": "maxmana",
+          "values": [
+            20
+          ],
+          "label": "+20 to Mana",
+          "priority": 55
+        },
+        {
+          "name": "poisonresist",
+          "values": [
+            10
+          ],
+          "label": "Poison Resist 10%",
+          "priority": 34
+        }
+      ],
+      "name": "The Hand of Broc",
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 10,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Gloves"
+      },
+      "position": {
+        "column": 10,
+        "row": 0
+      },
+      "category": "armor",
+      "base_code": "lgl",
+      "requirements": {
+        "level": 5,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "Melee Attacks Deal Splash Damage",
+        "+23% Enhanced Damage",
+        "3% Mana stolen per hit",
+        "3% Life stolen per hit",
+        "18% Enhanced Defense",
+        "+10 Defense",
+        "+20 to Mana",
+        "Poison Resist 10%"
+      ],
+      "hash": "a988f5192b407b073553d41a54736303c994261d"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "rin",
+        "category": "misc",
+        "codes": {
+          "normal": "rin",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Ring",
+        "stackable": false,
+        "type": "Ring",
+        "type_code": "ring",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 381114122153,
+      "item_level": 19,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 1,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "strength",
+          "values": [
+            2
+          ],
+          "label": "+2 to Strength",
+          "priority": 67,
+          "min": 1,
+          "max": 2
+        },
+        {
+          "name": "poisonresist",
+          "values": [
+            30
+          ],
+          "label": "Poison Resist 30%",
+          "priority": 34,
+          "min": 21,
+          "max": 30
+        }
+      ],
+      "name": "Jade Ring of Strength",
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 7,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Left Ring"
+      },
+      "position": {
+        "column": 7,
+        "row": 0
+      },
+      "category": "misc",
+      "base_code": "rin",
+      "requirements": {
+        "level": 13,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "+2 to Strength",
+        "Poison Resist 30%"
+      ],
+      "hash": "861b9786d2012a22a8ad225d84d8263e7d507ccd"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "amu",
+        "category": "misc",
+        "codes": {
+          "normal": "amu",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Amulet",
+        "stackable": false,
+        "type": "Amulet",
+        "type_code": "amul",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 312158141432,
+      "item_level": 61,
+      "quality": {
+        "id": 6,
+        "name": "Rare"
+      },
+      "graphic_id": 2,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "item_addclassskills",
+          "values": [
+            0,
+            1
+          ],
+          "label": "+1 to Amazon Skills",
+          "priority": 157
+        },
+        {
+          "name": "min_damage",
+          "values": [
+            4
+          ],
+          "label": "+4 to Minimum Damage",
+          "priority": 127
+        },
+        {
+          "name": "lifedrainmindam",
+          "values": [
+            5
+          ],
+          "label": "5% Life stolen per hit",
+          "priority": 88,
+          "min": 4,
+          "max": 5
+        },
+        {
+          "name": "strength",
+          "values": [
+            11
+          ],
+          "label": "+11 to Strength",
+          "priority": 67,
+          "min": 10,
+          "max": 15
+        },
+        {
+          "name": "maxmana",
+          "values": [
+            14
+          ],
+          "label": "+14 to Mana",
+          "priority": 55,
+          "min": 11,
+          "max": 20
+        },
+        {
+          "name": "all_resist",
+          "values": [
+            14
+          ],
+          "label": "All Resistances +14%",
+          "priority": 36,
+          "min": 12,
+          "max": 15
+        }
+      ],
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 2,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Amulet"
+      },
+      "position": {
+        "column": 2,
+        "row": 0
+      },
+      "category": "misc",
+      "base_code": "amu",
+      "name": "Amulet",
+      "requirements": {
+        "level": 45,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "+1 to Amazon Skills",
+        "+4 to Minimum Damage",
+        "5% Life stolen per hit",
+        "+11 to Strength",
+        "+14 to Mana",
+        "All Resistances +14%"
+      ],
+      "hash": "33755d41ec4340dcb1d6a4cd908bf56f57af4c30"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": true,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "hxb",
+        "category": "weapon",
+        "codes": {
+          "normal": "hxb",
+          "exceptional": "8hx",
+          "elite": "6hx"
+        },
+        "name": "Heavy Crossbow",
+        "stackable": false,
+        "type": "Crossbow",
+        "type_code": "xbow",
+        "size": {
+          "height": 4,
+          "width": 2
+        },
+        "class": {
+          "base_code": "xbw",
+          "2hd_code": "xbw",
+          "base": "Crossbow",
+          "2hd": "Crossbow"
+        },
+        "requirements": {
+          "strength": 60,
+          "dexterity": 40
+        },
+        "damage": {
+          "one_handed": {},
+          "two_handed": {
+            "minimum": 20,
+            "maximum": 33
+          },
+          "missile": {}
+        }
+      },
+      "socketed_count": 3,
+      "id": 51313141413910,
+      "item_level": 54,
+      "quality": {
+        "id": 7,
+        "name": "Unique"
+      },
+      "graphic_id": false,
+      "class_specifics": false,
+      "durability": {
+        "maximum": 50,
+        "current": 41
+      },
+      "socket_count": 3,
+      "modifiers": [
+        {
+          "name": "corrupted",
+          "values": [
+            0,
+            32
+          ],
+          "label": "Corrupted",
+          "priority": 246
+        },
+        {
+          "name": "item_fasterattackrate",
+          "values": [
+            80
+          ],
+          "label": "80% Increased Attack Speed",
+          "priority": 145
+        },
+        {
+          "name": "item_explosivearrow",
+          "values": [
+            5
+          ],
+          "label": "Fires Explosive Arrows or Bolts",
+          "priority": 133
+        },
+        {
+          "name": "max_damage",
+          "values": [
+            11
+          ],
+          "label": "+11 to Maximum Damage",
+          "priority": 126
+        },
+        {
+          "name": "maxdamage_percent",
+          "values": [
+            98,
+            76
+          ],
+          "label": "+98% Enhanced Damage",
+          "priority": 120,
+          "min": 70,
+          "max": 80
+        },
+        {
+          "name": "tohit",
+          "values": [
+            70
+          ],
+          "label": "+70 to Attack Rating",
+          "priority": 115
+        },
+        {
+          "name": "firedam",
+          "values": [
+            30,
+            50
+          ],
+          "label": "Adds 30-50 Fire Damage",
+          "priority": 101
+        },
+        {
+          "name": "armorclass",
+          "values": [
+            13
+          ],
+          "label": "+13 Defense",
+          "priority": 71
+        },
+        {
+          "name": "maxmana",
+          "values": [
+            22
+          ],
+          "label": "+22 to Mana",
+          "priority": 55
+        },
+        {
+          "name": "maxfireresist",
+          "values": [
+            15
+          ],
+          "label": "15% to Maximum Fire Resist",
+          "priority": 42
+        },
+        {
+          "name": "fireresist",
+          "values": [
+            15
+          ],
+          "label": "Fire Resist 15%",
+          "priority": 36
+        }
+      ],
+      "socketed": [
+        {
+          "is_identified": true,
+          "is_socketed": false,
+          "is_new": false,
+          "is_ear": false,
+          "is_starter": false,
+          "is_simple": false,
+          "is_ethereal": false,
+          "is_personalized": false,
+          "is_runeword": false,
+          "format_version": 105,
+          "base": {
+            "id": "jew",
+            "category": "misc",
+            "codes": {
+              "normal": "jew",
+              "exceptional": "",
+              "elite": ""
+            },
+            "name": "Jewel",
+            "stackable": false,
+            "type": "Jewel",
+            "type_code": "jewl",
+            "size": {
+              "height": 1,
+              "width": 1
+            },
+            "requirements": {}
+          },
+          "socketed_count": 0,
+          "id": 1151575311,
+          "item_level": 60,
+          "quality": {
+            "id": 6,
+            "name": "Rare"
+          },
+          "graphic_id": 5,
+          "class_specifics": false,
+          "socket_count": 0,
+          "modifiers": [
+            {
+              "name": "armorclass",
+              "values": [
+                13
+              ],
+              "label": "+13 Defense",
+              "priority": 71
+            },
+            {
+              "name": "maxmana",
+              "values": [
+                22
+              ],
+              "label": "+22 to Mana",
+              "priority": 55
+            },
+            {
+              "name": "max_damage",
+              "values": [
+                11
+              ],
+              "label": "+11 to Maximum Damage",
+              "priority": 126
+            },
+            {
+              "name": "maxdamage_percent",
+              "values": [
+                22,
+                22
+              ],
+              "label": "+22% Enhanced Damage",
+              "priority": 120
+            }
+          ],
+          "location": {
+            "storage_id": 0,
+            "equipment_id": 2,
+            "zone_id": 6,
+            "zone": "Socketed",
+            "storage": "Unknown",
+            "equipment": "Amulet"
+          },
+          "position": {
+            "column": 0,
+            "row": 0
+          },
+          "category": "misc",
+          "base_code": "jew",
+          "name": "Jewel",
+          "requirements": {
+            "level": 41,
+            "strength": 0,
+            "dexterity": 0
+          },
+          "corrupted": false,
+          "desecrated": false,
+          "properties": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "hash": "21052d8f1bb3d6dcf9f7dd2bc2b1feb66832f7e8"
+        },
+        {
+          "is_identified": true,
+          "is_socketed": false,
+          "is_new": false,
+          "is_ear": false,
+          "is_starter": false,
+          "is_simple": true,
+          "is_ethereal": false,
+          "is_personalized": false,
+          "is_runeword": false,
+          "format_version": 105,
+          "base": {
+            "id": "r13",
+            "category": "misc",
+            "codes": {
+              "normal": "r13",
+              "exceptional": "",
+              "elite": ""
+            },
+            "name": "Shael Rune",
+            "stackable": true,
+            "type": "Rune",
+            "type_code": "rune",
+            "size": {
+              "height": 1,
+              "width": 1
+            },
+            "requirements": {
+              "level": 29
+            }
+          },
+          "modifiers": [
+            {
+              "name": "item_fasterattackrate",
+              "values": [
+                20
+              ],
+              "label": "20% Increased Attack Speed",
+              "priority": 145
+            }
+          ],
+          "location": {
+            "storage_id": 0,
+            "equipment_id": 0,
+            "zone_id": 6,
+            "zone": "Socketed",
+            "storage": "Unknown"
+          },
+          "position": {
+            "column": 1,
+            "row": 0
+          },
+          "category": "misc",
+          "base_code": "r13",
+          "name": "Shael Rune",
+          "requirements": {
+            "level": 29,
+            "strength": 0,
+            "dexterity": 0
+          },
+          "corrupted": false,
+          "desecrated": false,
+          "properties": [
+            null
+          ],
+          "hash": "8411b00aec0b4ba1ee9daa6e55d6a5b553499d76"
+        },
+        {
+          "is_identified": true,
+          "is_socketed": false,
+          "is_new": false,
+          "is_ear": false,
+          "is_starter": false,
+          "is_simple": true,
+          "is_ethereal": false,
+          "is_personalized": false,
+          "is_runeword": false,
+          "format_version": 105,
+          "base": {
+            "id": "r13",
+            "category": "misc",
+            "codes": {
+              "normal": "r13",
+              "exceptional": "",
+              "elite": ""
+            },
+            "name": "Shael Rune",
+            "stackable": true,
+            "type": "Rune",
+            "type_code": "rune",
+            "size": {
+              "height": 1,
+              "width": 1
+            },
+            "requirements": {
+              "level": 29
+            }
+          },
+          "modifiers": [
+            {
+              "name": "item_fasterattackrate",
+              "values": [
+                20
+              ],
+              "label": "20% Increased Attack Speed",
+              "priority": 145
+            }
+          ],
+          "location": {
+            "storage_id": 0,
+            "equipment_id": 0,
+            "zone_id": 6,
+            "zone": "Socketed",
+            "storage": "Unknown"
+          },
+          "position": {
+            "column": 2,
+            "row": 0
+          },
+          "category": "misc",
+          "base_code": "r13",
+          "name": "Shael Rune",
+          "requirements": {
+            "level": 29,
+            "strength": 0,
+            "dexterity": 0
+          },
+          "corrupted": false,
+          "desecrated": false,
+          "properties": [
+            null
+          ],
+          "hash": "8411b00aec0b4ba1ee9daa6e55d6a5b553499d76"
+        }
+      ],
+      "name": "Hellcast",
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 11,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Right Hand Switch"
+      },
+      "position": {
+        "column": 11,
+        "row": 0
+      },
+      "category": "weapon",
+      "base_code": "hxb",
+      "requirements": {
+        "level": 41,
+        "strength": 60,
+        "dexterity": 40
+      },
+      "corrupted": true,
+      "corruptions": [
+        "item_numsockets"
+      ],
+      "desecrated": false,
+      "properties": [
+        "Corrupted",
+        "80% Increased Attack Speed",
+        "Fires Explosive Arrows or Bolts",
+        "+11 to Maximum Damage",
+        "+98% Enhanced Damage",
+        "+70 to Attack Rating",
+        "Adds 30-50 Fire Damage",
+        "+13 Defense",
+        "+22 to Mana",
+        "15% to Maximum Fire Resist",
+        "Fire Resist 15%"
+      ],
+      "damage": {
+        "two_handed": {
+          "minimum": 39,
+          "maximum": 76
+        }
+      },
+      "hash": "244ca3b94f1cefa2bc73bfa5b63580e95b3f4e24"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cqv",
+        "category": "misc",
+        "codes": {
+          "normal": "cqv",
+          "exceptional": "cqv2",
+          "elite": "cqv3"
+        },
+        "name": "Light Bolts",
+        "stackable": true,
+        "type": "Crossbow Quiver",
+        "type_code": "xboq",
+        "size": {
+          "height": 3,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 15010814068,
+      "item_level": 40,
+      "quality": {
+        "id": 6,
+        "name": "Rare"
+      },
+      "graphic_id": false,
+      "class_specifics": 55,
+      "quantity": 141,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "passive_phys_pierce",
+          "values": [
+            2
+          ],
+          "label": "-2% to Enemy Physical Resistance",
+          "priority": 158
+        },
+        {
+          "name": "firedam",
+          "values": [
+            22,
+            55
+          ],
+          "label": "Adds 22-55 Fire Damage",
+          "priority": 101
+        },
+        {
+          "name": "colddam",
+          "values": [
+            28,
+            78,
+            25
+          ],
+          "label": "Adds 28-78 Cold Damage",
+          "priority": 96
+        },
+        {
+          "name": "lifedrainmindam",
+          "values": [
+            6
+          ],
+          "label": "6% Life stolen per hit",
+          "priority": 88,
+          "min": 6,
+          "max": 7
+        },
+        {
+          "name": "energy",
+          "values": [
+            15
+          ],
+          "label": "+15 to Energy",
+          "priority": 61,
+          "min": 11,
+          "max": 15
+        },
+        {
+          "name": "fireresist",
+          "values": [
+            10
+          ],
+          "label": "Fire Resist 10%",
+          "priority": 36,
+          "min": 5,
+          "max": 10
+        }
+      ],
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 12,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Left Hand Switch"
+      },
+      "position": {
+        "column": 12,
+        "row": 0
+      },
+      "category": "misc",
+      "base_code": "cqv",
+      "name": "Light Bolts",
+      "requirements": {
+        "level": 18,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "-2% to Enemy Physical Resistance",
+        "Adds 22-55 Fire Damage",
+        "Adds 28-78 Cold Damage",
+        "6% Life stolen per hit",
+        "+15 to Energy",
+        "Fire Resist 10%"
+      ],
+      "hash": "b2e0dd0ceae52c07637722e2513e673c2d2a5648"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm1",
+        "category": "misc",
+        "codes": {
+          "normal": "cm1",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Small Charm",
+        "stackable": false,
+        "type": "Small Charm",
+        "type_code": "scha",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 112148651312,
+      "item_level": 58,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 1,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "maxhp",
+          "values": [
+            6
+          ],
+          "label": "+6 to Life",
+          "priority": 59,
+          "min": 5,
+          "max": 10
+        },
+        {
+          "name": "poisonresist",
+          "values": [
+            8
+          ],
+          "label": "Poison Resist 8%",
+          "priority": 34,
+          "min": 8,
+          "max": 9
+        }
+      ],
+      "name": "Jade Small Charm of Life",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 0,
+        "row": 4
+      },
+      "category": "misc",
+      "base_code": "cm1",
+      "requirements": {
+        "level": 20,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "+6 to Life",
+        "Poison Resist 8%"
+      ],
+      "hash": "90b0e8485bd1fb4115c5fd76278b50e7d6ed641e"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm1",
+        "category": "misc",
+        "codes": {
+          "normal": "cm1",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Small Charm",
+        "stackable": false,
+        "type": "Small Charm",
+        "type_code": "scha",
+        "size": {
+          "height": 1,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 11605711015,
+      "item_level": 27,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 1,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "maxhp",
+          "values": [
+            7
+          ],
+          "label": "+7 to Life",
+          "priority": 59,
+          "min": 5,
+          "max": 10
+        },
+        {
+          "name": "coldresist",
+          "values": [
+            6
+          ],
+          "label": "Cold Resist 6%",
+          "priority": 40,
+          "min": 6,
+          "max": 7
+        }
+      ],
+      "name": "Lapis Small Charm of Life",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 3,
+        "row": 4
+      },
+      "category": "misc",
+      "base_code": "cm1",
+      "requirements": {
+        "level": 14,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "+7 to Life",
+        "Cold Resist 6%"
+      ],
+      "hash": "0b6e374bb470bd0f335219aa7425d1d86d2769cc"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm2",
+        "category": "misc",
+        "codes": {
+          "normal": "cm2",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Large Charm",
+        "stackable": false,
+        "type": "Medium Charm",
+        "type_code": "mcha",
+        "size": {
+          "height": 2,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 11774130013,
+      "item_level": 64,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 2,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "item_fastergethitrate",
+          "values": [
+            8
+          ],
+          "label": "8% Faster Hit Recovery",
+          "priority": 139
+        }
+      ],
+      "name": "Large Charm of Balance",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 8,
+        "row": 6
+      },
+      "category": "misc",
+      "base_code": "cm2",
+      "requirements": {
+        "level": 14,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "8% Faster Hit Recovery"
+      ],
+      "hash": "4f1e5068279ffadbbd6b5c1619c58abdff991659"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": true,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": true,
+      "format_version": 105,
+      "base": {
+        "id": "8sb",
+        "category": "weapon",
+        "codes": {
+          "normal": "sbw",
+          "exceptional": "8sb",
+          "elite": "6sb"
+        },
+        "name": "Edge Bow",
+        "stackable": false,
+        "type": "Bow",
+        "type_code": "bow",
+        "size": {
+          "height": 3,
+          "width": 2
+        },
+        "class": {
+          "base_code": "bow",
+          "2hd_code": "bow",
+          "base": "Bow",
+          "2hd": "Bow"
+        },
+        "requirements": {
+          "level": 18,
+          "strength": 25,
+          "dexterity": 43
+        },
+        "damage": {
+          "one_handed": {},
+          "two_handed": {
+            "minimum": 8,
+            "maximum": 25
+          },
+          "missile": {}
+        }
+      },
+      "socketed_count": 4,
+      "id": 141261461511,
+      "item_level": 50,
+      "quality": {
+        "id": 3,
+        "name": "Superior",
+        "sub_id": 1
+      },
+      "graphic_id": false,
+      "class_specifics": false,
+      "runeword": {
+        "key": "Runeword49",
+        "name": "Harmony",
+        "modifiers": [
+          {
+            "name": "firemindam",
+            "encoding": 0,
+            "description": {
+              "function": 1,
+              "priority": 102,
+              "value": 1,
+              "label": {
+                "positive_code": "ModStr1p",
+                "negative_code": "ModStr1p",
+                "group": {},
+                "positive": "to Minimum Fire Damage",
+                "negative": "to Minimum Fire Damage"
+              }
+            }
+          },
+          {
+            "name": "firemaxdam",
+            "encoding": 0,
+            "description": {
+              "function": 1,
+              "priority": 101,
+              "value": 1,
+              "label": {
+                "positive_code": "ModStr1o",
+                "negative_code": "ModStr1o",
+                "group": {},
+                "positive": "to Maximum Fire Damage",
+                "negative": "to Maximum Fire Damage"
+              }
+            }
+          },
+          {
+            "name": "lightmindam",
+            "encoding": 0,
+            "description": {
+              "function": 1,
+              "priority": 99,
+              "value": 1,
+              "label": {
+                "positive_code": "ModStr1r",
+                "negative_code": "ModStr1r",
+                "group": {},
+                "positive": "to Minimum Lightning Damage",
+                "negative": "to Minimum Lightning Damage"
+              }
+            }
+          },
+          {
+            "name": "lightmaxdam",
+            "encoding": 0,
+            "description": {
+              "function": 1,
+              "priority": 98,
+              "value": 1,
+              "label": {
+                "positive_code": "ModStr1q",
+                "negative_code": "ModStr1q",
+                "group": {},
+                "positive": "to Maximum Lightning Damage",
+                "negative": "to Maximum Lightning Damage"
+              }
+            }
+          },
+          {
+            "name": "coldmindam",
+            "encoding": 0,
+            "description": {
+              "function": 1,
+              "priority": 96,
+              "value": 1,
+              "label": {
+                "positive_code": "ModStr1t",
+                "negative_code": "ModStr1t",
+                "group": {},
+                "positive": "to Minimum Cold Damage",
+                "negative": "to Minimum Cold Damage"
+              }
+            }
+          },
+          {
+            "name": "coldmaxdam",
+            "encoding": 0,
+            "description": {
+              "function": 1,
+              "priority": 95,
+              "value": 1,
+              "label": {
+                "positive_code": "ModStr1s",
+                "negative_code": "ModStr1s",
+                "group": {},
+                "positive": "to Maximum Cold Damage",
+                "negative": "to Maximum Cold Damage"
+              }
+            }
+          },
+          {
+            "name": "item_charged_skill",
+            "encoding": 3,
+            "description": {
+              "function": 24,
+              "priority": 1,
+              "value": 0,
+              "label": {
+                "positive_code": "ModStre10d",
+                "negative_code": "ModStre10d",
+                "group": {},
+                "positive": "(%d/%d Charges)",
+                "negative": "(%d/%d Charges)"
+              }
+            }
+          },
+          {
+            "name": "item_aura",
+            "encoding": 0,
+            "description": {
+              "function": 16,
+              "priority": 159,
+              "value": 0,
+              "label": {
+                "positive_code": "ModitemAura",
+                "negative_code": "ModitemAura",
+                "group": {},
+                "positive": "Level %d %s Aura When Equipped",
+                "negative": "Level %d %s Aura When Equipped"
+              }
+            }
+          },
+          {
+            "name": "manarecoverybonus",
+            "encoding": 0,
+            "description": {
+              "function": 2,
+              "priority": 52,
+              "value": 2,
+              "label": {
+                "positive_code": "ModStr4g",
+                "negative_code": "ModStr4g",
+                "group": {},
+                "positive": "Regenerate Mana",
+                "negative": "Regenerate Mana"
+              }
+            }
+          },
+          {
+            "name": "item_lightradius",
+            "encoding": 0,
+            "description": {
+              "function": 1,
+              "priority": 6,
+              "value": 1,
+              "label": {
+                "positive_code": "ModStr3f",
+                "negative_code": "ModStr3f",
+                "group": {},
+                "positive": "to Light Radius",
+                "negative": "to Light Radius"
+              }
+            }
+          },
+          {
+            "name": "item_singleskill",
+            "encoding": 1,
+            "description": {
+              "function": 27,
+              "priority": 81,
+              "value": 0,
+              "label": {
+                "group": {}
+              }
+            }
+          }
+        ],
+        "runes": [
+          "r03",
+          "r06",
+          "r12",
+          "r18"
+        ]
+      },
+      "durability": {
+        "maximum": 20,
+        "current": 20
+      },
+      "socket_count": 4,
+      "modifiers": [
+        {
+          "name": "item_aura",
+          "values": [
+            115,
+            10
+          ],
+          "label": "Level 10 Vigor Aura When Equipped",
+          "priority": 159
+        },
+        {
+          "name": "min_damage",
+          "values": [
+            9
+          ],
+          "label": "+9 to Minimum Damage",
+          "priority": 127
+        },
+        {
+          "name": "max_damage",
+          "values": [
+            9
+          ],
+          "label": "+9 to Maximum Damage",
+          "priority": 126
+        },
+        {
+          "name": "maxdamage_percent",
+          "values": [
+            282,
+            15
+          ],
+          "label": "+282% Enhanced Damage",
+          "priority": 120,
+          "min": 200,
+          "max": 275
+        },
+        {
+          "name": "firedam",
+          "values": [
+            55,
+            160
+          ],
+          "label": "Adds 55-160 Fire Damage",
+          "priority": 101
+        },
+        {
+          "name": "lightdam",
+          "values": [
+            55,
+            160
+          ],
+          "label": "Adds 55-160 Lightning Damage",
+          "priority": 99
+        },
+        {
+          "name": "colddam",
+          "values": [
+            55,
+            160,
+            55
+          ],
+          "label": "Adds 55-160 Cold Damage",
+          "priority": 96
+        },
+        {
+          "name": "item_singleskill",
+          "values": [
+            32,
+            6
+          ],
+          "label": "+6 to Valkyrie (Amazon Only)",
+          "priority": 81,
+          "min": 3,
+          "max": 6
+        },
+        {
+          "name": "dexterity",
+          "values": [
+            10
+          ],
+          "label": "+10 to Dexterity",
+          "priority": 65
+        },
+        {
+          "name": "manarecoverybonus",
+          "values": [
+            20
+          ],
+          "label": "Regenerate Mana 20%",
+          "priority": 52
+        },
+        {
+          "name": "item_manaafterkill",
+          "values": [
+            2
+          ],
+          "label": "+2 to Mana after each Kill",
+          "priority": 16
+        },
+        {
+          "name": "item_lightradius",
+          "values": [
+            2
+          ],
+          "label": "+2 to Light Radius",
+          "priority": 6
+        },
+        {
+          "name": "item_charged_skill",
+          "values": [
+            20,
+            95,
+            25,
+            25
+          ],
+          "label": "Level 20 Revive (25/25 Charges)",
+          "priority": 1
+        }
+      ],
+      "socketed": [
+        {
+          "is_identified": true,
+          "is_socketed": false,
+          "is_new": false,
+          "is_ear": false,
+          "is_starter": false,
+          "is_simple": true,
+          "is_ethereal": false,
+          "is_personalized": false,
+          "is_runeword": false,
+          "format_version": 105,
+          "base": {
+            "id": "r03",
+            "category": "misc",
+            "codes": {
+              "normal": "r03",
+              "exceptional": "",
+              "elite": ""
+            },
+            "name": "Tir Rune",
+            "stackable": true,
+            "type": "Rune",
+            "type_code": "rune",
+            "size": {
+              "height": 1,
+              "width": 1
+            },
+            "requirements": {
+              "level": 13
+            }
+          },
+          "modifiers": [
+            {
+              "name": "item_manaafterkill",
+              "values": [
+                2
+              ],
+              "label": "+2 to Mana after each Kill",
+              "priority": 16
+            }
+          ],
+          "location": {
+            "storage_id": 0,
+            "equipment_id": 0,
+            "zone_id": 6,
+            "zone": "Socketed",
+            "storage": "Unknown"
+          },
+          "position": {
+            "column": 0,
+            "row": 0
+          },
+          "category": "misc",
+          "base_code": "r03",
+          "name": "Tir Rune",
+          "requirements": {
+            "level": 13,
+            "strength": 0,
+            "dexterity": 0
+          },
+          "corrupted": false,
+          "desecrated": false,
+          "properties": [
+            null
+          ],
+          "hash": "c94ddadfb10e87781115a5e226ee8e41a445d07c"
+        },
+        {
+          "is_identified": true,
+          "is_socketed": false,
+          "is_new": false,
+          "is_ear": false,
+          "is_starter": false,
+          "is_simple": true,
+          "is_ethereal": false,
+          "is_personalized": false,
+          "is_runeword": false,
+          "format_version": 105,
+          "base": {
+            "id": "r06",
+            "category": "misc",
+            "codes": {
+              "normal": "r06",
+              "exceptional": "",
+              "elite": ""
+            },
+            "name": "Ith Rune",
+            "stackable": true,
+            "type": "Rune",
+            "type_code": "rune",
+            "size": {
+              "height": 1,
+              "width": 1
+            },
+            "requirements": {
+              "level": 15
+            }
+          },
+          "modifiers": [
+            {
+              "name": "max_damage",
+              "values": [
+                9
+              ],
+              "label": "+9 to Maximum Damage",
+              "priority": 126
+            }
+          ],
+          "location": {
+            "storage_id": 0,
+            "equipment_id": 0,
+            "zone_id": 6,
+            "zone": "Socketed",
+            "storage": "Unknown"
+          },
+          "position": {
+            "column": 1,
+            "row": 0
+          },
+          "category": "misc",
+          "base_code": "r06",
+          "name": "Ith Rune",
+          "requirements": {
+            "level": 15,
+            "strength": 0,
+            "dexterity": 0
+          },
+          "corrupted": false,
+          "desecrated": false,
+          "properties": [
+            null
+          ],
+          "hash": "8c5c2a6eb87d8dc02a8ba51cbe07319b8ff65695"
+        },
+        {
+          "is_identified": true,
+          "is_socketed": false,
+          "is_new": false,
+          "is_ear": false,
+          "is_starter": false,
+          "is_simple": true,
+          "is_ethereal": false,
+          "is_personalized": false,
+          "is_runeword": false,
+          "format_version": 105,
+          "base": {
+            "id": "r12",
+            "category": "misc",
+            "codes": {
+              "normal": "r12",
+              "exceptional": "",
+              "elite": ""
+            },
+            "name": "Sol Rune",
+            "stackable": true,
+            "type": "Rune",
+            "type_code": "rune",
+            "size": {
+              "height": 1,
+              "width": 1
+            },
+            "requirements": {
+              "level": 27
+            }
+          },
+          "modifiers": [
+            {
+              "name": "min_damage",
+              "values": [
+                9
+              ],
+              "label": "+9 to Minimum Damage",
+              "priority": 127
+            }
+          ],
+          "location": {
+            "storage_id": 0,
+            "equipment_id": 0,
+            "zone_id": 6,
+            "zone": "Socketed",
+            "storage": "Unknown"
+          },
+          "position": {
+            "column": 2,
+            "row": 0
+          },
+          "category": "misc",
+          "base_code": "r12",
+          "name": "Sol Rune",
+          "requirements": {
+            "level": 27,
+            "strength": 0,
+            "dexterity": 0
+          },
+          "corrupted": false,
+          "desecrated": false,
+          "properties": [
+            null
+          ],
+          "hash": "8556fc4f40d13d4aa2e552110cc2650e01a314cc"
+        },
+        {
+          "is_identified": true,
+          "is_socketed": false,
+          "is_new": false,
+          "is_ear": false,
+          "is_starter": false,
+          "is_simple": true,
+          "is_ethereal": false,
+          "is_personalized": false,
+          "is_runeword": false,
+          "format_version": 105,
+          "base": {
+            "id": "r18",
+            "category": "misc",
+            "codes": {
+              "normal": "r18",
+              "exceptional": "",
+              "elite": ""
+            },
+            "name": "Ko Rune",
+            "stackable": true,
+            "type": "Rune",
+            "type_code": "rune",
+            "size": {
+              "height": 1,
+              "width": 1
+            },
+            "requirements": {
+              "level": 39
+            }
+          },
+          "modifiers": [
+            {
+              "name": "dexterity",
+              "values": [
+                10
+              ],
+              "label": "+10 to Dexterity",
+              "priority": 65
+            }
+          ],
+          "location": {
+            "storage_id": 0,
+            "equipment_id": 0,
+            "zone_id": 6,
+            "zone": "Socketed",
+            "storage": "Unknown"
+          },
+          "position": {
+            "column": 3,
+            "row": 0
+          },
+          "category": "misc",
+          "base_code": "r18",
+          "name": "Ko Rune",
+          "requirements": {
+            "level": 39,
+            "strength": 0,
+            "dexterity": 0
+          },
+          "corrupted": false,
+          "desecrated": false,
+          "properties": [
+            null
+          ],
+          "hash": "24d0c8024e8fb96e1345d9ad49c88e44905c5a5c"
+        }
+      ],
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 4,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Right Hand"
+      },
+      "position": {
+        "column": 4,
+        "row": 0
+      },
+      "category": "weapon",
+      "base_code": "8sb",
+      "name": "Harmony",
+      "requirements": {
+        "level": 39,
+        "strength": 25,
+        "dexterity": 43
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "Level 10 Vigor Aura When Equipped",
+        "+9 to Minimum Damage",
+        "+9 to Maximum Damage",
+        "+282% Enhanced Damage",
+        "Adds 55-160 Fire Damage",
+        "Adds 55-160 Lightning Damage",
+        "Adds 55-160 Cold Damage",
+        "+6 to Valkyrie (Amazon Only)",
+        "+10 to Dexterity",
+        "Regenerate Mana 20%",
+        "+2 to Mana after each Kill",
+        "+2 to Light Radius",
+        "Level 20 Revive (25/25 Charges)"
+      ],
+      "damage": {
+        "two_handed": {
+          "minimum": 39,
+          "maximum": 104
+        }
+      },
+      "hash": "d2e657533ceb4751617e0b7f72104ee84c85f3f2"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "aqv2",
+        "category": "misc",
+        "codes": {
+          "normal": "aqv",
+          "exceptional": "aqv2",
+          "elite": "aqv3"
+        },
+        "name": "Sharp Arrows",
+        "stackable": true,
+        "type": "Bow Quiver",
+        "type_code": "bowq",
+        "size": {
+          "height": 3,
+          "width": 1
+        },
+        "requirements": {
+          "level": 25
+        }
+      },
+      "socketed_count": 0,
+      "id": 14511313412,
+      "item_level": 37,
+      "quality": {
+        "id": 6,
+        "name": "Rare"
+      },
+      "graphic_id": false,
+      "class_specifics": 53,
+      "quantity": 150,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "corrupted",
+          "values": [
+            0,
+            36
+          ],
+          "label": "Corrupted",
+          "priority": 246
+        },
+        {
+          "name": "item_fasterattackrate",
+          "values": [
+            20
+          ],
+          "label": "20% Increased Attack Speed",
+          "priority": 145
+        },
+        {
+          "name": "max_damage",
+          "values": [
+            10
+          ],
+          "label": "+10 to Maximum Damage",
+          "priority": 126
+        },
+        {
+          "name": "maxdamage_percent",
+          "values": [
+            19,
+            19
+          ],
+          "label": "+19% Enhanced Damage",
+          "priority": 120,
+          "min": 10,
+          "max": 20
+        },
+        {
+          "name": "tohit",
+          "values": [
+            43
+          ],
+          "label": "+43 to Attack Rating",
+          "priority": 115,
+          "min": 30,
+          "max": 60
+        },
+        {
+          "name": "fireresist",
+          "corrupted": true,
+          "values": [
+            10
+          ],
+          "label": "Fire Resist 10%",
+          "priority": 36
+        },
+        {
+          "name": "item_manaafterkill",
+          "values": [
+            2
+          ],
+          "label": "+2 to Mana after each Kill",
+          "priority": 16,
+          "min": 2,
+          "max": 3
+        },
+        {
+          "name": "item_lightradius",
+          "values": [
+            3
+          ],
+          "label": "+3 to Light Radius",
+          "priority": 6
+        }
+      ],
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 5,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Left Hand"
+      },
+      "position": {
+        "column": 5,
+        "row": 0
+      },
+      "category": "misc",
+      "base_code": "aqv2",
+      "name": "Sharp Arrows",
+      "requirements": {
+        "level": 25,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": true,
+      "corruptions": [
+        "fireresist"
+      ],
+      "desecrated": false,
+      "properties": [
+        "Corrupted",
+        "20% Increased Attack Speed",
+        "+10 to Maximum Damage",
+        "+19% Enhanced Damage",
+        "+43 to Attack Rating",
+        "Fire Resist 10%",
+        "+2 to Mana after each Kill",
+        "+3 to Light Radius"
+      ],
+      "hash": "e0fee2e5c8d6b017d75c8194ac99625083eefa54"
+    }
+  ],
+  "account": null,
+  "guild": {
+    "name": "Obsidian Lords",
+    "rank": 2,
+    "rank_name": "Guild Master",
+    "tag": "OL2"
+  },
+  "_obsidianLordsSync": {
+    "character": "Magizon",
+    "syncedAt": "2026-11-03T02:39:05.138Z",
+    "source": "https://api.projectdiablo2.com/game/character/Magizon"
+  }
+}
