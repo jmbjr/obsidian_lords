@@ -100,7 +100,7 @@ test("snapshot drift fails closed, switches never rewrite screenshot observation
   const base=buildAmazonParityObservations(magizon,skills,{...defaultEquipmentSettings(),weaponSet:"main"});
   const swapped=buildAmazonParityObservations(magizon,skills,{...defaultEquipmentSettings(),weaponSet:"switch"});
   assert.equal(base.pinned,true);
-  assert.equal(swapped.pinned,true);
+  assert.equal(swapped.pinned,true);\n  assert.equal(swapped.baselineConfiguration,false);\n  assert.equal(swapped.counts["configuration-drift"],42);
   assert.equal(get(base)["extended.ias"].modeled,40);
   assert.equal(get(swapped)["extended.ias"].modeled,100);
   assert.equal(get(base)["extended.ias"].observed,get(swapped)["extended.ias"].observed);
