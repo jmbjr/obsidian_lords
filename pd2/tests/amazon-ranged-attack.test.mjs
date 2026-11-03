@@ -40,8 +40,8 @@ test("selected hand set changes weapon, IAS, AR contributions and selected skill
   const other=projected(p,{weaponSet:"switch"});
   assert.equal(main.weapon.name,"Harmony");
   assert.equal(other.weapon.name,"Hellcast");
-  assert.equal(main.contributions.ias.value,26);
-  assert.equal(other.contributions.ias.value,86);
+  assert.equal(main.contributions.ias.value,40);
+  assert.equal(other.contributions.ias.value,100);
   assert.equal(main.contributions.flatAttackRating.value,43);
   assert.equal(other.contributions.flatAttackRating.value,70);
   assert.equal(other.contributions.dexterity.value,50);
@@ -66,7 +66,7 @@ test("master gear off and per-item exclusion recompute all selected attack input
   const minus=projected(payload,{excludedItemIds:[item.id]});
   assert.equal(minus.contributions.offWeaponMax.value,0);
   assert.equal(minus.contributions.offWeaponED.value,23);
-  assert.equal(minus.contributions.ias.value,6);
+  assert.equal(minus.contributions.ias.value,20);
   assert.equal(minus.contributions.flatAttackRating.value,0);
   assert.ok(minus.physical.max<base.physical.max);
   const off=projected(payload,{includeEquipment:false});
@@ -77,12 +77,12 @@ test("master gear off and per-item exclusion recompute all selected attack input
 });
 
 test("PD2 specific animation table computes frames from pinned EIAS/WSM instead of fixed breakpoints",()=>{
-  const bow=pd2AmazonRangedFrames({ias:26,weaponCode:"8sb"});
+  const bow=pd2AmazonRangedFrames({ias:40,weaponCode:"8sb"});
   assert.equal(bow.wsm,5);
   assert.equal(bow.animation,"bow");
-  assert.equal(bow.eias,21);
-  assert.equal(bow.frames,12);
-  const crossbow=pd2AmazonRangedFrames({ias:86,weaponCode:"hxb"});
+  assert.equal(bow.eias,30);
+  assert.equal(bow.frames,11);
+  const crossbow=pd2AmazonRangedFrames({ias:100,weaponCode:"hxb"});
   assert.equal(crossbow.wsm,10);
   assert.equal(crossbow.animation,"xbw");
   assert.ok(Number.isInteger(crossbow.frames));
