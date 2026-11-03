@@ -1,7 +1,7 @@
 // PD2 armory JSON importer, independent of network or UI.
 // Only use the player's equipped items (never mercenary or weapon switch),
 // and retain all source item data for later modeling and round trips.
-import { emptyBonus } from "./amazon-comparison.js";
+import { resolveAmazonEquipmentSkills } from "./amazon-equipment-skills.js";
 
 export const armoryCharacterUrl = name =>
   `https://api.projectdiablo2.com/game/character/${encodeURIComponent(name)}`;
@@ -39,11 +39,9 @@ export async function loadPublishedArmoryCharacter(name, baseUrl, fetchImpl=fetc
 
 const integer=(value,min=0,max=1000000)=>Number.isInteger(value)&&value>=min&&value<=max;
 const mods=item=>(item?.modifiers||[]);
-const hasActiveEquipment=item=>item?.location?.zone==="Equipped" &&
-  integer(item.location.equipment_id,1,10);
 const get=(mod)=>Array.isArray(mod.values)?mod.values[0]:undefined;
 
-export function importArmoryAmazon(payload, skills) {
+export function importArmoryAmazon(payload, skills, equipmentOptions={}) {
   const c=payload?.character;
   if(!c||c.class?.id!==0||!Array.isArray(c.skills)||!Array.isArray(payload.items))
     throw new Error("Expected PD2 Amazon armory JSON with skills and items");
@@ -60,25 +58,14 @@ export function importArmoryAmazon(payload, skills) {
     if(!integer(entry.level,0,skill.selected.maxLevel))throw new Error(`Invalid points for ${skill.identity.internalName}`);
     build[entry.id]=entry.level;
   }
-  const bonus=emptyBonus();
-  const equipped=payload.items.filter(hasActiveEquipment);
-  // Armory items are already resolved. Do not recursively count socketed
-  // runes or jewels again; weapon switch slots 11/12 are not active.
-  for(const item of equipped){
-    for(const mod of mods(item)){
-      const n=get(mod);
-      if(!Number.isFinite(n))continue;
-      if(mod.name==="item_addclassskills"&&mod.values?.[0]===0){
-        if(integer(mod.values?.[1],0,100))bonus.all+=mod.values[1];
-      }
-      // Other +skill families need their source ID/selection semantics mapped
-      // from S14 tables before aggregation; retain raw data, warn rather than guess.
-      if(["item_addskill_tab","item_singleskill","item_nonclassskill"].includes(mod.name))
-        warnings.push(`Unmapped effective skill modifier ${mod.name} on ${item.name||item.base?.name}`);
-    }
-  }
+  const skillResolution=resolveAmazonEquipmentSkills(payload,skills,equipmentOptions);
+  const bonus=skillResolution.bonus;
+  const equipped=skillResolution.selection.activeItems.map(item=>item.raw);
+  for(const mod of skillResolution.unresolved)
+    warnings.push(`Unresolved equipment skill bonus ${mod.modifier} at ${mod.sourcePath}: ${mod.reason}`);
   const per=(name)=>equipped.reduce((a,item)=>a+mods(item).filter(m=>m.name===name).reduce((b,m)=>b+(Number(get(m))||0),0),0);
-  const equippedWeapon=equipped.find(item=>item.location.equipment_id===4 && item.category==="weapon")||null;
+  const rightHand = skillResolution.selection.weaponSet==="main" ? 4 : 11;
+  const equippedWeapon=equipped.find(item=>item.location.equipment_id===rightHand && item.category==="weapon")||null;
   const bow=equippedWeapon?.damage?.two_handed;
   if(!equippedWeapon||!bow?.minimum||!bow?.maximum)
     warnings.push("No active physical bow damage found; manual physical-damage input retained");
@@ -106,6 +93,8 @@ export function importArmoryAmazon(payload, skills) {
   return {
     name:c.name,level:c.level,unspentSkillPoints:c.points?.skill,
     build,bonus,equippedWeapon,recognized,
+    skillSources:skillResolution.sources,unresolvedSkillModifiers:skillResolution.unresolved,
+    equipmentSelection:{weaponSet:skillResolution.selection.weaponSet,includeEquipment:skillResolution.selection.includeEquipment,excludedItemIds:skillResolution.selection.excludedItemIds},
     warnings,
     source:payload,
   };
