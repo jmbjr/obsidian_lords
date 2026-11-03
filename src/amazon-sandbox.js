@@ -10,6 +10,7 @@ import { defaultEquipmentSettings, resolveEquipmentBuild } from "./amazon-equipm
 import { projectArmoryCharacterSheet } from "./armory-character-sheet.js";
 import { projectAmazonRangedAttack } from "./amazon-ranged-attack.js";
 import { projectAmazonExtendedInfo } from "./amazon-extended-info.js";
+import { buildAmazonParityObservations } from "./amazon-parity.js";
 import { compareMarginalEffects } from "./multishot-marginal.js";
 import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison, amazonAllocationIssues, amazonBuildIssues } from "./amazon-comparison.js";
 
@@ -82,6 +83,8 @@ export function renderAmazonSandbox() {
   const cards = skills.filter((skill) => resolveAmazonLayout(skill).page === state.page);
   const unplaced = skills.filter((skill) => resolveAmazonLayout(skill).page === null);
   const preview = previewAmazonSkill(selected, current[state.selected], effectiveBonus(selected), current, (activeBonus().skills[selected.identity.internalId] || 0) > 0);
+  const parityReport = armoryImports[state.active]?.name?.toLowerCase()==="magizon" ?
+    buildAmazonParityObservations(armoryImports[state.active].source,skills) : null;
   const extendedInfo = armoryImports[state.active] ? projectAmazonExtendedInfo(
     armoryImports[state.active].source,skills,current,activeBonus(),equipmentSettings[state.active]) : null;
   const attackProjection = armoryImports[state.active] ? projectAmazonRangedAttack(
@@ -283,6 +286,23 @@ export function renderAmazonSandbox() {
         </div>
         <p class="annotation">${extendedInfo.unmappedScopeCount} stored/charm/mercenary records remain outside verified player gear scope. Crushing Blow, Deadly Strike, Open Wounds chance, and Open Wounds DPS are distinct statistics. Critical Strike comes from the skill resolver and does not combine additively with Deadly Strike here.</p>
       </section>` : ""}
+      ${parityReport ? `<details class="sandbox-inspector parity-report" aria-label="M8 Screenshot parity audit">
+        <summary><strong>Screenshot parity audit · M8</strong> · ${parityReport.pinned?"pinned Magizon reference":"snapshot changed"}</summary>
+        <p class="annotation">This fixed reference compares the <strong>original imported Magizon snapshot, main hands (4/5), all items included, no manual overrides</strong> against transcribed in-game screenshots. It is separate from the current A/B what-if settings. A match is not equivalent to verified full character parity, and a partial numerical gap is not necessarily a formula error.</p>
+        ${parityReport.pinned?`
+          <p class="annotation">Direct/source-preview matches: <strong>${parityReport.counts.match}</strong> · Partially modeled: <strong>${parityReport.counts.partial}</strong> · Unsupported: <strong>${parityReport.counts.unavailable}</strong> · Direct mismatches: <strong>${parityReport.counts.mismatch}</strong> · Not observed: <strong>${parityReport.counts["not-observed"]}</strong>.</p>
+          <details><summary>Evidence-backed inventory charm candidates</summary>
+            <p class="annotation">The source items below are stored in Inventory, but their activation has not been independently verified; they are not silently added to game stats.</p>
+            ${parityReport.rows.filter(r=>r.candidateCharmEvidence.length).map(row=>`<p class="annotation"><strong>${escape(row.label)}</strong>: modeled ${escape(row.modeled)}, screenshot ${escape(row.observed)}, candidate ${row.candidateCharmEvidence.map(s=>`${escape(s.item)} (+${s.amount})`).join(", ")}. ${row.candidateReconciles?"Reconciles numerically; not yet applied.":"Still differs."}</p>`).join("")}
+          </details>
+          <details><summary>Full screenshot-to-model matrix · ${parityReport.rows.length} observations</summary>
+            <div class="parity-scroll"><table class="parity-table"><thead><tr><th>Screen</th><th>Metric</th><th>Observed</th><th>Modeled</th><th>Gap</th><th>Assessment</th></tr></thead>
+            <tbody>${parityReport.rows.map(row=>`<tr title="${escape(row.explanation)}"><td>${escape(row.view)}</td><td>${escape(row.label)}</td><td>${row.observed??"—"}</td><td>${row.modeled??"—"}</td><td>${row.numericGap??"—"}</td><td>${escape(row.verdict)}</td></tr>`).join("")}</tbody>
+            </table></div>
+          </details>
+          <p class="annotation">The 29 playable Amazon skill rows are inventoried; only Multiple Shot level 21 is a confidently transcribed numerical skill-tree reference. Other skill levels are intentionally marked unobserved rather than invented.</p>
+        `:`<p class="annotation">No trustworthy comparison is available for this refreshed source: the original screenshot reference is pinned to ${escape(parityReport.expectedSnapshot)}. Export a fresh synchronized game screenshot to create a new baseline.</p>`}
+      </details>` : ""}
       ${armoryImports[state.active] ? `<p class="annotation">Armory: <strong>${escape(armoryImports[state.active].name)}</strong> · ${armoryImports[state.active].equippedCount} active equipped items · ${armoryImports[state.active].warnings.length} caveats. Raw item data is kept only for this page session; the existing exported build JSON remains skill-only. ${armoryImports[state.active].warnings.map(x=>escape(x)).join("; ")}</p>` : ""}
       <div class="sandbox-actions"><button data-page="1" aria-pressed="${state.page === 1}">Bow & Crossbow</button><button data-page="2" aria-pressed="${state.page === 2}">Passive & Magic</button><button data-page="3" aria-pressed="${state.page === 3}">Javelin & Spear</button></div>
       <div class="skill-tree" aria-label="Amazon skill tree">
