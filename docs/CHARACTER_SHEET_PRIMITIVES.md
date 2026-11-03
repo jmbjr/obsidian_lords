@@ -13,7 +13,7 @@ The original published PD2 Armory snapshots (Magizon and Magiknaab) contain `cha
 | STR / DEX / VIT / ENE | Armory base attribute + individually traced flat `strength`, `dexterity`, `vitality`, `energy` and `all_attributes` modifiers on selected items | Final in-game value when charm effects, unmodeled set bonuses, buffs, or unknown effects exist |
 | Experience, unspent points, life, mana, stamina | Exact raw Armory fields, labeled `source` | Live change when gear disabled, next-level XP or maximum resources |
 | Fire / cold / lightning / poison | Sum of selected `all_resist` plus corresponding flat elemental resist modifiers | Final on-screen resistances; difficulty penalties, caps and inventory charms are not applied |
-| Item defense | Sum of already resolved `item.defense.total` from selected gear, source paths preserved | Complete character defense (Dexterity, skill bonuses/auras and engine rounding excluded); never apply `item_armor_percent` a second time |
+| Item defense | Sum of already resolved `item.defense.total` from selected armor, plus separately traced flat `armorclass` on items without resolved defense; never reapply local armor affixes | Complete character defense (Dexterity, skill bonuses/auras and engine rounding excluded); never apply `item_armor_percent` a second time |
 | Equipment attack rating | Flat `tohit` plus separate `item_tohit_percent` categories, source paths preserved | Final AR, order of flat/percentage bonuses, skill-specific AR or chance to hit |
 | Active weapon physical min/max | Already resolved `item.damage.two_handed` for the chosen right-hand weapon slot, labeled **raw weapon damage** | Final displayed skill attack damage, elemental additions, other weapon types, attack frames, chance to hit |
 
@@ -25,7 +25,7 @@ All selected item modifiers are **parent resolved records** only: socket child m
 
 Magizon's pinned published snapshot reports base Strength **41**, Dexterity **50**. Selected main equipment (without unresolved inventory charms) gives an additional **+18 Strength**, **+10 Dexterity**, hence the M5 *partial* projections **59 STR and 60 DEX**. The user screenshot shows **65 STR and 60 DEX**; the remaining +6 STR difference may be from inventory charms or another unmodeled source and is not silently assigned. Also, raw stamina **1313** versus screen **1312** remains unexplained; M5 displays the Armory reading as such.
 
-The main Harmony bow has raw resolved **39–104** physical damage and +10 Dexterity. The alternate Hellcast has **39–76** and removes that +10 Dexterity while retaining all shared item attributes. M5 does not recalculate the screenshot's **347–890** Multiple Shot damage; M6 will add the underlying skill/off-weapon equations and rounding with separate parity verification.
+The main Harmony bow has raw resolved **39–104** physical damage and +10 Dexterity. The alternate Hellcast has **39–76** and removes that +10 Dexterity while retaining all shared item attributes; its +13 flat Defense is tracked separately from the armor subtotal of 367. M5 does not recalculate the screenshot's **347–890** Multiple Shot damage; M6 will add the underlying skill/off-weapon equations and rounding with separate parity verification.
 
 ## Avoid and Shattering Arrow
 
