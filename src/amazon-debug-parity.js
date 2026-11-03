@@ -5,7 +5,7 @@ import { PARITY_OBSERVATIONS, buildAmazonParityObservations } from "./amazon-par
 import { importArmoryAmazon } from "./pd2-armory.js";
 
 const sameObject=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
-const standard=(settings={})=>settings.weaponSet==="main" &&
+const standard=(settings={})=>(settings.weaponSet??"main")==="main" &&
   settings.includeEquipment!==false && settings.includeCharms!==false &&
   (settings.excludedItemIds||[]).length===0 && (settings.excludedCharmIds||[]).length===0;
 const keys=[
@@ -50,9 +50,12 @@ export function buildAmazonDebugComparison(payload,skills,build,bonus,settings={
     const computed=key==="character.multipleShotAttackRating" && attackProjection ?
       attackProjection.attackRating.value:row.modeled;
     const numerical=typeof computed==="number"&&typeof row.observed==="number";
+    const verdict=!comparable?"reference-not-comparable":row.observed===null?"not-observed":
+      computed===null?"unavailable":row.modelStatus==="partial"?"partial":
+      computed===row.observed?"match":"mismatch";
     return {key,label:row.label,view:row.view,observed:pinned?row.observed:null,
       computed,delta:pinned&&numerical?computed-row.observed:null,
-      status:row.modelStatus,verdict:comparable?row.verdict:"reference-not-comparable",
+      status:row.modelStatus,verdict,
       comparable,note:row.explanation,
       sources:row.evidence||[],
       referenceSource:pinned?"Pinned in-game screenshot transcription":"No matching screenshot reference"};
