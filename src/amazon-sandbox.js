@@ -276,6 +276,7 @@ export function renderAmazonSandbox() {
               <summary>Debug · current Armory JSON vs calculated values</summary>
               <div class="ar-debug-content">
                 <p class="annotation">${escape(armoryDebug.warning)}</p>
+                <p class="annotation"><strong>Calculation tiers:</strong> ${Object.entries(armoryDebug.calculationTiers).map(([id,tier])=>`<strong>${escape(tier.label)}</strong> — ${escape(tier.description)}`).join(" · ")}</p>
                 <p class="annotation"><strong>Loaded:</strong> ${escape(armoryDebug.character)} · ${escape(armoryDebug.syncedAt||"sync time unavailable")} · ${escape(armoryDebug.selectedSet)} weapon set. Recomputed from the currently selected equipment and inventory charms, not an old screenshot.</p>
                 ${armoryDebug.groups.map(group=>{
                   const rows=armoryDebug.rows.filter(row=>row.group===group);
@@ -284,10 +285,11 @@ export function renderAmazonSandbox() {
                     <div class="armory-debug-rows">
                       ${rows.map(row=>`<div class="armory-debug-row">
                         <strong>${escape(row.label)}</strong>
+                        <p class="annotation"><strong>Calculation tier:</strong> ${escape(armoryDebug.calculationTiers[row.calculationTier].label)}</p>
                         <div class="armory-debug-values">
-                          <span><small>Official JSON${row.kind==="calculation-only"?" (not published)":""}</small><b>${row.armoryValue===null?"Not provided":escape(row.armoryValue)}</b></span>
-                          <span><small>Our interpretation</small><b>${row.computedValue===null?"Unavailable":escape(row.computedValue)}</b></span>
-                          <span><small>Δ calc − source</small><b>${row.delta===null?"N/A":escape((row.delta>0?"+":"")+row.delta)}</b></span>
+                          <span><small>${row.calculationTier==="raw"?"Direct official JSON field":row.kind==="calculation-only"?"Direct JSON total (not published)":"Independent JSON source sum"}</small><b>${row.armoryValue===null?"Not provided":escape(row.armoryValue)}</b></span>
+                          <span><small>Our ${row.calculationTier==="raw"?"parsed value":row.calculationTier==="aggregation"?"aggregation":row.calculationTier==="baseFormula"?"base formula":"skill estimate"}</small><b>${row.computedValue===null?"Unavailable":escape(row.computedValue)}</b></span>
+                          <span><small>Δ model − comparable source</small><b>${row.delta===null?"N/A":escape((row.delta>0?"+":"")+row.delta)}</b></span>
                         </div>
                         <small>${escape(row.status)} · ${escape(row.note)}</small>
                         ${row.sources.length?`<details class="ar-debug-row-source">
