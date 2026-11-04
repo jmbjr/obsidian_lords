@@ -21,7 +21,7 @@ export function renderArmoryItemInspector(report,escape) {
   };
   const item=x=>'<details class="armory-item-entry"><summary>'+
     safe(x.name)+' · '+safe(x.slotLabel||x.storage||x.scope)+
-    ' · '+x.modifiers.length+' source stats'+(x.configured?' · included':' · not applied')+
+    ' · '+x.modifiers.length+' source stats'+(x.configured?' · enabled for this set':' · excluded/not applicable')+
     '</summary><p class="annotation">Source <code>'+safe(x.sourcePath)+
     '</code> · Slot '+safe(x.slot??"none")+' · Position '+safe(display(x.position))+
     (x.corrupted?' · Corrupted':'')+(x.runeword?' · Runeword '+safe(x.runeword):'')+
