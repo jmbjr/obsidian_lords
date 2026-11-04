@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { importArmoryAmazon } from "../../src/pd2-armory.js";
 import { projectAmazonRangedAttack } from "../../src/amazon-ranged-attack.js";
-import { buildArmoryDebugAudit } from "../../src/amazon-armory-debug.js";
+import { buildArmoryDebugAudit, ARMORY_DEBUG_TIERS } from "../../src/amazon-armory-debug.js";
 
 const skills=JSON.parse(readFileSync("pd2/generated/amazon-skills.json","utf8")).skills;
 const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
@@ -90,8 +90,73 @@ test("mobile Debug uses a stacked source-versus-model layout with item paths",()
   assert.match(code,/Debug · current Armory JSON vs calculated values/);
   assert.match(code,/data-armory-debug/);
   assert.match(code,/armory-debug-values/);
-  assert.match(code,/Official JSON/);
+  assert.match(code,/Direct official JSON field/);
+  assert.match(code,/Independent JSON source sum/);
+  assert.match(code,/Calculation tier:/);
   assert.match(code,/Inspect \$\{row\.sources\.length\} JSON source/);
   assert.doesNotMatch(code,/buildAmazonDebugComparison\(/);
   assert.doesNotMatch(code,/data-debug-parity/);
+});
+
+test("Milestone 10: every live Debug row has a meaningful computation tier",()=>{
+  const report=audit();
+  assert.deepEqual(Object.keys(ARMORY_DEBUG_TIERS),["raw","aggregation","baseFormula","skillEstimate"]);
+  assert.ok(report.rows.length>40);
+  for(const row of report.rows) {
+    assert.ok(Object.hasOwn(ARMORY_DEBUG_TIERS,row.calculationTier),row.key);
+    assert.ok(ARMORY_DEBUG_TIERS[row.calculationTier].description.length>20);
+  }
+  assert.equal(byKey(report,"level").calculationTier,"raw");
+  assert.equal(byKey(report,"multipleShotHard").calculationTier,"raw");
+  assert.equal(byKey(report,"weaponmin").calculationTier,"raw");
+  assert.equal(byKey(report,"flatAttackRating").calculationTier,"aggregation");
+  assert.equal(byKey(report,"knownDefense").calculationTier,"aggregation");
+  assert.equal(byKey(report,"dexterityEffective").calculationTier,"aggregation");
+  assert.equal(byKey(report,"dexterityAR").calculationTier,"baseFormula");
+  assert.equal(byKey(report,"baseAR").calculationTier,"baseFormula");
+  assert.equal(byKey(report,"multipleShotLevel").calculationTier,"aggregation");
+  for(const key of ["multipleShotAR","multipleShotSkillArPercent","multipleShotPhysicalMin","attackFrames"])
+    assert.equal(byKey(report,key).calculationTier,"skillEstimate",key);
+});
+
+test("Milestone 10: Magizon 323 is independently reconstructed, not a direct JSON field",()=>{
+  const report=audit();
+  const ar=byKey(report,"flatAttackRating");
+  const dex=byKey(report,"dexterityAR");
+  const base=byKey(report,"baseAR");
+  assert.equal(ar.armoryValue,53);
+  assert.equal(ar.computedValue,53);
+  assert.equal(dex.computedValue,270);
+  assert.equal(base.computedValue,323);
+  assert.equal(base.armoryValue,null);
+  assert.equal(base.delta,null);
+  assert.equal(base.status,"model-only");
+  assert.ok(base.sources.some(x=>x.sourcePath?.startsWith("items[")));
+  assert.ok(base.sources.some(x=>x.sourcePath?.includes("attributes")||x.path?.includes("attributes")));
+  assert.ok(!JSON.stringify(snapshot).includes('"baseAttackRating":323'));
+});
+
+test("Milestone 10: intermediate tiers survive selection and manual override",()=>{
+  const main=audit();
+  const noCharms=audit(snapshot,{includeCharms:false});
+  const noEquipment=audit(snapshot,{includeEquipment:false,includeCharms:false});
+  const override=audit(snapshot,{},400);
+  for(const report of [main,noCharms,noEquipment,override]) {
+    assert.equal(byKey(report,"flatAttackRating").calculationTier,"aggregation");
+    assert.equal(byKey(report,"baseAR").calculationTier,"baseFormula");
+    assert.equal(byKey(report,"multipleShotAR").calculationTier,"skillEstimate");
+    assert.equal(byKey(report,"baseAR").armoryValue,null);
+  }
+  assert.notEqual(byKey(noCharms,"flatAttackRating").computedValue,byKey(main,"flatAttackRating").computedValue);
+  assert.equal(byKey(noEquipment,"flatAttackRating").computedValue,0);
+  assert.equal(byKey(override,"baseAR").computedValue,453);
+});
+
+test("Milestone 10: mobile Debug renders provenance labels without inventing official totals",()=>{
+  const code=readFileSync("src/amazon-sandbox.js","utf8");
+  assert.match(code,/armoryDebug\.calculationTiers\[row\.calculationTier\]\.label/);
+  assert.match(code,/Direct JSON total \(not published\)/);
+  assert.match(code,/Independent JSON source sum/);
+  assert.match(code,/Delta|Δ model − comparable source/);
+  assert.match(code,/Inspect \$\{row\.sources\.length\} JSON source/);
 });
