@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { classifyArmoryItem, normalizeArmoryEquipment, selectEquipmentSources, equipmentSourceSummary, WEAPON_HAND_SETS } from "../../src/armory-equipment.js";
 
-const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
+const load=name=>JSON.parse(readFileSync(name==="magizon"?"pd2/fixtures/character-parity/magizon-2026-11-03-pinned.json":`public/armory/${name}.json`,"utf8"));
 const graph=normalizeArmoryEquipment(load("magizon"));
 const slot=(selection,n)=>selection.activeItems.find(x=>x.slot===n);
 const ids=selection=>selection.activeItems.map(x=>x.slot).sort((a,b)=>a-b);
