@@ -6,7 +6,7 @@ import { projectArmoryCharacterSheet as projectSheet } from "../../src/armory-ch
 const projectArmoryCharacterSheet=(payload,options={})=>projectSheet(payload,{includeCharms:false,...options});
 import { resolveAmazonLayout } from "../../src/amazon-layout.js";
 
-const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
+const load=name=>JSON.parse(readFileSync(name==="magizon"?"pd2/fixtures/character-parity/magizon-2026-11-03-pinned.json":`public/armory/${name}.json`,"utf8"));
 const skills=JSON.parse(readFileSync("pd2/generated/amazon-skills.json","utf8")).skills;
 const magizon=load("magizon");
 
