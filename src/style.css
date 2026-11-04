@@ -382,3 +382,25 @@ footer {
   .armory-debug-values { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .armory-debug-values>span:last-child { grid-column:1/-1; }
 }
+
+/* M11 item-level source inspector: nested, folded evidence on narrow phones. */
+.armory-item-debug,.armory-item-category,.armory-item-section,.armory-item-total,.armory-item-entry {
+  min-width:0; max-width:100%; margin:.55rem 0; border:1px solid #544954;
+  border-radius:.4rem; padding:.45rem .6rem; overflow-wrap:anywhere;
+}
+.armory-item-debug { border-color:#a38b5c; background:#211d23; }
+.armory-item-category { background:#28222b; }
+.armory-item-section { background:#221e25; }
+.armory-item-entry { background:#1c1a20; border-color:#554b52; }
+.armory-item-total { border-style:dashed; border-color:#74654d; }
+.armory-item-debug summary { cursor:pointer; font-weight:600; line-height:1.5; padding:.35rem .1rem; }
+.armory-item-entry summary { font-weight:500; }
+.armory-item-debug ul { margin:.5rem 0; padding-left:1.2rem; font-size:.85rem; }
+.armory-item-debug li { margin:.35rem 0; line-height:1.45; overflow-wrap:anywhere; }
+.armory-item-debug code { white-space:normal; overflow-wrap:anywhere; }
+.armory-item-debug p { font-size:.84rem; line-height:1.45; }
+@media(max-width:520px) {
+  .armory-item-debug,.armory-item-category,.armory-item-section,.armory-item-total,.armory-item-entry {
+    margin:.4rem 0; padding:.35rem .4rem;
+  }
+}
