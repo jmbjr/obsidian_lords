@@ -62,7 +62,7 @@ test("main versus switch, master gear and charms adjust current official source 
   assert.equal(byKey(allOff,"ias").armoryValue,0);
   assert.equal(byKey(allOff,"knownDefense").armoryValue,0);
   for (const result of [main,switchSet,noCharms,allOff])
-    assert.ok(result.rows.filter(x=>x.kind==="matched-semantic").every(x=>x.status==="agrees"));
+    assert.deepEqual(result.rows.filter(x=>x.kind==="matched-semantic"&&x.status==="differs").map(x=>({key:x.key,raw:x.armoryValue,computed:x.computedValue})),[]);
 });
 
 test("manual AR override affects only the computed estimate, not source JSON",()=>{
