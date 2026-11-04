@@ -13,12 +13,18 @@ const scalar=(item,names)=>item.modifiers.flatMap(mod=>
   names.includes(mod.name)&&Array.isArray(mod.values)&&mod.values.length===1&&integer(mod.values[0])?
     [{item:item.name,sourcePath:mod.sourcePath,modifier:mod.name,amount:mod.values[0],values:mod.values}]:[]);
 const sourceSum=entries=>entries.reduce((v,e)=>v+e.amount,0);
-const row=(group,key,label,official,computed,sources=[],note="",kind="matched-semantic")=>{
+export const ARMORY_DEBUG_TIERS = Object.freeze({
+  raw: {label:"Raw JSON field",description:"Value supplied directly by an Armory JSON field; no aggregation."},
+  aggregation: {label:"Source aggregation",description:"Sum or composition of selected JSON fields and item/charm modifiers; selection rules still matter."},
+  baseFormula: {label:"Formula-derived base stat",description:"Applies an explicit base-stat equation to JSON-derived inputs; formula parity is a separate verification question."},
+  skillEstimate: {label:"Final / skill estimate",description:"Uses skill-specific equations, stacking, or animation assumptions; not an authoritative final JSON field."},
+});
+const row=(group,key,label,official,computed,sources=[],note="",kind="matched-semantic",calculationTier="aggregation")=>{
   const measurable=integer(official)&&integer(computed);
   return {group,key,label,armoryValue:official,computedValue:computed,
     delta:measurable?computed-official:null,
     status:kind==="calculation-only"?"model-only":!measurable?"unavailable":official===computed?"agrees":"differs",
-    kind,sources,note};
+    kind,calculationTier,sources,note};
 };
 
 export function buildArmoryDebugAudit(payload,skills,build,bonus,settings={},attackProjection=null) {
@@ -45,19 +51,19 @@ export function buildArmoryDebugAudit(payload,skills,build,bonus,settings={},att
   for(const [key,label,official,computed,path] of direct)
     rows.push(row("Raw character",key,label,asNumber(official),computed,
       [{sourcePath:path,amount:official,kind:"raw-character-field"}],
-      "Direct value in current official Armory character JSON, not the live character screen"));
+      "Direct value in current official Armory character JSON, not the live character screen","matched-semantic","raw"));
   for(const key of attributeNames){
     const base=asNumber(c.attributes?.[key]);
     rows.push(row("Attributes",key+"Base",key+" (raw base)",base,sheet.baseAttributes[key].value,
       [{sourcePath:"character.attributes."+key,amount:base,kind:"raw-character-field"}],
-      "Attribute values stored in the Armory character section; not the final equipped stat"));
+      "Attribute values stored in the Armory character section; not the final equipped stat","matched-semantic","raw"));
     const entries=items.flatMap(item=>scalar(item,[key,"all_attributes"]));
     rows.push(row("Attributes",key+"Equipped",key+" (selected item + charm bonuses)",
       sourceSum(entries),sheet.attributes[key].equipment,entries,
       "Independent sum of selected item modifier tuples compared with M5 contribution; not a final game value"));
     rows.push(row("Attributes",key+"Effective",key+" (derived from JSON)",null,
       sheet.attributes[key].value,[{sourcePath:"character.attributes."+key,amount:base},...entries],
-      "Derived attribute = Armory raw base + selected item/charm modifiers; official JSON does not provide a final character-screen attribute", "calculation-only"));
+      "Raw attribute plus applicable item/charm modifiers; this total is not stored as a direct JSON field", "calculation-only","aggregation"));
   }
   const metricGroups=[
     ["Attack rating","flatAttackRating","Flat AR from selected items",["tohit"],sheet.attackRating.flatEquipment.value],
@@ -95,43 +101,42 @@ export function buildArmoryDebugAudit(payload,skills,build,bonus,settings={},att
     rows.push(row("Weapon","weapon"+side,"Selected weapon resolved "+side+" damage",
       raw,attack.weapon.physical[side],
       weapon?[{sourcePath:weapon.sourcePath+".damage.two_handed."+field,item:weapon.name,amount:raw}]:[],
-      "Resolved weapon-only damage directly published in current Armory item record; not the final Multiple Shot display"));
+      "Resolved weapon-only damage directly published in current Armory item record; not the final Multiple Shot display","matched-semantic","raw"));
   }
   const skillsById=new Map(c.skills.map(x=>[x.id,x]));
   const multipleHard=asNumber(skillsById.get(12)?.level);
   rows.push(row("Skills","multipleShotHard","Multiple Shot hard skill points (JSON)",
     multipleHard,asNumber(build?.[12]),
     [{sourcePath:"character.skills[id=12].level",amount:multipleHard,kind:"raw-character-skill"}],
-    "Hard points from the Armory skills array. Manual Build A/B point edits can cause a difference"));
+    "Hard points from the Armory skills array. Manual Build A/B point edits can cause a difference","matched-semantic","raw"));
   const formula=attack.attackRating.breakdown;
   const sourceEstimate=[
     ["dexterityAR","Dexterity-derived AR",formula.derivedFormula,
-      "5 × effective Dexterity − 30; reconstructed, not a directly published Armory total"],
+      "5 × effective Dexterity − 30 (or the separate measured base-AR override); applies a game-derived formula, not a direct Armory JSON total","baseFormula",formula.dexSources],
     ["baseAR","Base AR including flat equipment",formula.additiveBase,
-      "Dexterity-derived base AR + selected flat item/charm AR"],
+      "Formula-derived (or overridden) base AR + independently summed selected flat item/charm AR; matches an Armory website value only if separately observed","baseFormula",[...formula.dexSources,...formula.flatSources]],
     ["multipleShotLevel","Multiple Shot effective level",attack.effective,
-      "Hard points + resolved skill bonuses; no Armory field for final effective level"],
+      "Hard points + resolved skill bonuses with activation rules; no direct JSON final effective-level field","aggregation",[]],
     ["multipleShotSkillArPercent","Multiple Shot AR bonus %",attack.skillAR,
-      "Season 14 skill source formula; not an Armory final AR field"],
+      "Season 14 skill-specific formula; not an Armory JSON field","skillEstimate",[]],
     ["multipleShotAR","Multiple Shot selected-skill AR estimate",attack.attackRating.value,
-      "Provisional AR formula; the Armory JSON does not contain the official final selected-skill attack rating"],
+      "Provisional skill-specific AR stacking; the Armory JSON does not contain final selected-skill attack rating","skillEstimate",[...formula.dexSources,...formula.flatSources,...formula.percentSources]],
     ["multipleShotPhysicalMin","Multiple Shot estimated physical minimum",attack.physical.min,
-      "Partial physical-only model; not the Armory weapon field or a final displayed damage value"],
+      "Partial physical-only skill model, not the weapon's raw JSON damage or verified final screen value","skillEstimate",[]],
     ["multipleShotPhysicalMax","Multiple Shot estimated physical maximum",attack.physical.max,
-      "Partial physical-only model; not the Armory weapon field or a final displayed damage value"],
+      "Partial physical-only skill model, not the weapon's raw JSON damage or verified final screen value","skillEstimate",[]],
     ["attackFrames","Modeled Amazon bow/crossbow attack frames",attack.speed.frames,
-      "PD2 animation reconstruction, not an official final frame-count field in Armory JSON"],
+      "PD2 animation model; not a final frame-count field in the Armory JSON","skillEstimate",[]],
   ];
-  for(const [key,label,computed,note] of sourceEstimate)rows.push(row(
+  for(const [key,label,computed,note,tier,sources] of sourceEstimate)rows.push(row(
     "Calculated — not directly in JSON",key,label,null,computed,
-    key==="multipleShotAR"?[...formula.dexSources,...formula.flatSources,...formula.percentSources]:[],
-    note,"calculation-only"));
+    sources,note,"calculation-only",tier));
   return {
     schemaVersion:2,available:true,character:c.name,level:c.level,
     syncedAt:graph.source.syncedAt,source:graph.source.source,
     selectedSet:selection.weaponSet,activeGear:selection.activeItems.length,
-    activeCharms:selection.activeCharms.length,rows,
+    activeCharms:selection.activeCharms.length,rows,calculationTiers:ARMORY_DEBUG_TIERS,
     groups:[...new Set(rows.map(x=>x.group))],
-    warning:"Official Armory raw fields and modifier tuples are source data; calculated character totals are model outputs, NOT authoritative in-game readings. No screenshot matching is required.",
+    warning:"Raw JSON, selected-source aggregation, base formulas and skill estimates are different evidence levels. Computation tier does not prove PD2 game parity; Armory website Advanced values are observations, not direct JSON fields.",
   };
 }
