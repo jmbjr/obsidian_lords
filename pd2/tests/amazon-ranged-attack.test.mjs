@@ -6,7 +6,7 @@ import { importArmoryAmazon } from "../../src/pd2-armory.js";
 import { resolveEquipmentBuild } from "../../src/amazon-equipment-controls.js";
 
 const skills=JSON.parse(readFileSync("pd2/generated/amazon-skills.json","utf8")).skills;
-const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
+const load=name=>JSON.parse(readFileSync(name==="magizon"?"pd2/fixtures/character-parity/magizon-2026-11-03-pinned.json":`public/armory/${name}.json`,"utf8"));
 const projected=(payload,options={})=>{
   const {baseAttackRatingOverride=null,...rest}=options;
   // M6 historical equipped-only fixtures; M9 tests active charms separately.
