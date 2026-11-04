@@ -11,6 +11,8 @@ import { projectArmoryCharacterSheet } from "./armory-character-sheet.js";
 import { projectAmazonRangedAttack } from "./amazon-ranged-attack.js";
 import { projectAmazonExtendedInfo } from "./amazon-extended-info.js";
 import { buildArmoryDebugAudit } from "./amazon-armory-debug.js";
+import { buildArmoryItemInspector } from "./armory-item-inspector.js";
+import { renderArmoryItemInspector } from "./armory-item-inspector-view.js";
 import { compareMarginalEffects } from "./multishot-marginal.js";
 import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison, amazonAllocationIssues, amazonBuildIssues } from "./amazon-comparison.js";
 
@@ -91,6 +93,7 @@ export function renderAmazonSandbox() {
   const armoryDebug = armoryImports[state.active] ? buildArmoryDebugAudit(
     armoryImports[state.active].source,skills,current,activeBonus(),
     equipmentSettings[state.active],attackProjection) : null;
+  const armoryItems = armoryImports[state.active] ? buildArmoryItemInspector(armoryImports[state.active].source,equipmentSettings[state.active]) : null;
   const comparisons = compareAmazonBuilds(skills, state.builds, state.bonuses, state.comparison);
   const dependencies = findAmazonDependencies(selected, skills);
   const buildIssues = state.builds.map(build => amazonBuildIssues(build,state.level,skills));
@@ -278,6 +281,7 @@ export function renderAmazonSandbox() {
                 <p class="annotation">${escape(armoryDebug.warning)}</p>
                 <p class="annotation"><strong>Calculation tiers:</strong> ${Object.values(armoryDebug.calculationTiers).map(tier=>`<strong>${escape(tier.label)}</strong> — ${escape(tier.description)}`).join(" · ")}</p>
                 <p class="annotation"><strong>Loaded:</strong> ${escape(armoryDebug.character)} · ${escape(armoryDebug.syncedAt||"sync time unavailable")} · ${escape(armoryDebug.selectedSet)} weapon set. Recomputed from the currently selected equipment and inventory charms, not an old screenshot.</p>
+                ${renderArmoryItemInspector(armoryItems,escape)}
                 ${armoryDebug.groups.map(group=>{
                   const rows=armoryDebug.rows.filter(row=>row.group===group);
                   return `<details class="armory-debug-group" ${group==="Attack rating"||group==="Calculated — not directly in JSON"?"open":""}>
