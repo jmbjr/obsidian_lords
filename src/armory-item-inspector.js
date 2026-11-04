@@ -66,7 +66,7 @@ const group=(key,title,raw,configured,description)=>({
   key,title,description,items:raw.map(inspect),
   rawSummary:summarize(raw.map(inspect)),
   configuredSummary:summarize(configured.map(inspect)),
-  configuredCount:configured.length,
+  configuredCount:configured.length,configuredIds:configured.map(item=>item.id),
 });
 
 // Returns all sections even when empty. Inactive switch hands are never
