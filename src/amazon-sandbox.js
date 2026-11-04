@@ -276,7 +276,7 @@ export function renderAmazonSandbox() {
               <summary>Debug · current Armory JSON vs calculated values</summary>
               <div class="ar-debug-content">
                 <p class="annotation">${escape(armoryDebug.warning)}</p>
-                <p class="annotation"><strong>Calculation tiers:</strong> ${Object.entries(armoryDebug.calculationTiers).map(([id,tier])=>`<strong>${escape(tier.label)}</strong> — ${escape(tier.description)}`).join(" · ")}</p>
+                <p class="annotation"><strong>Calculation tiers:</strong> ${Object.values(armoryDebug.calculationTiers).map(tier=>`<strong>${escape(tier.label)}</strong> — ${escape(tier.description)}`).join(" · ")}</p>
                 <p class="annotation"><strong>Loaded:</strong> ${escape(armoryDebug.character)} · ${escape(armoryDebug.syncedAt||"sync time unavailable")} · ${escape(armoryDebug.selectedSet)} weapon set. Recomputed from the currently selected equipment and inventory charms, not an old screenshot.</p>
                 ${armoryDebug.groups.map(group=>{
                   const rows=armoryDebug.rows.filter(row=>row.group===group);
