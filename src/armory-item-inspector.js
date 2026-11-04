@@ -13,7 +13,7 @@ const statKey = name => typeof name === "string" && name.length ? name : "(unnam
 // additive even if the payload contains numeric values.
 const NONADDITIVE = new Set([
   "corrupted","item_addclassskills","item_addskill_tab","item_singleskill",
-  "item_nonclassskill","item_aura","item_charged_skill","item_allskills",
+  "item_nonclassskill","item_aura","item_charged_skill",
   "item_explosivearrow","item_cannotbefrozen",
 ]);
 const SELECTOR_PREFIX = /^(?:item_aura|item_.*skill|skill_|state_)/;
