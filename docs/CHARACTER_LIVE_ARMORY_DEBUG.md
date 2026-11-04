@@ -26,3 +26,19 @@ The old screenshot evidence from the previously synced Magizon level-67 characte
 ## Verification
 
 `npm run check`, `npm run data:test`, and `npm run build` via CI. The new `amazon-armory-debug.test.mjs` covers current sync identity, raw fields, item/charm modifier subtotals, weapon switching, source traceability, AR overrides and the absence of a fake official final skill AR value.
+
+
+## Milestone 10 — intermediate calculation classification
+
+Every Debug row now exposes a **calculation tier**. The tier indicates *how* we produced the value, not whether PD2's executable agrees with it:
+
+| Tier | Data transformation | Examples | Verification boundary |
+| --- | --- | --- | --- |
+| **Raw JSON field** | Read a single published character/item field | `character.level`, hard skill points, equipped bow's resolved damage | Direct API provenance, though the live game may have changed since sync |
+| **Source aggregation** | Combine selected fields or resolved item/charm modifiers with documented selection/activation rules | Flat AR `43 + 10 = 53`, IAS, item resist subtotals, effective Dexterity, effective skill bonus composition | Summation is checkable, but loadout/activation and source-selection rules still need validation |
+| **Formula-derived base stat** | Apply a base-stat equation to source-derived inputs, optionally compose it with aggregated contributions | Magizon `5 × 60 − 30 = 270` DEX AR; `270 + 53 = 323` base AR | The official Armory JSON has no direct `323`; equation/runtime parity and snapshot assumptions are separately testable |
+| **Final / skill estimate** | Apply skill-specific AR/damage/animation equations, potentially incomplete modifiers | Multiple Shot AR %, selected-skill AR and damage, attack frames | This is an unverified modeling layer and should not be treated as a directly published official total |
+
+The JSON itself does **not** contain the numeric `323` or final selected-skill attack rating. The official *Armory website* may independently compute and display base AR (the screenshot showed 270 DEX + 53 equipment = 323); this is an external **website observation**, not a hidden API field or a confirmed in-game screenshot. Keep website, API, our model and in-game evidence conceptually distinct.
+
+The UI labels the first column **Direct official JSON field**, **Independent JSON source sum**, or **Direct JSON total (not published)**, depending on row provenance. A source/model numeric difference is displayed only when their semantics match. The source list remains expandable and includes modifier paths; weapon and charm selection still apply to both the original independent sum and our projection. Formula-derived and skill-estimate values have no fabricated official target. No underlying combat formula changes were made for this milestone.
