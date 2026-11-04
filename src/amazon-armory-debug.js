@@ -110,17 +110,20 @@ export function buildArmoryDebugAudit(payload,skills,build,bonus,settings={},att
     [{sourcePath:"character.skills[id=12].level",amount:multipleHard,kind:"raw-character-skill"}],
     "Hard points from the Armory skills array. Manual Build A/B point edits can cause a difference","matched-semantic","raw"));
   const formula=attack.attackRating.breakdown;
+  // M9c projections expose `path`; Debug evidence renders `sourcePath`.
+  // Normalize the trace without modifying any underlying AR mathematics.
+  const evidencePaths=entries=>entries.map(e=>({...e,sourcePath:e.sourcePath||e.path}));
   const sourceEstimate=[
     ["dexterityAR","Dexterity-derived AR",formula.derivedFormula,
-      "5 × effective Dexterity − 30 (or the separate measured base-AR override); applies a game-derived formula, not a direct Armory JSON total","baseFormula",formula.dexSources],
+      "5 × effective Dexterity − 30 (or the separate measured base-AR override); applies a game-derived formula, not a direct Armory JSON total","baseFormula",evidencePaths(formula.dexSources)],
     ["baseAR","Base AR including flat equipment",formula.additiveBase,
-      "Formula-derived (or overridden) base AR + independently summed selected flat item/charm AR; matches an Armory website value only if separately observed","baseFormula",[...formula.dexSources,...formula.flatSources]],
+      "Formula-derived (or overridden) base AR + independently summed selected flat item/charm AR; matches an Armory website value only if separately observed","baseFormula",evidencePaths([...formula.dexSources,...formula.flatSources])],
     ["multipleShotLevel","Multiple Shot effective level",attack.effective,
       "Hard points + resolved skill bonuses with activation rules; no direct JSON final effective-level field","aggregation",[]],
     ["multipleShotSkillArPercent","Multiple Shot AR bonus %",attack.skillAR,
       "Season 14 skill-specific formula; not an Armory JSON field","skillEstimate",[]],
     ["multipleShotAR","Multiple Shot selected-skill AR estimate",attack.attackRating.value,
-      "Provisional skill-specific AR stacking; the Armory JSON does not contain final selected-skill attack rating","skillEstimate",[...formula.dexSources,...formula.flatSources,...formula.percentSources]],
+      "Provisional skill-specific AR stacking; the Armory JSON does not contain final selected-skill attack rating","skillEstimate",evidencePaths([...formula.dexSources,...formula.flatSources,...formula.percentSources])],
     ["multipleShotPhysicalMin","Multiple Shot estimated physical minimum",attack.physical.min,
       "Partial physical-only skill model, not the weapon's raw JSON damage or verified final screen value","skillEstimate",[]],
     ["multipleShotPhysicalMax","Multiple Shot estimated physical maximum",attack.physical.max,
