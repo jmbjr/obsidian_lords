@@ -2,9 +2,9 @@
   "file": {
     "header": 2857740885,
     "version": 96,
-    "filesize": 2534,
-    "checksum": 85400291,
-    "updated_at": 1793768231
+    "filesize": 2619,
+    "checksum": 1592953284,
+    "updated_at": 1793769747
   },
   "character": {
     "name": "Magizon",
@@ -25,17 +25,17 @@
       "energy": 15
     },
     "gold": {
-      "character": 69729,
+      "character": 69502,
       "stash": 0,
-      "total": 69729
+      "total": 69502
     },
     "points": {
       "stat": 176,
       "skill": 29
     },
-    "life": 473,
+    "life": 528,
     "mana": 153,
-    "stamina": 1324,
+    "stamina": 353,
     "experience": 298528132,
     "level": 70,
     "skills": [
@@ -844,14 +844,14 @@
       ],
       "location": {
         "storage_id": 0,
-        "equipment_id": 4,
+        "equipment_id": 11,
         "zone_id": 1,
         "zone": "Equipped",
         "storage": "Unknown",
-        "equipment": "Right Hand"
+        "equipment": "Right Hand Switch"
       },
       "position": {
-        "column": 4,
+        "column": 11,
         "row": 0
       },
       "category": "weapon",
@@ -886,6 +886,251 @@
         }
       },
       "hash": "d2e657533ceb4751617e0b7f72104ee84c85f3f2"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "aqv",
+        "category": "misc",
+        "codes": {
+          "normal": "aqv",
+          "exceptional": "aqv2",
+          "elite": "aqv3"
+        },
+        "name": "Blunt Arrows",
+        "stackable": true,
+        "type": "Bow Quiver",
+        "type_code": "bowq",
+        "size": {
+          "height": 3,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 108121515133,
+      "item_level": 12,
+      "quality": {
+        "id": 2,
+        "name": "Normal"
+      },
+      "graphic_id": false,
+      "class_specifics": 52,
+      "quantity": 350,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "max_damage",
+          "values": [
+            2
+          ],
+          "label": "+2 to Maximum Damage",
+          "priority": 126
+        }
+      ],
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 12,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Left Hand Switch"
+      },
+      "position": {
+        "column": 12,
+        "row": 0
+      },
+      "category": "misc",
+      "base_code": "aqv",
+      "name": "Blunt Arrows",
+      "requirements": {
+        "level": 0,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "+2 to Maximum Damage"
+      ],
+      "hash": "a3d68876253b70e67c4b21eea5572a8b24a8323d"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "sbw",
+        "category": "weapon",
+        "codes": {
+          "normal": "sbw",
+          "exceptional": "8sb",
+          "elite": "6sb"
+        },
+        "name": "Short Bow",
+        "stackable": false,
+        "type": "Bow",
+        "type_code": "bow",
+        "size": {
+          "height": 3,
+          "width": 2
+        },
+        "class": {
+          "base_code": "bow",
+          "2hd_code": "bow",
+          "base": "Bow",
+          "2hd": "Bow"
+        },
+        "requirements": {
+          "dexterity": 15
+        },
+        "damage": {
+          "one_handed": {},
+          "two_handed": {
+            "minimum": 1,
+            "maximum": 4
+          },
+          "missile": {}
+        }
+      },
+      "socketed_count": 0,
+      "id": 15151375711,
+      "item_level": 12,
+      "quality": {
+        "id": 2,
+        "name": "Normal"
+      },
+      "graphic_id": false,
+      "class_specifics": false,
+      "durability": {
+        "maximum": 20,
+        "current": 18
+      },
+      "socket_count": 0,
+      "modifiers": [],
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 4,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Right Hand"
+      },
+      "position": {
+        "column": 4,
+        "row": 0
+      },
+      "category": "weapon",
+      "base_code": "sbw",
+      "name": "Short Bow",
+      "requirements": {
+        "level": 0,
+        "strength": 0,
+        "dexterity": 15
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [],
+      "damage": {
+        "two_handed": {
+          "minimum": 1,
+          "maximum": 4
+        }
+      },
+      "hash": "8b20be6791aaf05575f8a512486dd7a294761f3a"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "aqv",
+        "category": "misc",
+        "codes": {
+          "normal": "aqv",
+          "exceptional": "aqv2",
+          "elite": "aqv3"
+        },
+        "name": "Blunt Arrows",
+        "stackable": true,
+        "type": "Bow Quiver",
+        "type_code": "bowq",
+        "size": {
+          "height": 3,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 6131591012101,
+      "item_level": 12,
+      "quality": {
+        "id": 2,
+        "name": "Normal"
+      },
+      "graphic_id": false,
+      "class_specifics": 52,
+      "quantity": 350,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "max_damage",
+          "values": [
+            2
+          ],
+          "label": "+2 to Maximum Damage",
+          "priority": 126
+        }
+      ],
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 5,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Left Hand"
+      },
+      "position": {
+        "column": 5,
+        "row": 0
+      },
+      "category": "misc",
+      "base_code": "aqv",
+      "name": "Blunt Arrows",
+      "requirements": {
+        "level": 0,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "+2 to Maximum Damage"
+      ],
+      "hash": "d716f458c285e98f92b0d5123d367d31147cd38e"
     }
   ],
   "account": null,
@@ -897,7 +1142,7 @@
   },
   "_obsidianLordsSync": {
     "character": "Magizon",
-    "syncedAt": "2026-11-04T04:58:54.510Z",
+    "syncedAt": "2026-11-04T05:23:00.408Z",
     "source": "https://api.projectdiablo2.com/game/character/Magizon"
   }
 }
