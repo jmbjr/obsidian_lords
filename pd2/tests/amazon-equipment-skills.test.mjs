@@ -7,7 +7,7 @@ import { compareAmazonBuilds } from "../../src/amazon-comparison.js";
 
 const skills=JSON.parse(readFileSync("pd2/generated/amazon-skills.json","utf8")).skills;
 const byId=id=>skills.find(x=>x.identity.internalId===id);
-const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
+const load=name=>JSON.parse(readFileSync(name==="magizon"?"pd2/fixtures/character-parity/magizon-2026-11-03-pinned.json":`public/armory/${name}.json`,"utf8"));
 
 test("Magizon +6 Valkyrie from equipped Harmony is direct +skill, not a hard point",()=>{
   const payload=load("magizon");

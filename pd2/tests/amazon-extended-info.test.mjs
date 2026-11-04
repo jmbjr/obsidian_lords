@@ -5,7 +5,7 @@ import { projectAmazonExtendedInfo, EXTENDED_INFO_CATEGORIES } from "../../src/a
 import { importArmoryAmazon } from "../../src/pd2-armory.js";
 
 const skills=JSON.parse(readFileSync("pd2/generated/amazon-skills.json","utf8")).skills;
-const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
+const load=name=>JSON.parse(readFileSync(name==="magizon"?"pd2/fixtures/character-parity/magizon-2026-11-03-pinned.json":`public/armory/${name}.json`,"utf8"));
 const project=(payload,options={})=>{
   // M7 equipped-only baseline is retained for comparison to M9 charm-inclusive inputs.
   const gear={includeCharms:false,...options};

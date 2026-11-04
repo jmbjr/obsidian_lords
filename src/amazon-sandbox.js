@@ -10,8 +10,7 @@ import { defaultEquipmentSettings, resolveEquipmentBuild } from "./amazon-equipm
 import { projectArmoryCharacterSheet } from "./armory-character-sheet.js";
 import { projectAmazonRangedAttack } from "./amazon-ranged-attack.js";
 import { projectAmazonExtendedInfo } from "./amazon-extended-info.js";
-import { buildAmazonParityObservations } from "./amazon-parity.js";
-import { buildAmazonDebugComparison } from "./amazon-debug-parity.js";
+import { buildArmoryDebugAudit } from "./amazon-armory-debug.js";
 import { compareMarginalEffects } from "./multishot-marginal.js";
 import { STORAGE_KEY, normalizeBuildSnapshot, compareAmazonBuilds, findAmazonDependencies, emptyBonus, bonusForSkill, normalizeComparisonConfig, normalizeFullComparison, amazonAllocationIssues, amazonBuildIssues } from "./amazon-comparison.js";
 
@@ -84,14 +83,12 @@ export function renderAmazonSandbox() {
   const cards = skills.filter((skill) => resolveAmazonLayout(skill).page === state.page);
   const unplaced = skills.filter((skill) => resolveAmazonLayout(skill).page === null);
   const preview = previewAmazonSkill(selected, current[state.selected], effectiveBonus(selected), current, (activeBonus().skills[selected.identity.internalId] || 0) > 0);
-  const parityReport = armoryImports[state.active]?.name?.toLowerCase()==="magizon" ?
-    buildAmazonParityObservations(armoryImports[state.active].source,skills) : null;
   const extendedInfo = armoryImports[state.active] ? projectAmazonExtendedInfo(
     armoryImports[state.active].source,skills,current,activeBonus(),equipmentSettings[state.active]) : null;
   const attackProjection = armoryImports[state.active] ? projectAmazonRangedAttack(
     armoryImports[state.active].source,skills,current,activeBonus(),
     {...equipmentSettings[state.active],baseAttackRatingOverride:measuredBaseAttackRating[state.active]}) : null;
-  const debugReport = armoryImports[state.active] ? buildAmazonDebugComparison(
+  const armoryDebug = armoryImports[state.active] ? buildArmoryDebugAudit(
     armoryImports[state.active].source,skills,current,activeBonus(),
     equipmentSettings[state.active],attackProjection) : null;
   const comparisons = compareAmazonBuilds(skills, state.builds, state.bonuses, state.comparison);
@@ -270,38 +267,39 @@ export function renderAmazonSandbox() {
             <p>Equipment AR %: +${attackProjection.contributions.percentAttackRating.value}% · Multiple Shot AR %: ${attackProjection.skillAR===null?"—":"+"+attackProjection.skillAR+"%"}</p>
             <p>Estimated selected-skill AR: <strong>${attackProjection.attackRating.value??"Not calculated"}</strong></p>
             <small>Base AR source: ${escape(attackProjection.attackRating.baseSource)} (${attackProjection.attackRating.baseWithoutEquipment??"unknown"}). The selected-skill AR calculation remains a partial estimate.</small>
-            ${debugReport?.referenceAvailable ? `<div class="ar-reference-summary" data-ar-reference-summary>
-              <small>Previously captured in-game Multiple Shot AR · not live</small>
-              <div class="ar-reference-values">
-                <span>Screenshot <strong>${escape(debugReport.primary.observed)}</strong></span>
-                <span>Calculated <strong>${escape(debugReport.primary.computed??"Unavailable")}</strong></span>
-                <span>Δ modeled − observed <strong>${debugReport.primary.delta===null?"—":escape((debugReport.primary.delta>0?"+":"")+debugReport.primary.delta)}</strong></span>
-              </div>
-              <small>${debugReport.comparable?"Pinned baseline":"Modified build / loadout: historical reference, not a valid parity test"} · ${escape(debugReport.primary.status)} model</small>
-            </div>` : ""}
-            ${debugReport ? `<details class="ar-debug-parity" data-debug-parity>
-              <summary>Debug · compare screenshot vs calculated values</summary>
+            ${armoryDebug ? `<div class="ar-reference-summary" data-armory-source-info>
+              <small>Current official Armory source · ${escape(armoryDebug.character)} · level ${escape(armoryDebug.level??"?")}</small>
+              <p>Synced: <strong>${escape(armoryDebug.syncedAt||"unknown")}</strong> · ${armoryDebug.activeGear} equipped items · ${armoryDebug.activeCharms} active charms</p>
+              <small>Selected-skill AR is <strong>not</strong> published in the Armory JSON. Our current computed estimate is <strong>${attackProjection.attackRating.value??"unavailable"}</strong>.</small>
+            </div>
+            <details class="ar-debug-parity" data-armory-debug>
+              <summary>Debug · current Armory JSON vs calculated values</summary>
               <div class="ar-debug-content">
-                <p class="annotation">${escape(debugReport.warning)} ${escape(debugReport.screenshotCapture)}.</p>
-                ${debugReport.reasons.length?`<p class="annotation">Comparison limitations: ${debugReport.reasons.map(escape).join("; ")}.</p>`:""}
-                <div class="parity-scroll"><table class="parity-table" aria-label="Debug observed vs computed data">
-                  <thead><tr><th>Metric</th><th>Screenshot</th><th>Calculated</th><th>Δ</th><th>Meaning</th></tr></thead>
-                  <tbody>${debugReport.rows.map(row=>`<tr>
-                    <td>${escape(row.label)}</td>
-                    <td>${row.observed===null?"—":escape(row.observed)}</td>
-                    <td>${row.computed===null?"Unavailable":escape(row.computed)}</td>
-                    <td>${row.delta===null?"—":escape((row.delta>0?"+":"")+row.delta)}</td>
-                    <td>${escape(row.verdict)} · ${escape(row.status)}</td>
-                  </tr>
-                  <tr><td colspan="5"><details class="ar-debug-row-source">
-                    <summary>Show evidence: ${escape(row.label)}</summary>
-                    <p>${escape(row.note)}</p>
-                    ${row.sources.length?`<ul>${row.sources.map(src=>`<li>${escape(src.item||src.path||src.sourcePath||"Source")}: ${escape(src.amount??"—")} (${escape(src.sourcePath||src.path||"source path unavailable")})</li>`).join("")}</ul>`:"<p>No independently supported source contribution recorded.</p>"}
-                  </details></td></tr>`).join("")}</tbody></table></div>
-                <p class="annotation">A zero equipment-only subtotal does not establish a zero final game stat. A matching partial number is not proof the full PD2 formula has been reconstructed.</p>
+                <p class="annotation">${escape(armoryDebug.warning)}</p>
+                <p class="annotation"><strong>Loaded:</strong> ${escape(armoryDebug.character)} · ${escape(armoryDebug.syncedAt||"sync time unavailable")} · ${escape(armoryDebug.selectedSet)} weapon set. Recomputed from the currently selected equipment and inventory charms, not an old screenshot.</p>
+                ${armoryDebug.groups.map(group=>{
+                  const rows=armoryDebug.rows.filter(row=>row.group===group);
+                  return `<details class="armory-debug-group" ${group==="Attack rating"||group==="Calculated — not directly in JSON"?"open":""}>
+                    <summary>${escape(group)} · ${rows.length} fields</summary>
+                    <div class="armory-debug-rows">
+                      ${rows.map(row=>`<div class="armory-debug-row">
+                        <strong>${escape(row.label)}</strong>
+                        <div class="armory-debug-values">
+                          <span><small>Official JSON${row.kind==="calculation-only"?" (not published)":""}</small><b>${row.armoryValue===null?"Not provided":escape(row.armoryValue)}</b></span>
+                          <span><small>Our interpretation</small><b>${row.computedValue===null?"Unavailable":escape(row.computedValue)}</b></span>
+                          <span><small>Δ calc − source</small><b>${row.delta===null?"N/A":escape((row.delta>0?"+":"")+row.delta)}</b></span>
+                        </div>
+                        <small>${escape(row.status)} · ${escape(row.note)}</small>
+                        ${row.sources.length?`<details class="ar-debug-row-source">
+                          <summary>Inspect ${row.sources.length} JSON source${row.sources.length===1?"":"s"}</summary>
+                          <ul>${row.sources.map(e=>`<li>${escape(e.item||e.kind||"Armory field")} · <code>${escape(e.sourcePath)}</code> · ${escape(e.modifier||"")} ${escape(e.amount??"unknown")}</li>`).join("")}</ul>
+                        </details>`:""}
+                      </div>`).join("")}
+                    </div>
+                  </details>`;
+                }).join("")}
               </div>
             </details>` : ""}
-
             <details class="ar-calculation-breakdown" data-ar-breakdown>
               <summary>Show full AR calculation · intermediate values and sources</summary>
               ${(() => {
@@ -336,7 +334,7 @@ export function renderAmazonSandbox() {
                   </ol>
                   <p class="annotation"><strong>Exact implemented expression:</strong> <code>${escape(ar.equation)}</code></p>
                   ${ar.internalCheck?`<p class="annotation">${escape(ar.internalCheck)}</p>`:""}
-                  <p class="annotation"><strong>Unverified:</strong> passive, aura, buff and conditional AR effects; whether PD2 combines AR percentages in this exact order; possible screenshot state differences. The in-game observed 881 is not being forced into this calculation.</p>
+                  <p class="annotation"><strong>Unverified:</strong> passive, aura, buff and conditional AR effects; whether PD2 combines AR percentages in this exact order; possible screenshot state differences. No final in-game AR number is supplied by the Armory JSON.</p>
                 </div>`;
               })()}
             </details>
@@ -382,23 +380,6 @@ export function renderAmazonSandbox() {
         </div>
         <p class="annotation">${extendedInfo.unmappedScopeCount} stored/charm/mercenary records remain outside verified player gear scope. Crushing Blow, Deadly Strike, Open Wounds chance, and Open Wounds DPS are distinct statistics. Critical Strike comes from the skill resolver and does not combine additively with Deadly Strike here.</p>
       </section>` : ""}
-      ${parityReport ? `<details class="sandbox-inspector parity-report" aria-label="M8 Screenshot parity audit">
-        <summary><strong>Screenshot parity audit · M8</strong> · ${parityReport.pinned?"pinned Magizon reference":"snapshot changed"}</summary>
-        <p class="annotation">This fixed reference compares the <strong>original imported Magizon snapshot, main hands (4/5), all items included, no manual overrides</strong> against transcribed in-game screenshots. It is separate from the current A/B what-if settings. A match is not equivalent to verified full character parity, and a partial numerical gap is not necessarily a formula error.</p>
-        ${parityReport.pinned?`
-          <p class="annotation">Direct/source-preview matches: <strong>${parityReport.counts.match}</strong> · Partially modeled: <strong>${parityReport.counts.partial}</strong> · Unsupported: <strong>${parityReport.counts.unavailable}</strong> · Direct mismatches: <strong>${parityReport.counts.mismatch}</strong> · Not observed: <strong>${parityReport.counts["not-observed"]}</strong>.</p>
-          <details><summary>Evidence-backed inventory charm candidates</summary>
-            <p class="annotation">The source items below occupy verified active charm rows. They contribute to the updated model; individual inclusion is controlled in the charm section.</p>
-            ${parityReport.rows.filter(r=>r.candidateCharmEvidence.length).map(row=>`<p class="annotation"><strong>${escape(row.label)}</strong>: modeled ${escape(row.modeled)}, screenshot ${escape(row.observed)}, candidate ${row.candidateCharmEvidence.map(s=>`${escape(s.item)} (+${s.amount})`).join(", ")}. ${row.candidateReconciles?"Reconciles with selected active charms.":"Still differs."}</p>`).join("")}
-          </details>
-          <details><summary>Full screenshot-to-model matrix · ${parityReport.rows.length} observations</summary>
-            <div class="parity-scroll"><table class="parity-table"><thead><tr><th>Screen</th><th>Metric</th><th>Observed</th><th>Modeled</th><th>Gap</th><th>Assessment</th></tr></thead>
-            <tbody>${parityReport.rows.map(row=>`<tr title="${escape(row.explanation)}"><td>${escape(row.view)}</td><td>${escape(row.label)}</td><td>${row.observed??"—"}</td><td>${row.modeled??"—"}</td><td>${row.numericGap??"—"}</td><td>${escape(row.verdict)}</td></tr>`).join("")}</tbody>
-            </table></div>
-          </details>
-          <p class="annotation">The 29 playable Amazon skill rows are inventoried; only Multiple Shot level 21 is a confidently transcribed numerical skill-tree reference. Other skill levels are intentionally marked unobserved rather than invented.</p>
-        `:`<p class="annotation">No trustworthy comparison is available for this refreshed source: the original screenshot reference is pinned to ${escape(parityReport.expectedSnapshot)}. Export a fresh synchronized game screenshot to create a new baseline.</p>`}
-      </details>` : ""}
       ${armoryImports[state.active] ? `<p class="annotation">Armory: <strong>${escape(armoryImports[state.active].name)}</strong> · ${armoryImports[state.active].equippedCount} active equipped items · ${armoryImports[state.active].warnings.length} caveats. Raw item data is kept only for this page session; the existing exported build JSON remains skill-only. ${armoryImports[state.active].warnings.map(x=>escape(x)).join("; ")}</p>` : ""}
       <div class="sandbox-actions"><button data-page="1" aria-pressed="${state.page === 1}">Bow & Crossbow</button><button data-page="2" aria-pressed="${state.page === 2}">Passive & Magic</button><button data-page="3" aria-pressed="${state.page === 3}">Javelin & Spear</button></div>
       <div class="skill-tree" aria-label="Amazon skill tree">

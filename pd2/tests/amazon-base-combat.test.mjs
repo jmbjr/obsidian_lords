@@ -9,7 +9,7 @@ import {projectAmazonExtendedInfo} from "../../src/amazon-extended-info.js";
 import {buildAmazonParityObservations} from "../../src/amazon-parity.js";
 
 const skills=JSON.parse(readFileSync("pd2/generated/amazon-skills.json","utf8")).skills;
-const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
+const load=name=>JSON.parse(readFileSync(name==="magizon"?"pd2/fixtures/character-parity/magizon-2026-11-03-pinned.json":`public/armory/${name}.json`,"utf8"));
 const magizon=load("magizon");
 const report=(payload,options={})=>{
   const imp=importArmoryAmazon(payload,skills,options);
