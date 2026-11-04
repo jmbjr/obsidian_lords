@@ -6,7 +6,7 @@ import { importArmoryAmazon } from "../../src/pd2-armory.js";
 import { projectAmazonRangedAttack } from "../../src/amazon-ranged-attack.js";
 
 const skills=JSON.parse(readFileSync("pd2/generated/amazon-skills.json","utf8")).skills;
-const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
+const load=name=>JSON.parse(readFileSync(name==="magizon"?"pd2/fixtures/character-parity/magizon-2026-11-03-pinned.json":`public/armory/${name}.json`,"utf8"));
 const project=(payload,options={})=>{
   const imported=importArmoryAmazon(payload,skills,options);
   return projectAmazonRangedAttack(payload,skills,imported.build,imported.bonus,options);
