@@ -39,7 +39,8 @@ test("M11: main and alternate composites are independent and share non-hand stat
   assert.notEqual(stat(g.get("mainHands"),"item_fasterattackrate"),stat(g.get("alternateHands"),"item_fasterattackrate"));
   assert.equal(stat(g.get("mainHands"),"tohit"),43);
   assert.equal(stat(g.get("alternateHands"),"tohit"),70);
-  assert.equal(stat(g.get("sharedEquipped"),"item_crushingblow"),15);
+  // Historical fixture has no Crushing Blow; do not invent an item bonus.
+  assert.equal(stat(g.get("sharedEquipped"),"item_crushingblow"),0);
 });
 
 test("M11: toggles change configured sums but not all-items hypotheses",()=>{
@@ -49,9 +50,12 @@ test("M11: toggles change configured sums but not all-items hypotheses",()=>{
     assert.deepEqual(disabled.get(key).rawSummary,all.get(key).rawSummary,key);
     assert.equal(disabled.get(key).configuredCount,0,key);
   }
-  const noGloves=groups(inspect(json,{excludedItemIds:["items[10]"]}));
-  assert.equal(stat(noGloves.get("sharedEquipped"),"item_fasterattackrate","configuredSummary"),
-    stat(all.get("sharedEquipped"),"item_fasterattackrate","configuredSummary")-7);
+  const sharedIAS=json.items.findIndex(x=>x.location?.equipment_id===3 && x.modifiers?.some(m=>m.name==="item_fasterattackrate"));
+  assert.ok(sharedIAS>=0,"Fixture must contain a shared equipped IAS item");
+  const itsIAS=json.items[sharedIAS].modifiers.find(m=>m.name==="item_fasterattackrate").values[0];
+  const withoutSharedIAS=groups(inspect(json,{excludedItemIds:[`items[${sharedIAS}]`]}));
+  assert.equal(stat(withoutSharedIAS.get("sharedEquipped"),"item_fasterattackrate","configuredSummary"),
+    stat(all.get("sharedEquipped"),"item_fasterattackrate","configuredSummary")-itsIAS);
   const switchSelected=groups(inspect(json,{weaponSet:"switch"}));
   assert.equal(stat(switchSelected.get("mainCombined"),"tohit"),stat(all.get("mainCombined"),"tohit"));
   assert.equal(stat(switchSelected.get("alternateCombined"),"tohit"),stat(all.get("alternateCombined"),"tohit"));
@@ -66,7 +70,9 @@ test("M11: charms have separately screened active and hypothetical totals",()=>{
   const toggled=groups(inspect(json,{includeCharms:false}));
   assert.equal(stat(toggled.get("charms"),"tohit"),10);
   assert.equal(stat(toggled.get("charms"),"tohit","configuredSummary"),0);
-  const excluded=groups(inspect(json,{excludedCharmIds:["items[24]"]}));
+  const arCharm=json.items.findIndex(x=>x.location?.storage==="Inventory" && x.modifiers?.some(m=>m.name==="tohit" && m.values?.[0]===10));
+  assert.ok(arCharm>=0,"Fixture must contain the +10 AR charm");
+  const excluded=groups(inspect(json,{excludedCharmIds:[`items[${arCharm}]`]}));
   assert.equal(stat(excluded.get("charms"),"tohit","configuredSummary"),0);
 });
 
