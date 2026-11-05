@@ -1,0 +1,1913 @@
+{
+  "schemaVersion": 1,
+  "roadmapIssue": 1,
+  "milestone": "12.1",
+  "purpose": "Coverage inventory, not a claim of in-game parity",
+  "snapshot": {
+    "path": "public/armory/magizon.json",
+    "gitBlobSha": "223551b159efca8be2d415c703df909337394539",
+    "syncedAt": "2026-11-04T05:23:00.408Z",
+    "mainHands": "4 Short Bow + 5 Blunt Arrows",
+    "alternateHands": "11 Harmony + 12 Blunt Arrows"
+  },
+  "observations": [
+    {
+      "scenario": "short-bow-normal-attack",
+      "context": "Main hands 4/5; 50 displayed DEX; Penetrate +35%",
+      "baseAR": 220,
+      "percentContributions": [
+        {
+          "source": "Penetrate",
+          "amount": 35
+        }
+      ],
+      "observedAR": 297,
+      "arithmetic": "trunc(220*(1+.35))=297"
+    },
+    {
+      "scenario": "multiple-shot-with-harmony",
+      "context": "User-confirmed 60 DEX + Penetrate 35% + Multiple Shot 122%; not a timestamp-pinned Harmony screenshot",
+      "baseAR": 270,
+      "percentContributions": [
+        {
+          "source": "Penetrate",
+          "amount": 35
+        },
+        {
+          "source": "Multiple Shot",
+          "amount": 122
+        }
+      ],
+      "observedAR": 693,
+      "arithmetic": "trunc(270*(1+.35+1.22))=693"
+    },
+    {
+      "scenario": "normal-quest-resistances",
+      "context": "User-confirmed Normal+Nightmare Anya quest reward in Normal difficulty",
+      "elements": [
+        "fire",
+        "cold",
+        "lightning",
+        "poison"
+      ],
+      "observedPercent": 20,
+      "source": "two +10% quest rewards, not JSON"
+    },
+    {
+      "scenario": "full-life",
+      "context": "User subsequently confirmed restored health",
+      "observedCurrent": 528,
+      "observedMaximum": 528
+    },
+    {
+      "scenario": "short-bow-damage",
+      "context": "Short Bow 1-4 base plus +2 maximum quiver, 50 DEX; other damage modifiers may apply",
+      "observedMin": 1,
+      "observedMax": 7
+    },
+    {
+      "scenario": "empty-weapon-set",
+      "context": "Previous snapshot and screenshot; do not conflate with latest main/alternate slot configuration",
+      "observedBaseAR": 220,
+      "observedDefense": 12
+    }
+  ],
+  "rows": [
+    {
+      "key": "character.name",
+      "screen": "character-screen",
+      "domain": "identity",
+      "producer": "armory-character-sheet",
+      "status": "raw",
+      "sourceCategories": [
+        "raw-character"
+      ],
+      "gap": "Direct snapshot value; screenshot sync remains a separate requirement"
+    },
+    {
+      "key": "character.class",
+      "screen": "character-screen",
+      "domain": "identity",
+      "producer": "armory-character-sheet",
+      "status": "raw",
+      "sourceCategories": [
+        "raw-character"
+      ],
+      "gap": "Direct snapshot value; screenshot sync remains a separate requirement"
+    },
+    {
+      "key": "character.level",
+      "screen": "character-screen",
+      "domain": "identity",
+      "producer": "armory-character-sheet",
+      "status": "raw",
+      "sourceCategories": [
+        "raw-character"
+      ],
+      "gap": "Direct snapshot value; screenshot sync remains a separate requirement"
+    },
+    {
+      "key": "character.experience",
+      "screen": "character-screen",
+      "domain": "identity",
+      "producer": "armory-character-sheet",
+      "status": "raw",
+      "sourceCategories": [
+        "raw-character"
+      ],
+      "gap": "Direct snapshot value; screenshot sync remains a separate requirement"
+    },
+    {
+      "key": "character.points.stat",
+      "screen": "character-screen",
+      "domain": "identity",
+      "producer": "armory-character-sheet",
+      "status": "raw",
+      "sourceCategories": [
+        "raw-character"
+      ],
+      "gap": "Direct snapshot value; screenshot sync remains a separate requirement"
+    },
+    {
+      "key": "character.points.skill",
+      "screen": "character-screen",
+      "domain": "identity",
+      "producer": "armory-character-sheet",
+      "status": "raw",
+      "sourceCategories": [
+        "raw-character"
+      ],
+      "gap": "Direct snapshot value; screenshot sync remains a separate requirement"
+    },
+    {
+      "key": "character.attributes.strength",
+      "screen": "character-screen",
+      "domain": "identity",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Raw base value plus selected gear/charm contributions; buffs and runtime not complete"
+    },
+    {
+      "key": "character.attributes.dexterity",
+      "screen": "character-screen",
+      "domain": "identity",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Raw base value plus selected gear/charm contributions; buffs and runtime not complete"
+    },
+    {
+      "key": "character.attributes.vitality",
+      "screen": "character-screen",
+      "domain": "identity",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Raw base value plus selected gear/charm contributions; buffs and runtime not complete"
+    },
+    {
+      "key": "character.attributes.energy",
+      "screen": "character-screen",
+      "domain": "identity",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Raw base value plus selected gear/charm contributions; buffs and runtime not complete"
+    },
+    {
+      "key": "character.nextLevelXp",
+      "screen": "character-screen",
+      "domain": "progression",
+      "producer": "none",
+      "status": "gap",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "No sourced next-level XP formula wired"
+    },
+    {
+      "key": "character.attack1DamageMin",
+      "screen": "character-screen",
+      "domain": "combat",
+      "producer": "amazon-ranged-attack",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "character.attack1DamageMax",
+      "screen": "character-screen",
+      "domain": "combat",
+      "producer": "amazon-ranged-attack",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "character.attack2DamageMin",
+      "screen": "character-screen",
+      "domain": "combat",
+      "producer": "amazon-ranged-attack",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "character.attack2DamageMax",
+      "screen": "character-screen",
+      "domain": "combat",
+      "producer": "amazon-ranged-attack",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "character.attack1Rating",
+      "screen": "character-screen",
+      "domain": "combat",
+      "producer": "amazon-ranged-attack",
+      "status": "known-omission",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "projectAmazonRangedAttack/explainAmazonAttackRating includes Multiple Shot and item AR% but omits the effective Penetrate passive; non-Multiple-Shot normal attack unsupported"
+    },
+    {
+      "key": "character.attack2Rating",
+      "screen": "character-screen",
+      "domain": "combat",
+      "producer": "amazon-ranged-attack",
+      "status": "known-omission",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "projectAmazonRangedAttack/explainAmazonAttackRating includes Multiple Shot and item AR% but omits the effective Penetrate passive; non-Multiple-Shot normal attack unsupported"
+    },
+    {
+      "key": "character.lifeCurrent",
+      "screen": "character-screen",
+      "domain": "resources",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Armory character.life=528 with full-life screenshot 528/528; current/max semantics not established for changing state"
+    },
+    {
+      "key": "character.lifeMaximum",
+      "screen": "character-screen",
+      "domain": "resources",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Armory life and max life not separately supplied in known payload; full-life screenshot 528/528"
+    },
+    {
+      "key": "character.manaCurrent",
+      "screen": "character-screen",
+      "domain": "resources",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "character.manaMaximum",
+      "screen": "character-screen",
+      "domain": "resources",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "character.staminaCurrent",
+      "screen": "character-screen",
+      "domain": "resources",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "character.staminaMaximum",
+      "screen": "character-screen",
+      "domain": "resources",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "character.defense",
+      "screen": "character-screen",
+      "domain": "defense",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "character.fireResist",
+      "screen": "character-screen",
+      "domain": "defense",
+      "producer": "armory-character-sheet",
+      "status": "known-omission",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Quest-difficulty input absent from JSON model; user verified Normal+Nightmare Anya rewards +20% each in Normal for Magizon"
+    },
+    {
+      "key": "character.coldResist",
+      "screen": "character-screen",
+      "domain": "defense",
+      "producer": "armory-character-sheet",
+      "status": "known-omission",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Quest-difficulty input absent from JSON model; user verified Normal+Nightmare Anya rewards +20% each in Normal for Magizon"
+    },
+    {
+      "key": "character.lightningResist",
+      "screen": "character-screen",
+      "domain": "defense",
+      "producer": "armory-character-sheet",
+      "status": "known-omission",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Quest-difficulty input absent from JSON model; user verified Normal+Nightmare Anya rewards +20% each in Normal for Magizon"
+    },
+    {
+      "key": "character.poisonResist",
+      "screen": "character-screen",
+      "domain": "defense",
+      "producer": "armory-character-sheet",
+      "status": "known-omission",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "runtime-context"
+      ],
+      "gap": "Quest-difficulty input absent from JSON model; user verified Normal+Nightmare Anya rewards +20% each in Normal for Magizon"
+    },
+    {
+      "key": "extended.fireResistCurrent",
+      "screen": "extended",
+      "domain": "resistance",
+      "producer": "amazon-extended-info",
+      "status": "known-omission",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Quest-difficulty input absent from JSON model; user verified Normal+Nightmare Anya rewards +20% each in Normal for Magizon"
+    },
+    {
+      "key": "extended.fireResistMaximum",
+      "screen": "extended",
+      "domain": "resistance",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.coldResistCurrent",
+      "screen": "extended",
+      "domain": "resistance",
+      "producer": "amazon-extended-info",
+      "status": "known-omission",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Quest-difficulty input absent from JSON model; user verified Normal+Nightmare Anya rewards +20% each in Normal for Magizon"
+    },
+    {
+      "key": "extended.coldResistMaximum",
+      "screen": "extended",
+      "domain": "resistance",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.coldLength",
+      "screen": "extended",
+      "domain": "resistance",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.lightningResistCurrent",
+      "screen": "extended",
+      "domain": "resistance",
+      "producer": "amazon-extended-info",
+      "status": "known-omission",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Quest-difficulty input absent from JSON model; user verified Normal+Nightmare Anya rewards +20% each in Normal for Magizon"
+    },
+    {
+      "key": "extended.lightningResistMaximum",
+      "screen": "extended",
+      "domain": "resistance",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.poisonResistCurrent",
+      "screen": "extended",
+      "domain": "resistance",
+      "producer": "amazon-extended-info",
+      "status": "known-omission",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Quest-difficulty input absent from JSON model; user verified Normal+Nightmare Anya rewards +20% each in Normal for Magizon"
+    },
+    {
+      "key": "extended.poisonResistMaximum",
+      "screen": "extended",
+      "domain": "resistance",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.poisonLength",
+      "screen": "extended",
+      "domain": "resistance",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.curseResistCurrent",
+      "screen": "extended",
+      "domain": "resistance",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.curseResistMaximum",
+      "screen": "extended",
+      "domain": "resistance",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.curseLength",
+      "screen": "extended",
+      "domain": "resistance",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.fireAbsorbFlat",
+      "screen": "extended",
+      "domain": "absorption",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.fireAbsorbPercent",
+      "screen": "extended",
+      "domain": "absorption",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.coldAbsorbFlat",
+      "screen": "extended",
+      "domain": "absorption",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.coldAbsorbPercent",
+      "screen": "extended",
+      "domain": "absorption",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.lightningAbsorbFlat",
+      "screen": "extended",
+      "domain": "absorption",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.lightningAbsorbPercent",
+      "screen": "extended",
+      "domain": "absorption",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.magicAbsorbFlat",
+      "screen": "extended",
+      "domain": "absorption",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.magicAbsorbPercent",
+      "screen": "extended",
+      "domain": "absorption",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.physicalReductionFlat",
+      "screen": "extended",
+      "domain": "reduction",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.physicalReductionPercent",
+      "screen": "extended",
+      "domain": "reduction",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.magicReductionFlat",
+      "screen": "extended",
+      "domain": "reduction",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.magicReductionPercent",
+      "screen": "extended",
+      "domain": "reduction",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.attackerTakesPhysical",
+      "screen": "extended",
+      "domain": "reduction",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.attackerTakesLightning",
+      "screen": "extended",
+      "domain": "reduction",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.fireMastery",
+      "screen": "extended",
+      "domain": "elemental",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.coldMastery",
+      "screen": "extended",
+      "domain": "elemental",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.lightningMastery",
+      "screen": "extended",
+      "domain": "elemental",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.poisonMastery",
+      "screen": "extended",
+      "domain": "elemental",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.magicMastery",
+      "screen": "extended",
+      "domain": "elemental",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.firePierce",
+      "screen": "extended",
+      "domain": "elemental",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.coldPierce",
+      "screen": "extended",
+      "domain": "elemental",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.lightningPierce",
+      "screen": "extended",
+      "domain": "elemental",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.poisonPierce",
+      "screen": "extended",
+      "domain": "elemental",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.magicPierce",
+      "screen": "extended",
+      "domain": "elemental",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.physicalPierce",
+      "screen": "extended",
+      "domain": "elemental",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.baseArDex",
+      "screen": "extended",
+      "domain": "base-combat",
+      "producer": "armory-character-sheet",
+      "status": "formula-derived",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "5 × effective DEX − 30; supported 50 DEX -> 220 and 60 DEX -> 270; direct sources depend on active hand set"
+    },
+    {
+      "key": "extended.baseArEquip",
+      "screen": "extended",
+      "domain": "base-combat",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.baseArTotal",
+      "screen": "extended",
+      "domain": "base-combat",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Sums dex-derived and flat eligible equipment AR; not attack AR; passive Penetrate must be applied downstream"
+    },
+    {
+      "key": "extended.defDex",
+      "screen": "extended",
+      "domain": "base-combat",
+      "producer": "armory-character-sheet",
+      "status": "formula-derived",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "floor(effective DEX/4); 50 DEX -> 12; runtime final defense separate"
+    },
+    {
+      "key": "extended.defEquip",
+      "screen": "extended",
+      "domain": "base-combat",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.defTotal",
+      "screen": "extended",
+      "domain": "base-combat",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.base1hMin",
+      "screen": "extended",
+      "domain": "base-combat",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.base1hMax",
+      "screen": "extended",
+      "domain": "base-combat",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.base2hMin",
+      "screen": "extended",
+      "domain": "base-combat",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.base2hMax",
+      "screen": "extended",
+      "domain": "base-combat",
+      "producer": "armory-character-sheet",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.castRate",
+      "screen": "extended",
+      "domain": "speed",
+      "producer": "amazon-ranged-attack",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.blockRate",
+      "screen": "extended",
+      "domain": "speed",
+      "producer": "amazon-ranged-attack",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.hitRecovery",
+      "screen": "extended",
+      "domain": "speed",
+      "producer": "amazon-ranged-attack",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.runWalk",
+      "screen": "extended",
+      "domain": "speed",
+      "producer": "amazon-ranged-attack",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.attackRate",
+      "screen": "extended",
+      "domain": "speed",
+      "producer": "amazon-ranged-attack",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.ias",
+      "screen": "extended",
+      "domain": "speed",
+      "producer": "amazon-ranged-attack",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.fcrThresholds",
+      "screen": "extended",
+      "domain": "speed",
+      "producer": "amazon-ranged-attack",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.fhrThresholds",
+      "screen": "extended",
+      "domain": "speed",
+      "producer": "amazon-ranged-attack",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.attackFrames",
+      "screen": "extended",
+      "domain": "speed",
+      "producer": "amazon-ranged-attack",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Selected-bow animation formula exists; attack vs Multiple Shot contexts and runtime IAS conditions must be separated"
+    },
+    {
+      "key": "extended.iasThresholds",
+      "screen": "extended",
+      "domain": "speed",
+      "producer": "amazon-ranged-attack",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.crushingBlowChance",
+      "screen": "extended",
+      "domain": "effects",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.crushingBlowCap",
+      "screen": "extended",
+      "domain": "effects",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.openWoundsChance",
+      "screen": "extended",
+      "domain": "effects",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.openWoundsDps",
+      "screen": "extended",
+      "domain": "effects",
+      "producer": "amazon-extended-info",
+      "status": "known-omission",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Equipment deep_wounds subtotal is not final level-dependent displayed OW DPS; screenshot no gear +178"
+    },
+    {
+      "key": "extended.deadlyStrikeChance",
+      "screen": "extended",
+      "domain": "effects",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.deadlyStrikeCap",
+      "screen": "extended",
+      "domain": "effects",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.deadlyStrikeMultiplier",
+      "screen": "extended",
+      "domain": "effects",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.criticalStrikeChance",
+      "screen": "extended",
+      "domain": "effects",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "S14 passive preview exists; equipment +skill and cap interactions not exhaustively parity-verified"
+    },
+    {
+      "key": "extended.criticalStrikeCap",
+      "screen": "extended",
+      "domain": "effects",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.criticalStrikeMultiplier",
+      "screen": "extended",
+      "domain": "effects",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.lifeLeech",
+      "screen": "extended",
+      "domain": "effects",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.manaLeech",
+      "screen": "extended",
+      "domain": "effects",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.projectilePierce",
+      "screen": "extended",
+      "domain": "effects",
+      "producer": "amazon-extended-info",
+      "status": "known-omission",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Extended-info equipment-only item_pierce does not include passive Pierce skill"
+    },
+    {
+      "key": "extended.lifeAfterKill",
+      "screen": "extended",
+      "domain": "effects",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.manaAfterKill",
+      "screen": "extended",
+      "domain": "effects",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.addedDamage",
+      "screen": "extended",
+      "domain": "additional-damage",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.physicalMin",
+      "screen": "extended",
+      "domain": "additional-damage",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.physicalMax",
+      "screen": "extended",
+      "domain": "additional-damage",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.fireDamageMin",
+      "screen": "extended",
+      "domain": "additional-damage",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.fireDamageMax",
+      "screen": "extended",
+      "domain": "additional-damage",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.lightningDamageMin",
+      "screen": "extended",
+      "domain": "additional-damage",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.lightningDamageMax",
+      "screen": "extended",
+      "domain": "additional-damage",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.coldDamageMin",
+      "screen": "extended",
+      "domain": "additional-damage",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.coldDamageMax",
+      "screen": "extended",
+      "domain": "additional-damage",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.poisonDamageMin",
+      "screen": "extended",
+      "domain": "additional-damage",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.poisonDamageMax",
+      "screen": "extended",
+      "domain": "additional-damage",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.poisonDuration",
+      "screen": "extended",
+      "domain": "additional-damage",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.magicFind",
+      "screen": "extended",
+      "domain": "misc",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.goldFind",
+      "screen": "extended",
+      "domain": "misc",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.stashGold",
+      "screen": "extended",
+      "domain": "misc",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.xpProgress",
+      "screen": "extended",
+      "domain": "misc",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    },
+    {
+      "key": "extended.additionalXp",
+      "screen": "extended",
+      "domain": "misc",
+      "producer": "amazon-extended-info",
+      "status": "partial",
+      "sourceCategories": [
+        "raw-character",
+        "equipment",
+        "active-charms",
+        "skills",
+        "quest-difficulty",
+        "runtime-context"
+      ],
+      "gap": "Audit pending: final source coverage/stacking has not been proven"
+    }
+  ]
+}

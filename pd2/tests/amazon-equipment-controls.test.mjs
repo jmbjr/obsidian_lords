@@ -5,7 +5,8 @@ import { defaultEquipmentSettings, resolveEquipmentBuild, combineSkillBonuses } 
 import { emptyBonus, compareAmazonBuilds } from "../../src/amazon-comparison.js";
 
 const skills=JSON.parse(readFileSync("pd2/generated/amazon-skills.json","utf8")).skills;
-const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
+// Original M4 weapon/amulet assertions must use the archived gear loadout.
+const load=name=>JSON.parse(readFileSync(name==="magizon"?"pd2/fixtures/character-parity/magizon-2026-11-03-pinned.json":`public/armory/${name}.json`,"utf8"));
 
 test("default gear is included and Valkyrie item grant is recomputed from immutable snapshot",()=>{
   const magizon=load("magizon");

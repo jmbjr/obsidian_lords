@@ -7,7 +7,9 @@ import { buildArmoryDebugAudit, ARMORY_DEBUG_TIERS } from "../../src/amazon-armo
 
 const skills=JSON.parse(readFileSync("pd2/generated/amazon-skills.json","utf8")).skills;
 const load=name=>JSON.parse(readFileSync(`public/armory/${name}.json`,"utf8"));
-const snapshot=load("magizon");
+// Keep historical source-sum expectations immutable as the public character sync changes.
+const liveSnapshot=load("magizon");
+const snapshot=JSON.parse(readFileSync("pd2/fixtures/character-parity/magizon-2026-11-03-pinned.json","utf8"));
 const audit=(payload=snapshot,settings={},override=null)=>{
   const imported=importArmoryAmazon(payload,skills,settings);
   const attack=projectAmazonRangedAttack(payload,skills,imported.build,imported.bonus,{
@@ -18,15 +20,15 @@ const audit=(payload=snapshot,settings={},override=null)=>{
 const byKey=(result,key)=>result.rows.find(x=>x.key===key);
 
 test("latest live sync is used directly, with no historical screenshot timestamp gate",()=>{
-  const report=audit();
+  const report=audit(liveSnapshot);
   assert.equal(report.available,true);
   assert.equal(report.character,"Magizon");
-  assert.equal(report.syncedAt,snapshot._obsidianLordsSync.syncedAt);
-  assert.equal(report.level,snapshot.character.level);
-  assert.equal(byKey(report,"level").armoryValue,snapshot.character.level);
-  assert.equal(byKey(report,"strengthBase").armoryValue,snapshot.character.attributes.strength);
-  assert.equal(byKey(report,"skillPoints").armoryValue,snapshot.character.points.skill);
-  assert.equal(byKey(report,"stamina").armoryValue,snapshot.character.stamina);
+  assert.equal(report.syncedAt,liveSnapshot._obsidianLordsSync.syncedAt);
+  assert.equal(report.level,liveSnapshot.character.level);
+  assert.equal(byKey(report,"level").armoryValue,liveSnapshot.character.level);
+  assert.equal(byKey(report,"strengthBase").armoryValue,liveSnapshot.character.attributes.strength);
+  assert.equal(byKey(report,"skillPoints").armoryValue,liveSnapshot.character.points.skill);
+  assert.equal(byKey(report,"stamina").armoryValue,liveSnapshot.character.stamina);
   assert.equal(byKey(report,"level").status,"agrees");
   assert.ok(!JSON.stringify(report).includes("881"));
   assert.ok(report.rows.length>=40);
