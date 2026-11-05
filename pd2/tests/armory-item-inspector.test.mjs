@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 import {buildArmoryItemInspector} from "../../src/armory-item-inspector.js";
 import {renderArmoryItemInspector} from "../../src/armory-item-inspector-view.js";
-const json=JSON.parse(readFileSync("public/armory/magizon.json","utf8"));
+// Fixed M11 historical fixture: public/armory/magizon.json is intentionally mutable.
+const json=JSON.parse(readFileSync("pd2/fixtures/character-parity/magizon-2026-11-03-pinned.json","utf8"));
 const inspect=(payload=json,settings={})=>buildArmoryItemInspector(payload,settings);
 const groups=x=>new Map([...x.equipment,...x.sections].map(s=>[s.key,s]));
 const stat=(s,key,which="rawSummary")=>s[which].additive.find(x=>x.name===key)?.value||0;
