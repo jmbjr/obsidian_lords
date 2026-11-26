@@ -2,9 +2,9 @@
   "file": {
     "header": 2857740885,
     "version": 96,
-    "filesize": 3832,
-    "checksum": 3053955718,
-    "updated_at": 1795728100
+    "filesize": 4085,
+    "checksum": 3538681698,
+    "updated_at": 1795730557
   },
   "character": {
     "name": "Neckryerson",
@@ -1001,6 +1001,158 @@
       "is_runeword": false,
       "format_version": 105,
       "base": {
+        "id": "cm3",
+        "category": "misc",
+        "codes": {
+          "normal": "cm3",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Grand Charm",
+        "stackable": false,
+        "type": "Large Charm",
+        "type_code": "lcha",
+        "size": {
+          "height": 3,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 14454415615,
+      "item_level": 52,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 0,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "item_addskill_tab",
+          "values": [
+            17,
+            1
+          ],
+          "label": "+1 to Poison and Bone Skills (Necromancer Only)",
+          "priority": 151
+        }
+      ],
+      "name": "Fungal Grand Charm",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 0,
+        "row": 5
+      },
+      "category": "misc",
+      "base_code": "cm3",
+      "requirements": {
+        "level": 42,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "+1 to Poison and Bone Skills (Necromancer Only)"
+      ],
+      "hash": "7e6eec2bb53e23628cabe5b148479fc733522cb7"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "cm3",
+        "category": "misc",
+        "codes": {
+          "normal": "cm3",
+          "exceptional": "",
+          "elite": ""
+        },
+        "name": "Grand Charm",
+        "stackable": false,
+        "type": "Large Charm",
+        "type_code": "lcha",
+        "size": {
+          "height": 3,
+          "width": 1
+        },
+        "requirements": {}
+      },
+      "socketed_count": 0,
+      "id": 103156610124,
+      "item_level": 64,
+      "quality": {
+        "id": 4,
+        "name": "Magic"
+      },
+      "graphic_id": 0,
+      "class_specifics": false,
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "item_addskill_tab",
+          "values": [
+            17,
+            1
+          ],
+          "label": "+1 to Poison and Bone Skills (Necromancer Only)",
+          "priority": 151
+        }
+      ],
+      "name": "Fungal Grand Charm",
+      "location": {
+        "storage_id": 1,
+        "equipment_id": 0,
+        "zone_id": 0,
+        "zone": "Stored",
+        "storage": "Inventory"
+      },
+      "position": {
+        "column": 1,
+        "row": 5
+      },
+      "category": "misc",
+      "base_code": "cm3",
+      "requirements": {
+        "level": 42,
+        "strength": 0,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "+1 to Poison and Bone Skills (Necromancer Only)"
+      ],
+      "hash": "e604e5f6c0e631c4fa14205c08200237437830fa"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
         "id": "8ls",
         "category": "weapon",
         "codes": {
@@ -1188,158 +1340,6 @@
         }
       },
       "hash": "ceda8e68f2de76b32dedaf1e608adeaaeea030bc"
-    },
-    {
-      "is_identified": true,
-      "is_socketed": false,
-      "is_new": false,
-      "is_ear": false,
-      "is_starter": false,
-      "is_simple": false,
-      "is_ethereal": false,
-      "is_personalized": false,
-      "is_runeword": false,
-      "format_version": 105,
-      "base": {
-        "id": "cm3",
-        "category": "misc",
-        "codes": {
-          "normal": "cm3",
-          "exceptional": "",
-          "elite": ""
-        },
-        "name": "Grand Charm",
-        "stackable": false,
-        "type": "Large Charm",
-        "type_code": "lcha",
-        "size": {
-          "height": 3,
-          "width": 1
-        },
-        "requirements": {}
-      },
-      "socketed_count": 0,
-      "id": 14454415615,
-      "item_level": 52,
-      "quality": {
-        "id": 4,
-        "name": "Magic"
-      },
-      "graphic_id": 0,
-      "class_specifics": false,
-      "socket_count": 0,
-      "modifiers": [
-        {
-          "name": "item_addskill_tab",
-          "values": [
-            17,
-            1
-          ],
-          "label": "+1 to Poison and Bone Skills (Necromancer Only)",
-          "priority": 151
-        }
-      ],
-      "name": "Fungal Grand Charm",
-      "location": {
-        "storage_id": 1,
-        "equipment_id": 0,
-        "zone_id": 0,
-        "zone": "Stored",
-        "storage": "Inventory"
-      },
-      "position": {
-        "column": 0,
-        "row": 5
-      },
-      "category": "misc",
-      "base_code": "cm3",
-      "requirements": {
-        "level": 42,
-        "strength": 0,
-        "dexterity": 0
-      },
-      "corrupted": false,
-      "desecrated": false,
-      "properties": [
-        "+1 to Poison and Bone Skills (Necromancer Only)"
-      ],
-      "hash": "7e6eec2bb53e23628cabe5b148479fc733522cb7"
-    },
-    {
-      "is_identified": true,
-      "is_socketed": false,
-      "is_new": false,
-      "is_ear": false,
-      "is_starter": false,
-      "is_simple": false,
-      "is_ethereal": false,
-      "is_personalized": false,
-      "is_runeword": false,
-      "format_version": 105,
-      "base": {
-        "id": "cm3",
-        "category": "misc",
-        "codes": {
-          "normal": "cm3",
-          "exceptional": "",
-          "elite": ""
-        },
-        "name": "Grand Charm",
-        "stackable": false,
-        "type": "Large Charm",
-        "type_code": "lcha",
-        "size": {
-          "height": 3,
-          "width": 1
-        },
-        "requirements": {}
-      },
-      "socketed_count": 0,
-      "id": 103156610124,
-      "item_level": 64,
-      "quality": {
-        "id": 4,
-        "name": "Magic"
-      },
-      "graphic_id": 0,
-      "class_specifics": false,
-      "socket_count": 0,
-      "modifiers": [
-        {
-          "name": "item_addskill_tab",
-          "values": [
-            17,
-            1
-          ],
-          "label": "+1 to Poison and Bone Skills (Necromancer Only)",
-          "priority": 151
-        }
-      ],
-      "name": "Fungal Grand Charm",
-      "location": {
-        "storage_id": 1,
-        "equipment_id": 0,
-        "zone_id": 0,
-        "zone": "Stored",
-        "storage": "Inventory"
-      },
-      "position": {
-        "column": 1,
-        "row": 5
-      },
-      "category": "misc",
-      "base_code": "cm3",
-      "requirements": {
-        "level": 42,
-        "strength": 0,
-        "dexterity": 0
-      },
-      "corrupted": false,
-      "desecrated": false,
-      "properties": [
-        "+1 to Poison and Bone Skills (Necromancer Only)"
-      ],
-      "hash": "e604e5f6c0e631c4fa14205c08200237437830fa"
     }
   ],
   "account": null,
@@ -1351,7 +1351,7 @@
   },
   "_obsidianLordsSync": {
     "character": "Neckryerson",
-    "syncedAt": "2026-11-26T21:24:02.412Z",
+    "syncedAt": "2026-11-26T22:02:59.591Z",
     "source": "https://api.projectdiablo2.com/game/character/Neckryerson"
   }
 }
