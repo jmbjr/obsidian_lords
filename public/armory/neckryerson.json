@@ -3,8 +3,8 @@
     "header": 2857740885,
     "version": 96,
     "filesize": 4596,
-    "checksum": 2766589414,
-    "updated_at": 1795733602
+    "checksum": 1804327484,
+    "updated_at": 1795734325
   },
   "character": {
     "name": "Neckryerson",
@@ -33,10 +33,10 @@
       "stat": 60,
       "skill": 1
     },
-    "life": 311,
-    "mana": 6,
+    "life": 331,
+    "mana": 154,
     "stamina": 257,
-    "experience": 23880613,
+    "experience": 24248607,
     "level": 43,
     "skills": [
       {
@@ -210,7 +210,7 @@
     "id": 109806209,
     "name_id": 4,
     "type": 1,
-    "experience": 8001864,
+    "experience": 8194844,
     "description": "Cold Arrow",
     "items": [
       {
@@ -2116,7 +2116,7 @@
       },
       "durability": {
         "maximum": 12,
-        "current": 6
+        "current": 5
       },
       "socket_count": 0,
       "modifiers": [
@@ -3002,206 +3002,6 @@
         "Cold Resist 6%"
       ],
       "hash": "0b6e374bb470bd0f335219aa7425d1d86d2769cc"
-    },
-    {
-      "is_identified": true,
-      "is_socketed": false,
-      "is_new": false,
-      "is_ear": false,
-      "is_starter": false,
-      "is_simple": false,
-      "is_ethereal": false,
-      "is_personalized": false,
-      "is_runeword": false,
-      "format_version": 105,
-      "base": {
-        "id": "8ls",
-        "category": "weapon",
-        "codes": {
-          "normal": "lst",
-          "exceptional": "8ls",
-          "elite": "6ls"
-        },
-        "name": "Quarterstaff",
-        "stackable": false,
-        "type": "Staff",
-        "type_code": "staf",
-        "size": {
-          "height": 4,
-          "width": 1
-        },
-        "class": {
-          "base_code": "stf",
-          "2hd_code": "stf",
-          "base": "Staff",
-          "2hd": "Staff"
-        },
-        "requirements": {
-          "level": 23,
-          "strength": 25
-        },
-        "damage": {
-          "one_handed": {},
-          "two_handed": {
-            "minimum": 12,
-            "maximum": 38
-          },
-          "missile": {}
-        }
-      },
-      "socketed_count": 0,
-      "id": 116512710,
-      "item_level": 86,
-      "quality": {
-        "id": 7,
-        "name": "Unique"
-      },
-      "graphic_id": false,
-      "class_specifics": false,
-      "durability": {
-        "maximum": 60,
-        "current": 160
-      },
-      "socket_count": 0,
-      "modifiers": [
-        {
-          "name": "item_splashonhit",
-          "values": [
-            1,
-            358,
-            100
-          ],
-          "label": "Melee Attacks Deal Splash Damage",
-          "priority": 245
-        },
-        {
-          "name": "item_fasterattackrate",
-          "values": [
-            50
-          ],
-          "label": "50% Increased Attack Speed",
-          "priority": 145
-        },
-        {
-          "name": "item_fastergethitrate",
-          "values": [
-            50
-          ],
-          "label": "50% Faster Hit Recovery",
-          "priority": 139
-        },
-        {
-          "name": "min_damage",
-          "values": [
-            30
-          ],
-          "label": "+30 to Minimum Damage",
-          "priority": 127
-        },
-        {
-          "name": "max_damage",
-          "values": [
-            65
-          ],
-          "label": "+65 to Maximum Damage",
-          "priority": 126
-        },
-        {
-          "name": "maxdamage_percent",
-          "values": [
-            217,
-            217
-          ],
-          "label": "+217% Enhanced Damage",
-          "priority": 120,
-          "min": 200,
-          "max": 300
-        },
-        {
-          "name": "item_crushingblow",
-          "values": [
-            50
-          ],
-          "label": "50% Chance of Crushing Blow",
-          "priority": 87
-        },
-        {
-          "name": "item_crushingblow_efficiency",
-          "values": [
-            30
-          ],
-          "label": "30% Crushing Blow Efficiency",
-          "priority": 86,
-          "min": 30,
-          "max": 40
-        },
-        {
-          "name": "item_armor_percent",
-          "values": [
-            100
-          ],
-          "label": "100% Enhanced Defense",
-          "priority": 74
-        },
-        {
-          "name": "dexterity",
-          "values": [
-            15
-          ],
-          "label": "+15 to Dexterity",
-          "priority": 65
-        },
-        {
-          "name": "maxdurability",
-          "values": [
-            100
-          ],
-          "label": "+100 Durability",
-          "priority": 0
-        }
-      ],
-      "name": "Ribcracker",
-      "location": {
-        "storage_id": 0,
-        "equipment_id": 11,
-        "zone_id": 1,
-        "zone": "Equipped",
-        "storage": "Unknown",
-        "equipment": "Right Hand Switch"
-      },
-      "position": {
-        "column": 11,
-        "row": 0
-      },
-      "category": "weapon",
-      "base_code": "8ls",
-      "requirements": {
-        "level": 31,
-        "strength": 25,
-        "dexterity": 0
-      },
-      "corrupted": false,
-      "desecrated": false,
-      "properties": [
-        "Melee Attacks Deal Splash Damage",
-        "50% Increased Attack Speed",
-        "50% Faster Hit Recovery",
-        "+30 to Minimum Damage",
-        "+65 to Maximum Damage",
-        "+217% Enhanced Damage",
-        "50% Chance of Crushing Blow",
-        "30% Crushing Blow Efficiency",
-        "100% Enhanced Defense",
-        "+15 to Dexterity",
-        "+100 Durability"
-      ],
-      "damage": {
-        "two_handed": {
-          "minimum": 68,
-          "maximum": 185
-        }
-      },
-      "hash": "ceda8e68f2de76b32dedaf1e608adeaaeea030bc"
     },
     {
       "is_identified": true,
@@ -5172,14 +4972,14 @@
       ],
       "location": {
         "storage_id": 0,
-        "equipment_id": 4,
+        "equipment_id": 11,
         "zone_id": 1,
         "zone": "Equipped",
         "storage": "Unknown",
-        "equipment": "Right Hand"
+        "equipment": "Right Hand Switch"
       },
       "position": {
-        "column": 4,
+        "column": 11,
         "row": 0
       },
       "category": "weapon",
@@ -5211,6 +5011,206 @@
         }
       },
       "hash": "fd44b9aa6996228fd536373b1cbc684c977f69fd"
+    },
+    {
+      "is_identified": true,
+      "is_socketed": false,
+      "is_new": false,
+      "is_ear": false,
+      "is_starter": false,
+      "is_simple": false,
+      "is_ethereal": false,
+      "is_personalized": false,
+      "is_runeword": false,
+      "format_version": 105,
+      "base": {
+        "id": "8ls",
+        "category": "weapon",
+        "codes": {
+          "normal": "lst",
+          "exceptional": "8ls",
+          "elite": "6ls"
+        },
+        "name": "Quarterstaff",
+        "stackable": false,
+        "type": "Staff",
+        "type_code": "staf",
+        "size": {
+          "height": 4,
+          "width": 1
+        },
+        "class": {
+          "base_code": "stf",
+          "2hd_code": "stf",
+          "base": "Staff",
+          "2hd": "Staff"
+        },
+        "requirements": {
+          "level": 23,
+          "strength": 25
+        },
+        "damage": {
+          "one_handed": {},
+          "two_handed": {
+            "minimum": 12,
+            "maximum": 38
+          },
+          "missile": {}
+        }
+      },
+      "socketed_count": 0,
+      "id": 116512710,
+      "item_level": 86,
+      "quality": {
+        "id": 7,
+        "name": "Unique"
+      },
+      "graphic_id": false,
+      "class_specifics": false,
+      "durability": {
+        "maximum": 60,
+        "current": 160
+      },
+      "socket_count": 0,
+      "modifiers": [
+        {
+          "name": "item_splashonhit",
+          "values": [
+            1,
+            358,
+            100
+          ],
+          "label": "Melee Attacks Deal Splash Damage",
+          "priority": 245
+        },
+        {
+          "name": "item_fasterattackrate",
+          "values": [
+            50
+          ],
+          "label": "50% Increased Attack Speed",
+          "priority": 145
+        },
+        {
+          "name": "item_fastergethitrate",
+          "values": [
+            50
+          ],
+          "label": "50% Faster Hit Recovery",
+          "priority": 139
+        },
+        {
+          "name": "min_damage",
+          "values": [
+            30
+          ],
+          "label": "+30 to Minimum Damage",
+          "priority": 127
+        },
+        {
+          "name": "max_damage",
+          "values": [
+            65
+          ],
+          "label": "+65 to Maximum Damage",
+          "priority": 126
+        },
+        {
+          "name": "maxdamage_percent",
+          "values": [
+            217,
+            217
+          ],
+          "label": "+217% Enhanced Damage",
+          "priority": 120,
+          "min": 200,
+          "max": 300
+        },
+        {
+          "name": "item_crushingblow",
+          "values": [
+            50
+          ],
+          "label": "50% Chance of Crushing Blow",
+          "priority": 87
+        },
+        {
+          "name": "item_crushingblow_efficiency",
+          "values": [
+            30
+          ],
+          "label": "30% Crushing Blow Efficiency",
+          "priority": 86,
+          "min": 30,
+          "max": 40
+        },
+        {
+          "name": "item_armor_percent",
+          "values": [
+            100
+          ],
+          "label": "100% Enhanced Defense",
+          "priority": 74
+        },
+        {
+          "name": "dexterity",
+          "values": [
+            15
+          ],
+          "label": "+15 to Dexterity",
+          "priority": 65
+        },
+        {
+          "name": "maxdurability",
+          "values": [
+            100
+          ],
+          "label": "+100 Durability",
+          "priority": 0
+        }
+      ],
+      "name": "Ribcracker",
+      "location": {
+        "storage_id": 0,
+        "equipment_id": 4,
+        "zone_id": 1,
+        "zone": "Equipped",
+        "storage": "Unknown",
+        "equipment": "Right Hand"
+      },
+      "position": {
+        "column": 4,
+        "row": 0
+      },
+      "category": "weapon",
+      "base_code": "8ls",
+      "requirements": {
+        "level": 31,
+        "strength": 25,
+        "dexterity": 0
+      },
+      "corrupted": false,
+      "desecrated": false,
+      "properties": [
+        "Melee Attacks Deal Splash Damage",
+        "50% Increased Attack Speed",
+        "50% Faster Hit Recovery",
+        "+30 to Minimum Damage",
+        "+65 to Maximum Damage",
+        "+217% Enhanced Damage",
+        "50% Chance of Crushing Blow",
+        "30% Crushing Blow Efficiency",
+        "100% Enhanced Defense",
+        "+15 to Dexterity",
+        "+100 Durability"
+      ],
+      "damage": {
+        "two_handed": {
+          "minimum": 68,
+          "maximum": 185
+        }
+      },
+      "hash": "ceda8e68f2de76b32dedaf1e608adeaaeea030bc"
     }
   ],
   "account": null,
@@ -5222,7 +5222,7 @@
   },
   "_obsidianLordsSync": {
     "character": "Neckryerson",
-    "syncedAt": "2026-11-26T22:53:39.950Z",
+    "syncedAt": "2026-11-26T23:05:40.228Z",
     "source": "https://api.projectdiablo2.com/game/character/Neckryerson"
   }
 }
